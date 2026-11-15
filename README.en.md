@@ -56,7 +56,7 @@ Today is 2026-11-20. Here is my archive, please continue:
 ## 🔄 How it works
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["1 Pick a template<br/>Copy it to the AI"] --> B["2 Chat<br/>AI builds / adjusts functions"]
     B --> C["3 Say save<br/>Keep the JSON"]
     C --> D["4 Next time<br/>Paste the archive"]

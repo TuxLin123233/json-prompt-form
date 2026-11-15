@@ -56,7 +56,7 @@ AI 会给你一段 JSON，整段保存下来。下次开场贴「今天日期 + 
 ## 🔄 它怎么运转
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["1️⃣ 选模板<br/>复制给 AI"] --> B["2️⃣ 聊天<br/>AI 生成 / 调整功能"]
     B --> C["3️⃣ 说「存档」<br/>保存 JSON"]
     C --> D["4️⃣ 下次<br/>贴上存档继续"]
