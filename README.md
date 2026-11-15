@@ -1,5 +1,10 @@
 # json-prompt-form
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![JSON](https://img.shields.io/badge/format-JSON-blue.svg)](./form.json)
+[![Stars](https://img.shields.io/github/stars/TuxLin123233/json-prompt-form?style=social)](https://github.com/TuxLin123233/json-prompt-form/stargazers)
+[![Last commit](https://img.shields.io/github/last-commit/TuxLin123233/json-prompt-form)](https://github.com/TuxLin123233/json-prompt-form/commits/main)
+
 Json 驱动的提示词表单。
 
 一份用 JSON 描述「长期陪伴式 AI 助手」的提示词规范：把助手的身份、场景、功能、演化规则和记忆全部结构化进 `form.json`，让 AI 按这份表单为用户生成并持续陪同一个可成长的助手。
