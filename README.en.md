@@ -57,15 +57,10 @@ Today is 2026-11-20. Here is my archive, please continue:
 
 ```mermaid
 flowchart LR
-    A[Pick a template] --> B[Copy it to the AI]
-    B --> C[AI creates / adjusts functions]
-    C --> D[Chat & companionship]
-    D --> E{Session ending?}
-    E -- No --> D
-    E -- Yes --> F[Say "save"]
-    F --> G[Copy & keep the JSON]
-    G --> H[Next time: paste date + archive]
-    H --> D
+    A["1 Pick a template<br/>Copy it to the AI"] --> B["2 Chat<br/>AI builds / adjusts functions"]
+    B --> C["3 Say save<br/>Keep the JSON"]
+    C --> D["4 Next time<br/>Paste the archive"]
+    D --> B
 ```
 
 ## 🗂️ Files
