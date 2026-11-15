@@ -167,6 +167,8 @@
         <button class="choice" data-cat="生活">🧺 生活 / 钱 / 宠物</button>
         <button class="choice" data-cat="关系">👨‍👩‍👧 家人 / 关系</button>
         <button class="choice" data-cat="创作">✍️ 写作 / 创作</button>
+        <button class="choice" data-cat="效率">⏰ 时间 / 效率</button>
+        <button class="choice" data-cat="兴趣">🎸 兴趣 / 爱好</button>
       </div>
     </div>
     <div class="q">
@@ -251,9 +253,21 @@ const SCENARIOS = [
   { file: "adhd.json",              emoji: "🧠", name: "ADHD 支持",   desc: "注意力涣散、拖延、容易忘事",                          cat: "学习", min: 5,  diff: "进阶" },
   { file: "reading.json",           emoji: "📖", name: "读书",        desc: "买书不读、想建立阅读习惯",                            cat: "学习", min: 10, diff: "入门" },
   { file: "pet.json",               emoji: "🐾", name: "宠物",        desc: "养猫狗，想科学陪伴和记录",                            cat: "生活", min: 5,  diff: "入门" },
+  { file: "time-management.json",   emoji: "⏰", name: "时间管理",    desc: "事多拖延、忙但没产出",                                cat: "效率", min: 5,  diff: "入门" },
+  { file: "morning-routine.json",   emoji: "🌅", name: "早起晨间",    desc: "起不来、早晨手忙脚乱",                                cat: "生活", min: 5,  diff: "入门" },
+  { file: "meditation.json",        emoji: "🧘", name: "正念练习",    desc: "紧绷焦虑、睡前脑子停不下来",                          cat: "情绪", min: 5,  diff: "入门" },
+  { file: "healthy-diet.json",      emoji: "🥗", name: "健康饮食",    desc: "外卖多、饮食不规律、想吃得健康",                      cat: "健康", min: 5,  diff: "入门" },
+  { file: "journaling.json",        emoji: "📓", name: "日记觉察",    desc: "想写日记但坚持不了、想梳理情绪",                      cat: "情绪", min: 5,  diff: "入门" },
+  { file: "public-speaking.json",   emoji: "🎤", name: "演讲表达",    desc: "当众发言紧张、汇报没结构",                            cat: "职业", min: 10, diff: "进阶" },
+  { file: "relationship.json",      emoji: "💞", name: "恋爱沟通",    desc: "恋爱或伴侣沟通中容易争吵",                            cat: "关系", min: 5,  diff: "进阶" },
+  { file: "declutter.json",         emoji: "🧹", name: "整理收纳",    desc: "房间乱、东西多、舍不得扔",                            cat: "生活", min: 15, diff: "入门" },
+  { file: "instrument.json",        emoji: "🎸", name: "乐器练习",    desc: "学乐器、练琴容易中断",                                cat: "兴趣", min: 15, diff: "进阶" },
+  { file: "coding.json",            emoji: "💻", name: "编程学习",    desc: "自学编程、容易卡住或迷路",                            cat: "学习", min: 20, diff: "进阶" },
+  { file: "cooking.json",           emoji: "🍳", name: "学做饭",      desc: "不会做饭、想开始带饭",                                cat: "生活", min: 20, diff: "入门" },
+  { file: "plant-care.json",        emoji: "🪴", name: "植物养护",    desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门" },
 ];
 
-const CATS = ["全部", "学习", "健康", "生活", "情绪", "职业", "创作", "关系"];
+const CATS = ["全部", "学习", "健康", "生活", "情绪", "职业", "创作", "关系", "效率", "兴趣"];
 let activeCat = "全部";
 let quizCat = null;
 let quizMin = null;

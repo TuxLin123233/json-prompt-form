@@ -73,7 +73,7 @@ flowchart LR
 | 文件 | 是什么 |
 | --- | --- |
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
-| 🎯 [`examples/`](./examples) | 十四个现成场景，复制即用 |
+| 🎯 [`examples/`](./examples) | 二十六个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
 | 🔍 [`schema.json`](./schema.json) | 可选：给懂技术的人检查存档格式 |
 | 💬 [`docs/example-dialogue.md`](./docs/example-dialogue.md) | 一段完整示例对话 |
@@ -98,6 +98,18 @@ flowchart LR
 | 🧠 ADHD 支持 | [`adhd.json`](./examples/adhd.json) | 注意力涣散、拖延、容易忘事 | 5 分钟 |
 | 📖 读书 | [`reading.json`](./examples/reading.json) | 买书不读、想建立阅读习惯 | 10 分钟 |
 | 🐾 宠物 | [`pet.json`](./examples/pet.json) | 养猫狗，想科学陪伴和记录 | 5 分钟 |
+| ⏰ 时间管理 | [`time-management.json`](./examples/time-management.json) | 事多拖延、忙但没产出 | 5 分钟 |
+| 🌅 早起晨间 | [`morning-routine.json`](./examples/morning-routine.json) | 起不来、早晨手忙脚乱 | 5 分钟 |
+| 🧘 正念练习 | [`meditation.json`](./examples/meditation.json) | 紧绷焦虑、睡前脑子停不下来 | 5 分钟 |
+| 🥗 健康饮食 | [`healthy-diet.json`](./examples/healthy-diet.json) | 外卖多、饮食不规律、想吃得健康 | 5 分钟 |
+| 📓 日记觉察 | [`journaling.json`](./examples/journaling.json) | 想写日记但坚持不了、想梳理情绪 | 5 分钟 |
+| 🎤 演讲表达 | [`public-speaking.json`](./examples/public-speaking.json) | 当众发言紧张、汇报没结构 | 10 分钟 |
+| 💞 恋爱沟通 | [`relationship.json`](./examples/relationship.json) | 恋爱或伴侣沟通中容易争吵 | 5 分钟 |
+| 🧹 整理收纳 | [`declutter.json`](./examples/declutter.json) | 房间乱、东西多、舍不得扔 | 15 分钟 |
+| 🎸 乐器练习 | [`instrument.json`](./examples/instrument.json) | 学乐器、练琴容易中断 | 15 分钟 |
+| 💻 编程学习 | [`coding.json`](./examples/coding.json) | 自学编程、容易卡住或迷路 | 20 分钟 |
+| 🍳 学做饭 | [`cooking.json`](./examples/cooking.json) | 不会做饭、想开始带饭 | 20 分钟 |
+| 🪴 植物养护 | [`plant-care.json`](./examples/plant-care.json) | 喜欢绿植但总养死 | 5 分钟 |
 
 每个模板都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
 

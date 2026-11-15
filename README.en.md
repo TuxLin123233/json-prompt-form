@@ -73,7 +73,7 @@ flowchart LR
 | File | What it is |
 | --- | --- |
 | 📄 [`form.json`](./form.json) | Generic template for custom scenarios |
-| 🎯 [`examples/`](./examples) | 14 ready-to-use scenarios |
+| 🎯 [`examples/`](./examples) | 26 ready-to-use scenarios |
 | 🖥️ [`index.html`](./index.html) | One-click copy + scenario picker |
 | 🔍 [`schema.json`](./schema.json) | Optional archive validator |
 | 💬 [`docs/example-dialogue.md`](./docs/example-dialogue.md) | A full example conversation |
@@ -98,6 +98,18 @@ flowchart LR
 | 🧠 ADHD support | [`adhd.json`](./examples/adhd.json) | Focus, procrastination, forgetfulness | 5 min |
 | 📖 Reading | [`reading.json`](./examples/reading.json) | Building a reading habit | 10 min |
 | 🐾 Pets | [`pet.json`](./examples/pet.json) | Daily care and training records | 5 min |
+| ⏰ Time management | [`time-management.json`](./examples/time-management.json) | Overwhelmed, busy but unproductive | 5 min |
+| 🌅 Morning routine | [`morning-routine.json`](./examples/morning-routine.json) | Can't get up, chaotic mornings | 5 min |
+| 🧘 Mindfulness | [`meditation.json`](./examples/meditation.json) | Tense, anxious, racing mind at night | 5 min |
+| 🥗 Healthy eating | [`healthy-diet.json`](./examples/healthy-diet.json) | Too much takeout, irregular meals | 5 min |
+| 📓 Journaling | [`journaling.json`](./examples/journaling.json) | Can't keep a journal, wants clarity | 5 min |
+| 🎤 Public speaking | [`public-speaking.json`](./examples/public-speaking.json) | Nervous speaking, unstructured reports | 10 min |
+| 💞 Relationships | [`relationship.json`](./examples/relationship.json) | Frequent arguments with partner | 5 min |
+| 🧹 Decluttering | [`declutter.json`](./examples/declutter.json) | Cluttered home, hard to let go | 15 min |
+| 🎸 Instrument practice | [`instrument.json`](./examples/instrument.json) | Learning an instrument, keeps quitting | 15 min |
+| 💻 Coding | [`coding.json`](./examples/coding.json) | Self-taught coding, gets stuck or lost | 20 min |
+| 🍳 Cooking | [`cooking.json`](./examples/cooking.json) | Can't cook, wants to meal-prep | 20 min |
+| 🪴 Plant care | [`plant-care.json`](./examples/plant-care.json) | Loves plants but keeps killing them | 5 min |
 
 Every template adapts to your real situation and proposes new functions as you chat.
 
