@@ -19,6 +19,25 @@
             "type": "string",
             "pattern": "^\\d+\\.\\d+\\.\\d+$"
         },
+        "meta": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "audience": {
+                    "type": "string"
+                },
+                "daily_minutes": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "difficulty": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true
+        },
         "usage": {
             "type": "object"
         },

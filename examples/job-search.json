@@ -48,8 +48,9 @@
         "on_end": [
             "1. 确认记忆与功能状态已更新",
             "2. 输出完整存档 JSON，用 ```json 代码块包裹",
-            "3. 不省略任何字段，未变化的字段保留原值",
-            "4. 不添加任何解释文字"
+            "3. 若存档过长或可能被截断：改为分段输出，先发『存档 第 1/N 段』，用户回复『继续』后再发下一段，最后一段要能拼成完整 JSON",
+            "4. 不省略任何字段，未变化的字段保留原值",
+            "5. 不添加任何解释文字"
         ]
     },
     "assistant_identity": {
@@ -281,6 +282,7 @@
         "language": "跟随用户使用的语言",
         "ask_one_at_a_time": true,
         "on_session_end": "输出更新后的完整存档 JSON：用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字",
+        "long_archive_fallback": "若完整存档超过单条消息长度或可能被截断：分 N 段输出，每段标注『第 i/N 段』，段间只输出 JSON 片段；用户回复『继续』后继续发；不得省略字段",
         "format": "代码块内为合法 JSON，不加注释、不省略、不截断",
         "never_omit_fields": true,
         "no_explanation": true
@@ -352,7 +354,13 @@
         },
         "session_end": {
             "desc": "会话结束时的输出",
-            "ai_should": "输出更新后的完整存档 JSON，包含全部字段（schema_version、usage、goal、session_context、compatibility、protocol、assistant_identity、scene、functions、function_rules、evolution、rejected_suggestions、rejected_suggestion_format、memory、safety、output_rules、examples）；用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字"
+            "ai_should": "输出更新后的完整存档 JSON，包含全部字段（schema_version、usage、goal、session_context、compatibility、protocol、assistant_identity、scene、functions、function_rules、evolution、rejected_suggestions、rejected_suggestion_format、memory、safety、output_rules、examples）；用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字；若过长则分段输出并标注第 i/N 段，用户回复『继续』后续发"
         }
+    },
+    "meta": {
+        "category": "职业",
+        "audience": "社招、校招、转行求职者",
+        "daily_minutes": 10,
+        "difficulty": "进阶"
     }
 }

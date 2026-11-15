@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="json-prompt-form">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef2ff"/>
+      <stop offset="0.55" stop-color="#f5f3ff"/>
+      <stop offset="1" stop-color="#fdf2f8"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="1" stop-color="#db2777"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1040" cy="110" r="150" fill="#e0e7ff" opacity="0.7"/>
+  <circle cx="120" cy="540" r="120" fill="#fce7f3" opacity="0.7"/>
+
+  <text x="80" y="210" font-family="-apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" font-size="76" font-weight="800" fill="#1f2330">
+    json-prompt-form
+  </text>
+
+  <text x="82" y="285" font-family="-apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" font-size="34" font-weight="600" fill="#4f46e5">
+    让 AI 长期记住你
+  </text>
+
+  <text x="82" y="340" font-family="-apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" font-size="24" fill="#6b7280">
+    JSON 驱动的长期陪伴提示词模板 · 复制即用
+  </text>
+
+  <g font-family="-apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" font-size="20" font-weight="600">
+    <rect x="80" y="390" width="150" height="46" rx="23" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="155" y="419" text-anchor="middle" fill="#374151">备考学习</text>
+
+    <rect x="246" y="390" width="120" height="46" rx="23" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="306" y="419" text-anchor="middle" fill="#374151">健身睡眠</text>
+
+    <rect x="382" y="390" width="120" height="46" rx="23" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="442" y="419" text-anchor="middle" fill="#374151">求职工作</text>
+
+    <rect x="518" y="390" width="120" height="46" rx="23" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="578" y="419" text-anchor="middle" fill="#374151">情绪支持</text>
+
+    <rect x="654" y="390" width="120" height="46" rx="23" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="714" y="419" text-anchor="middle" fill="#374151">财务记账</text>
+
+    <rect x="790" y="390" width="120" height="46" rx="23" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="850" y="419" text-anchor="middle" fill="#374151">写作创作</text>
+  </g>
+
+  <text x="82" y="505" font-family="-apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" font-size="22" fill="#6b7280">
+    选场景 → 一键复制 → 粘贴给 AI → 说「存档」→ 下次续上
+  </text>
+
+  <rect x="80" y="540" width="1040" height="4" rx="2" fill="url(#brand)" opacity="0.85"/>
+
+  <text x="82" y="590" font-family="-apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" font-size="20" fill="#9ca3af">
+    github.com/TuxLin123233/json-prompt-form · MIT
+  </text>
+</svg>

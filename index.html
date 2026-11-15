@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>json-prompt-form · 一键复制 AI 长期陪伴模板</title>
+<meta name="description" content="选一个场景，一键复制给 AI，让网页版 AI 长期记住你、陪着你。">
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --card: #ffffff;
+    --text: #1f2330;
+    --muted: #6b7280;
+    --brand: #4f46e5;
+    --brand-soft: #eef2ff;
+    --line: #e5e7eb;
+    --ok: #059669;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  a { color: var(--brand); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 18px 64px; }
+  header.hero {
+    background: linear-gradient(135deg, #eef2ff 0%, #fdf2f8 100%);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+  }
+  .hero h1 { margin: 0 0 10px; font-size: 30px; }
+  .hero p { margin: 0 auto 20px; color: var(--muted); max-width: 620px; }
+  .hero-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    appearance: none; border: 1px solid var(--line); background: #fff;
+    color: var(--text); border-radius: 12px; padding: 10px 18px;
+    font-size: 15px; cursor: pointer; font-weight: 600;
+  }
+  .btn:hover { border-color: #c7d2fe; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.primary:hover { background: #4338ca; }
+  .btn.small { padding: 7px 12px; font-size: 13px; border-radius: 10px; }
+  h2 { margin: 40px 0 14px; font-size: 21px; }
+  .lead { color: var(--muted); margin-top: -6px; }
+  .quiz {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 22px;
+  }
+  .quiz .q { margin-bottom: 16px; }
+  .quiz .q strong { display: block; margin-bottom: 8px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice {
+    border: 1px solid var(--line); background: #fff; border-radius: 999px;
+    padding: 7px 14px; cursor: pointer; font-size: 14px;
+  }
+  .choice.active { background: var(--brand-soft); border-color: #a5b4fc; color: #3730a3; font-weight: 600; }
+  .result {
+    margin-top: 16px; padding: 16px; border-radius: 14px;
+    background: var(--brand-soft); border: 1px solid #c7d2fe; display: none;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .chip {
+    border: 1px solid var(--line); background: #fff; border-radius: 999px;
+    padding: 6px 14px; cursor: pointer; font-size: 14px;
+  }
+  .chip.active { background: var(--text); color: #fff; border-color: var(--text); }
+  .grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 18px; display: flex; flex-direction: column;
+  }
+  .card .emoji { font-size: 26px; }
+  .card h3 { margin: 6px 0 4px; font-size: 17px; }
+  .card .desc { color: var(--muted); font-size: 13px; min-height: 38px; }
+  .meta { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 14px; }
+  .tag { font-size: 12px; background: #f3f4f6; color: #4b5563; border-radius: 999px; padding: 2px 9px; }
+  .card-actions { margin-top: auto; display: flex; gap: 8px; }
+  .card-actions .btn { flex: 1; }
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+    background: #111827; color: #fff; padding: 11px 18px; border-radius: 999px;
+    font-size: 14px; opacity: 0; pointer-events: none; transition: .25s;
+    z-index: 50;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: #b91c1c; }
+  .steps { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .step .n { display: inline-flex; width: 26px; height: 26px; align-items: center; justify-content: center; border-radius: 50%; background: var(--brand-soft); color: #3730a3; font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+  pre.code {
+    background: #0f172a; color: #e2e8f0; border-radius: 14px; padding: 16px;
+    overflow: auto; font-size: 13px; line-height: 1.5;
+  }
+  dialog {
+    width: min(820px, 92vw); max-height: 82vh; border: none; border-radius: 16px; padding: 0;
+  }
+  dialog::backdrop { background: rgba(15, 23, 42, .5); }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .modal-body { padding: 16px 18px; overflow: auto; max-height: 60vh; }
+  .modal-body pre { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow: auto; font-size: 12px; }
+  footer { margin-top: 48px; text-align: center; color: var(--muted); font-size: 13px; }
+  .safe { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 14px; padding: 14px 18px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>🤖 选一个场景，让 AI 长期记住你</h1>
+    <p>不用安装、不用写代码。选模板 → 一键复制 → 粘贴给网页版 AI（如 DeepSeek）。聊完说「存档」，把 JSON 存起来，下次接着来。</p>
+    <div class="hero-actions">
+      <button class="btn primary" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">🎯 帮我选一个</button>
+      <button class="btn" onclick="document.getElementById('scenarios').scrollIntoView({behavior:'smooth'})">📋 直接浏览</button>
+      <a class="btn" href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">⭐ GitHub</a>
+    </div>
+  </header>
+
+  <h2>🧭 不知道选哪个？回答两个问题</h2>
+  <p class="lead">下面会推荐一个最接近的模板，也可以随时自己挑。</p>
+  <div class="quiz" id="quiz">
+    <div class="q">
+      <strong>1. 你现在最想改变的是？</strong>
+      <div class="choices" id="q1">
+        <button class="choice" data-cat="学习">📚 学习 / 考试</button>
+        <button class="choice" data-cat="健康">💪 身体 / 睡眠 / 戒断</button>
+        <button class="choice" data-cat="情绪">🌤️ 情绪 / 压力</button>
+        <button class="choice" data-cat="职业">💼 工作 / 求职</button>
+        <button class="choice" data-cat="生活">🧺 生活 / 钱 / 宠物</button>
+        <button class="choice" data-cat="关系">👨‍👩‍👧 家人 / 关系</button>
+        <button class="choice" data-cat="创作">✍️ 写作 / 创作</button>
+      </div>
+    </div>
+    <div class="q">
+      <strong>2. 你每天大概能投入多少时间？</strong>
+      <div class="choices" id="q2">
+        <button class="choice" data-min="5">⏱️ 5 分钟</button>
+        <button class="choice" data-min="10">⏳ 10 分钟</button>
+      </div>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <h2 id="scenarios">🎯 全部场景</h2>
+  <p class="lead">点「复制模板」，再粘贴给 AI。每个模板都会根据你的真实情况调整功能。</p>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
+
+  <h2>🚀 复制之后怎么用</h2>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><h3>粘贴模板</h3><p>把复制的整份 JSON 发给 AI，再补一句：今天是几号、你的情况是什么。</p></div>
+    <div class="step"><span class="n">2</span><h3>聊完说「存档」</h3><p>AI 会输出一段 JSON。整段复制，保存到笔记或私有仓库。</p></div>
+    <div class="step"><span class="n">3</span><h3>下次贴回来</h3><p>开场说「今天是几号，这是我的存档」，再粘贴上次的 JSON 就能续上。</p></div>
+  </div>
+
+  <h2>📋 照着复制</h2>
+  <pre class="code">第一次：
+&lt;把复制的模板整份粘贴在这里&gt;
+
+今天是 2026-11-15。我的情况是：……
+
+以后每次：
+今天是 2026-11-20。这是我的存档，请继续：
+&lt;把上次保存的 JSON 整段粘贴在这里&gt;
+
+结束时：
+对 AI 说「存档」或「保存」，把回答里 ```json 代码块的内容整段复制保存。</pre>
+
+  <h2>🛟 安全提醒</h2>
+  <div class="safe">
+    这是陪伴和自我管理工具，<strong>不做医疗、心理、法律、投资等专业诊断</strong>。遇到严重情绪危机，请立刻联系当地急救或心理危机热线，或告诉身边可信任的人。存档可能含隐私，请自己妥善保管。
+  </div>
+
+  <h2>❓ 常见问题</h2>
+  <div class="quiz">
+    <p><strong>AI 只输出了一半怎么办？</strong><br>回复「继续」，让它分段发完；或说「请输出完整存档 JSON」。</p>
+    <p><strong>换一个 AI 还能用吗？</strong><br>能。存档是纯文本 JSON，任何能读长文本的模型都能续接。</p>
+    <p><strong>为什么每次都要贴存档？</strong><br>网页版 AI 跨会话不共享记忆，也读不到你的本地文件。存档由你保管，也保护隐私。</p>
+    <p><strong>更多问题</strong>：<a href="FAQ.md">查看完整 FAQ</a> · <a href="README.md">阅读项目说明</a></p>
+  </div>
+
+  <footer>
+    MIT License · <a href="https://github.com/TuxLin123233/json-prompt-form">TuxLin123233/json-prompt-form</a>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<dialog id="modal">
+  <div class="modal-head">
+    <strong id="modal-title">预览</strong>
+    <div>
+      <button class="btn small primary" id="modal-copy">复制全部</button>
+      <button class="btn small" onclick="document.getElementById('modal').close()">关闭</button>
+    </div>
+  </div>
+  <div class="modal-body"><pre id="modal-body"></pre></div>
+</dialog>
+
+<script>
+const SCENARIOS = [
+  { file: "study-exam.json",        emoji: "📚", name: "备考",        desc: "中高考、考研、考证，容易拖延焦虑",                    cat: "学习", min: 5,  diff: "入门" },
+  { file: "fitness.json",           emoji: "💪", name: "健身",        desc: "想增肌减脂塑形，但总坚持不下来",                      cat: "健康", min: 5,  diff: "入门" },
+  { file: "job-search.json",        emoji: "💼", name: "求职",        desc: "投简历没回音、面试紧张、求职焦虑",                    cat: "职业", min: 10, diff: "进阶" },
+  { file: "emotion-support.json",   emoji: "🌤️", name: "情绪支持",    desc: "焦虑、低落、压力大，想有个出口",                      cat: "情绪", min: 5,  diff: "入门" },
+  { file: "finance.json",           emoji: "💰", name: "财务",        desc: "月光、超支、想存钱或还债",                            cat: "生活", min: 5,  diff: "入门" },
+  { file: "writing.json",           emoji: "✍️", name: "写作",        desc: "小说、公众号、日更，总卡文拖延",                      cat: "创作", min: 10, diff: "进阶" },
+  { file: "sleep.json",             emoji: "🌙", name: "睡眠",        desc: "入睡难、熬夜、睡眠质量差",                            cat: "健康", min: 5,  diff: "入门" },
+  { file: "quit-habits.json",       emoji: "🚭", name: "戒烟戒糖",    desc: "想戒烟、戒糖、戒手机等习惯",                          cat: "健康", min: 5,  diff: "进阶" },
+  { file: "language-learning.json", emoji: "🗣️", name: "语言学习",    desc: "练口语、背单词、备考语言考试",                        cat: "学习", min: 10, diff: "入门" },
+  { file: "parenting.json",         emoji: "👨‍👩‍👧", name: "亲子沟通", desc: "想改善亲子沟通、减少吼叫",                            cat: "关系", min: 10, diff: "进阶" },
+  { file: "caregiver.json",         emoji: "🤝", name: "照护者支持",  desc: "照顾老人病人、容易疲惫的人",                          cat: "关系", min: 5,  diff: "进阶" },
+  { file: "adhd.json",              emoji: "🧠", name: "ADHD 支持",   desc: "注意力涣散、拖延、容易忘事",                          cat: "学习", min: 5,  diff: "进阶" },
+  { file: "reading.json",           emoji: "📖", name: "读书",        desc: "买书不读、想建立阅读习惯",                            cat: "学习", min: 10, diff: "入门" },
+  { file: "pet.json",               emoji: "🐾", name: "宠物",        desc: "养猫狗，想科学陪伴和记录",                            cat: "生活", min: 5,  diff: "入门" },
+];
+
+const CATS = ["全部", "学习", "健康", "生活", "情绪", "职业", "创作", "关系"];
+let activeCat = "全部";
+let quizCat = null;
+let quizMin = null;
+
+const grid = document.getElementById('grid');
+const chips = document.getElementById('chips');
+const toast = document.getElementById('toast');
+
+function showToast(msg, isError) {
+  toast.textContent = msg;
+  toast.classList.toggle('error', !!isError);
+  toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+
+function cardHTML(s) {
+  return `<div class="card">
+    <div class="emoji">${s.emoji}</div>
+    <h3>${s.name}</h3>
+    <div class="desc">${s.desc}</div>
+    <div class="meta">
+      <span class="tag">${s.cat}</span>
+      <span class="tag">每天约 ${s.min} 分钟</span>
+      <span class="tag">${s.diff}</span>
+    </div>
+    <div class="card-actions">
+      <button class="btn primary small" data-copy="${s.file}">复制模板</button>
+      <button class="btn small" data-view="${s.file}">预览</button>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const list = SCENARIOS.filter(s => activeCat === "全部" || s.cat === activeCat);
+  grid.innerHTML = list.map(cardHTML).join('');
+}
+
+function renderChips() {
+  chips.innerHTML = CATS.map(c => `<button class="chip ${c === activeCat ? 'active' : ''}" data-cat="${c}">${c}</button>`).join('');
+}
+
+chips.addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  activeCat = btn.dataset.cat;
+  renderChips();
+  render();
+});
+
+document.getElementById('q1').addEventListener('click', e => {
+  const btn = e.target.closest('.choice');
+  if (!btn) return;
+  quizCat = btn.dataset.cat;
+  document.querySelectorAll('#q1 .choice').forEach(b => b.classList.toggle('active', b === btn));
+  recommend();
+});
+
+document.getElementById('q2').addEventListener('click', e => {
+  const btn = e.target.closest('.choice');
+  if (!btn) return;
+  quizMin = Number(btn.dataset.min);
+  document.querySelectorAll('#q2 .choice').forEach(b => b.classList.toggle('active', b === btn));
+  recommend();
+});
+
+function recommend() {
+  const box = document.getElementById('result');
+  if (!quizCat) { box.style.display = 'none'; return; }
+  let pool = SCENARIOS.filter(s => s.cat === quizCat);
+  if (!pool.length) pool = SCENARIOS;
+  pool.sort((a, b) => {
+    const da = quizMin ? Math.abs(a.min - quizMin) : 0;
+    const db = quizMin ? Math.abs(b.min - quizMin) : 0;
+    return da - db;
+  });
+  const s = pool[0];
+  box.style.display = 'block';
+  box.innerHTML = `推荐你试试 <strong>${s.emoji} ${s.name}</strong> —— ${s.desc}<br>
+    <button class="btn primary small" style="margin-top:10px" data-copy="${s.file}">复制这个模板</button>
+    <button class="btn small" style="margin-top:10px" data-view="${s.file}">先预览</button>`;
+}
+
+document.addEventListener('click', async e => {
+  const copyBtn = e.target.closest('[data-copy]');
+  const viewBtn = e.target.closest('[data-view]');
+  if (copyBtn) {
+    const file = copyBtn.dataset.copy;
+    copyBtn.disabled = true;
+    try {
+      const text = await fetchText(file);
+      await copyText(text);
+      showToast('已复制 ✓ 去粘贴给 AI 吧');
+    } catch (err) {
+      showToast('复制失败：请通过 GitHub Pages 打开，或到 examples/ 手动复制', true);
+    } finally {
+      copyBtn.disabled = false;
+    }
+  }
+  if (viewBtn) {
+    const file = viewBtn.dataset.view;
+    try {
+      const text = await fetchText(file);
+      document.getElementById('modal-title').textContent = file;
+      document.getElementById('modal-body').textContent = text;
+      document.getElementById('modal-copy').dataset.copy = file;
+      document.getElementById('modal').showModal();
+    } catch (err) {
+      showToast('无法读取文件：请通过 GitHub Pages 打开', true);
+    }
+  }
+});
+
+async function fetchText(file) {
+  const res = await fetch('examples/' + file, { cache: 'no-cache' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return await res.text();
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  const ok = document.execCommand('copy');
+  document.body.removeChild(ta);
+  if (!ok) throw new Error('copy failed');
+}
+
+renderChips();
+render();
+</script>
+</body>
+</html>
