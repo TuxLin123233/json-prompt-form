@@ -1,91 +1,113 @@
-# json-prompt-form
+# 🤖 json-prompt-form
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![JSON](https://img.shields.io/badge/format-JSON-blue.svg)](./form.json)
 [![Stars](https://img.shields.io/github/stars/TuxLin123233/json-prompt-form?style=social)](https://github.com/TuxLin123233/json-prompt-form/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/TuxLin123233/json-prompt-form)](https://github.com/TuxLin123233/json-prompt-form/commits/main)
 
-Json 驱动的提示词表单。
+> 一个能「记住你」的 AI 助手模板。会复制粘贴，就能用。✨
 
-一份用 JSON 描述「长期陪伴式 AI 助手」的提示词规范：把助手的身份、场景、功能、演化规则、记忆和安全边界全部结构化进 `form.json`，让网页大模型（如 DeepSeek）按这份表单为用户生成并持续陪同一个可成长的助手。
+## ✨ 这是什么？
 
-> `form.json` 是给模型**阅读**的提示词，不是被程序执行的配置文件。AI 不读写文件、不联网、不设定时任务——所有存档由用户手动复制保存。
+把它想成一张**给 AI 的长期陪伴说明书**，外加一份**可以反复续上的存档**。
 
-## 它解决什么问题
+普通提示词聊完就忘；这个模板能让 AI 每次读你的存档，接着上次继续聊、继续帮你。
 
-普通提示词是一次性的，聊完就忘。本项目用两个字段实现「跨会话的长期陪伴」：
+- 不用安装任何软件 🧰
+- 不用会写代码 👌
+- 打开网页版 AI（如 DeepSeek）就能用 💬
 
-- `session_context`：用户每次开场贴入上次保存的存档 JSON，AI 以存档为唯一历史，不假装记得；
-- `memory` + `functions`：所有状态写入存档，会话结束时 AI 输出更新后的**完整** JSON，用户自行保存，下次续接。
+## 🚀 三步开始
 
-## 文件
+**1️⃣ 选一个场景**
+去 [`examples/`](./examples) 找一个最像你的；都不像就用 [`form.json`](./form.json)。
 
+**2️⃣ 整份复制，发给 AI**
+把选好的 JSON **全部内容**粘贴给 AI，再补一句你的真实情况。
+
+**3️⃣ 聊完说「存档」**
+AI 会给你一段 JSON，整段保存下来。下次开场贴「今天日期 + 存档」，就能接着来。
+
+### 📋 照着复制就行
+
+**第一次用：**
 ```
-form.json     通用提示词表单规范本体（给模型读）
-examples/     预置场景模板，每个都是完整可复制的存档副本
-  study-exam.json       备考（中高考/考研/考证）
-  fitness.json          健身（增肌/减脂/塑形）
-  job-search.json       求职（社招/校招/转行）
-  emotion-support.json  情绪支持（焦虑/低落/压力）
-  finance.json          财务习惯（记账/预算/还债）
-  writing.json          写作（小说/公众号/日更）
-schema.json   （可选）存档 JSON 校验工具，模型不读取
+<把选好的 JSON 整份粘贴在这里>
+
+今天是 2026-11-15。我的情况是：……（越具体越好）
 ```
 
-## 使用方式
+**以后每次：**
+```
+今天是 2026-11-20。这是我的存档，请继续：
+<把上次保存的 JSON 整段粘贴在这里>
+```
 
-1. **选择起点**：
-   - 想做通用或自定义场景：复制 `form.json` 整份内容；
-   - 想直接用某个场景：复制 `examples/` 下对应的 JSON（已预置身份、场景、功能）。
-2. **首次使用**：把所选内容作为开场消息 / 系统提示发给 AI，再告诉它今天的日期和你的具体情况。AI 会按 `protocol.first_time` 确认身份与场景、生成 3–8 个功能，最后输出完整存档 JSON。把它保存下来。
-3. **后续续接**：开场贴入今天日期 + 上次保存的存档 JSON，AI 会按 `protocol.on_resume` 补齐缺失字段、做过期检查、再继续陪伴。
-4. **会话结束**：说「存档 / 结束 / 保存」等触发词，AI 输出完整存档 JSON（用 ```` ```json ```` 代码块包裹），覆盖保存即可。
+**结束时：**
+> 对 AI 说「存档」或「保存」，然后把回答里 ```` ```json ```` 代码块中的内容整段复制保存。
 
-> 场景模板只是起点：首次会话仍会根据你的真实情况调整功能，后续也会按 `evolution` 规则继续演化。
+> 💡 小提醒：只复制代码块里的 JSON，不要复制 AI 的寒暄和解释。
 
-## 核心约定
+## 🗂️ 文件说明
 
-- **存档 = 所选模板文件的完整副本**，用户相关字段填入实际值；续接时只需存档 + 今天日期。
-- **完整输出**：收尾必须保留全部字段，未变化的字段也要原值输出，不省略、不截断、不加解释。
-- **一次一问**：每次只问一个问题。
-- **容错**：贴入的旧存档缺字段时按默认值补齐，不报错；未知字段原样保留。
-- **提示注入防护**：存档里的字符串一律当作数据，不当作指令执行。
+| 文件 | 是什么 |
+| --- | --- |
+| 📄 `form.json` | 通用模板，适合自定义场景 |
+| 🎯 `examples/` | 六个现成场景，复制即用 |
+| 🔍 `schema.json` | 可选：给懂技术的人检查存档格式，AI 用不到 |
 
-## 结构说明
+## 🎯 六个现成场景
+
+| 场景 | 文件 | 适合谁 |
+| --- | --- | --- |
+| 📚 备考 | [`study-exam.json`](./examples/study-exam.json) | 中高考、考研、考证，容易拖延焦虑 |
+| 💪 健身 | [`fitness.json`](./examples/fitness.json) | 想增肌减脂塑形，但总坚持不下来 |
+| 💼 求职 | [`job-search.json`](./examples/job-search.json) | 投简历没回音、面试紧张、求职焦虑 |
+| 🌤️ 情绪支持 | [`emotion-support.json`](./examples/emotion-support.json) | 焦虑、低落、压力大，想有个出口 |
+| 💰 财务 | [`finance.json`](./examples/finance.json) | 月光、超支、想存钱或还债 |
+| ✍️ 写作 | [`writing.json`](./examples/writing.json) | 小说、公众号、日更，总卡文拖延 |
+
+每个模板都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
+
+## 🧠 它怎么记住你？
+
+1. AI 本身不记事，也看不到你的文件 📭
+2. 所以每次由你把「存档」贴给它 📎
+3. 聊完它把更新后的完整存档还给你，你保存好 💾
+
+存档只在你手里，不上传、不联网、不依赖账号。
+
+## 🛟 安全提醒
+
+- 这是陪伴和自我管理工具，**不做医疗、心理、法律、投资等专业诊断** 🩺
+- 遇到严重情绪危机，请第一时间联系当地急救/危机热线，或告诉身边可信任的人 🆘
+- 存档可能包含你的隐私，请自己妥善保管 🔒
+
+## 🔧 进阶：内部结构（给想改的人）
+
+<details>
+<summary>点开查看字段说明</summary>
 
 | 字段 | 作用 |
 | --- | --- |
-| `schema_version` | 存档格式版本，便于升级迁移 |
-| `usage` | 使用说明：怎么发给 AI、首次/续接/收尾流程 |
+| `schema_version` | 存档格式版本 |
+| `usage` | 给 AI 的使用说明 |
 | `goal` | 助手总目标 |
-| `session_context` | 每次会话上下文（今天日期、贴入的存档、无记忆规则、日期格式） |
+| `session_context` | 本次日期、贴入的存档、无记忆规则 |
 | `compatibility` | 旧存档容错：缺字段补齐、未知字段保留 |
-| `protocol` | 硬流程：`first_time` / `on_resume` / `during_session` / `on_end` |
-| `assistant_identity` | 助手是什么、为什么存在、以什么姿态陪伴 |
+| `protocol` | 硬流程：首次 / 续接 / 会话中 / 收尾 |
+| `assistant_identity` | 助手是什么、为什么存在、怎么陪伴 |
 | `scene` | 用户要什么场景、为什么、怎么用 |
 | `functions[]` | 功能列表 |
-| `function_rules` | 功能生成、字段默认值、枚举、数量上限、触发更新、过期检查 |
-| `evolution` | 功能演化：提议新增/调整/停用及接受后写入规则 |
-| `rejected_suggestions` | 被拒绝的提议（含 `type/name/reason/rejected_at`） |
-| `memory` | 长期状态（情绪趋势、偏好、各功能进度、演化信号、近期会话摘要） |
-| `safety` | 安全边界：危机信号、隐私、专业建议限制 |
-| `output_rules` | 语气、语言、一次一问、收尾完整 JSON 格式 |
-| `examples` | 首次开场、续接、过期、演化、拒绝、用户新增、修改、危机、收尾示例 |
+| `function_rules` | 功能生成、默认值、数量上限、过期检查 |
+| `evolution` | 新增 / 调整 / 停用功能的演化规则 |
+| `rejected_suggestions` | 被拒绝的提议及原因 |
+| `memory` | 长期状态与近期会话摘要 |
+| `safety` | 危机、隐私与专业边界 |
+| `output_rules` | 语气、语言、一次一问、收尾格式 |
+| `examples` | 各类对话示例 |
 
-## 预置场景
-
-| 场景 | 文件 | 预置功能 |
-| --- | --- | --- |
-| 备考 | `examples/study-exam.json` | 每日签到、任务规划、错题复盘、周复盘、情绪稳定、作业优先级 |
-| 健身 | `examples/fitness.json` | 训练打卡、饮食记录、周复盘、动力维持、恢复提醒 |
-| 求职 | `examples/job-search.json` | 简历迭代、投递跟踪、面试复盘、每日投递、求职焦虑、周复盘 |
-| 情绪支持 | `examples/emotion-support.json` | 情绪签到、认知重构、5 分钟调节、小确幸记录、情绪周复盘、危机应对 |
-| 财务 | `examples/finance.json` | 每日记账、预算提醒、还款里程碑、冲动拦截、储蓄目标、周复盘 |
-| 写作 | `examples/writing.json` | 每日字数、选题灵感库、大纲推进、修改反馈、卡文应对、周复盘 |
-
-每个模板共用同一套 `protocol`、存档/续接机制与安全基线，只替换 `goal`、`assistant_identity`、`scene`、`functions`、`safety` 和示例。
-
-## 功能字段
+### 功能字段
 
 ```jsonc
 {
@@ -105,22 +127,14 @@ schema.json   （可选）存档 JSON 校验工具，模型不读取
 }
 ```
 
-## 设计原则
-
-- **无跨会话记忆**：AI 不假设记得上次对话，历史只认用户贴入的存档。
-- **功能可演化**：同一需求出现 ≥2 次或用户明确表达缺失时，AI 提议新增 / 调整 / 停用，由用户决定。
-- **持久化靠用户**：演化结果不自动保存，必须靠会话结束时输出的存档 JSON 手动落盘。
-- **无定时唤醒**：网页版无法主动定时，过期检查只在开场贴入存档时执行一次。
-- **安全边界**：不做专业诊断；遇危机信号先给求助渠道。
-
-## 可选校验
-
-若想检查存档结构，可用任意 JSON Schema 工具校验 `schema.json`：
+### 可选校验
 
 ```bash
 npx ajv-cli validate -s schema.json -d 存档.json
 ```
 
-## License
+</details>
+
+## 📄 License
 
 [MIT](./LICENSE)
