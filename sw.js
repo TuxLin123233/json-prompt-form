@@ -1,4 +1,4 @@
-const CACHE = "jpf-v2";
+const CACHE = "jpf-v3";
 const CORE = [
   "./",
   "index.html",
@@ -40,7 +40,9 @@ const CORE = [
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then(cache => cache.addAll(CORE.map(url => new Request(url, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -60,7 +62,7 @@ self.addEventListener("fetch", event => {
 
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req)
+      fetch(req, { cache: "no-store" })
         .then(res => {
           const copy = res.clone();
           caches.open(CACHE).then(cache => cache.put(req, copy));
@@ -74,7 +76,7 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(req).then(hit => {
       if (hit) return hit;
-      return fetch(req).then(res => {
+      return fetch(req, { cache: "no-cache" }).then(res => {
         if (res.ok) {
           const copy = res.clone();
           caches.open(CACHE).then(cache => cache.put(req, copy));

@@ -114,7 +114,17 @@ function stripFence(text) {
     return t;
   } catch (err) {}
   const m = t.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
-  return m ? m[1].trim() : t;
+  if (m) return m[1].trim();
+  const first = t.indexOf("```");
+  const brace = t.indexOf("{");
+  if (first !== -1 && (brace === -1 || first < brace)) {
+    const last = t.lastIndexOf("```");
+    if (last > first) {
+      let inner = t.slice(first + 3, last).trim().replace(/^json\s*/i, "").trim();
+      return inner;
+    }
+  }
+  return t;
 }
 
 function braceBalance(text) {
