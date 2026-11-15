@@ -176,7 +176,7 @@ pip install jsonschema
 python3 scripts/validate.py            # 校验全部 JSON
 ```
 
-新增场景的步骤见 [CONTRIBUTING.md](./CONTRIBUTING.md)。CI 会在每次 push 时自动校验。
+新增场景的步骤见 [CONTRIBUTING.md](./CONTRIBUTING.md)。把 [`docs/ci/validate.yml`](./docs/ci/validate.yml) 放到 `.github/workflows/` 后，CI 会在每次 push 时自动校验。
 
 ### 可选校验
 

@@ -31,7 +31,7 @@ python3 scripts/generate_examples.py
 python3 scripts/validate.py
 ```
 
-不要直接手改 `examples/*.json`，它们由脚本生成，CI 会检查是否一致。
+不要直接手改 `examples/*.json`，它们由脚本生成，CI 会检查是否一致（启用方式见 [`docs/ci/README.md`](./docs/ci/README.md)）。
 
 ## 安全检查
 
