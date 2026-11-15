@@ -20,8 +20,11 @@ def load(path):
 
 def main():
     schema = load(os.path.join(ROOT, "schema.json"))
-    paths = [os.path.join(ROOT, "form.json")] + sorted(
-        glob.glob(os.path.join(ROOT, "examples", "*.json"))
+    paths = [
+        os.path.join(ROOT, "form.json"),
+        os.path.join(ROOT, "form.en.json"),
+    ] + sorted(
+        glob.glob(os.path.join(ROOT, "examples", "**", "*.json"), recursive=True)
     )
     failed = False
     for path in paths:

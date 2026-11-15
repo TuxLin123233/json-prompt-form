@@ -25,13 +25,13 @@ A normal prompt is forgotten once the chat ends. This template lets the AI read 
 ## 🚀 Start in 3 steps
 
 **1️⃣ Pick a scenario**
-Choose the closest one in [`examples/`](./examples), or use [`form.json`](./form.json) to build your own. Or open the [one-click copy page](https://tuxlin123233.github.io/json-prompt-form/).
+Choose the closest one in [`examples/`](./examples), or use [`form.json`](./form.json) to build your own. Or open the [one-click copy page](https://tuxlin123233.github.io/json-prompt-form/). To combine functions yourself, use the [custom builder](https://tuxlin123233.github.io/json-prompt-form/builder.html).
 
 **2️⃣ Copy the whole file to the AI**
 Paste the entire JSON, then add one sentence about your real situation.
 
 **3️⃣ Say "save" when you finish**
-The AI returns a JSON archive. Keep it. Next time, paste the date + archive to resume.
+The AI returns a JSON archive. Keep it. Next time, paste the date + archive to resume. If the archive is too long, say "compact archive" and it keeps only the essential fields; to resume, paste the original template and the compact archive together.
 
 ### 📋 Copy-paste templates
 
@@ -53,6 +53,14 @@ Today is 2026-11-20. Here is my archive, please continue:
 
 > 💡 Tip: copy only the JSON inside the code block, not the AI's explanation. If the archive is cut off, reply "continue" to get the remaining parts.
 
+### 🧰 More tools
+
+- 🛠️ [Custom builder](https://tuxlin123233.github.io/json-prompt-form/builder.html): answer a few questions and generate your own template.
+- 🔍 [Archive checker](https://tuxlin123233.github.io/json-prompt-form/checker.html): validate, format, and detect truncated archives.
+- 🕘 Search and recent scenarios on the home page.
+- 📱 Installable on your phone home screen; works offline.
+- 🧩 English templates in [`examples/en/`](./examples/en); filled sample archives in [`examples/filled/`](./examples/filled).
+
 ## 🔄 How it works
 
 ```mermaid
@@ -70,7 +78,15 @@ flowchart TD
 | 📄 [`form.json`](./form.json) | Generic template for custom scenarios |
 | 🎯 [`examples/`](./examples) | 26 ready-to-use scenarios |
 | 🖥️ [`index.html`](./index.html) | One-click copy + scenario picker |
+| 🛠️ [`builder.html`](./builder.html) | Custom builder: answer questions, get a template |
+| 🔍 [`checker.html`](./checker.html) | Archive checker: validate / format / detect truncation |
+| 🧩 [`examples/en/`](./examples/en) | 26 English scenario templates |
+| 💾 [`examples/filled/`](./examples/filled) | Filled sample archives with dates and memory |
+| 🌐 [`form.en.json`](./form.en.json) | English generic template |
 | 🔍 [`schema.json`](./schema.json) | Optional archive validator |
+| 🔁 [`scripts/migrate.py`](./scripts/migrate.py) | Migrate older archives |
+| 🤖 [`llms.txt`](./llms.txt) | Project summary for AI search tools |
+| 📜 [`CHANGELOG.md`](./CHANGELOG.md) | Version history |
 | 💬 [`docs/example-dialogue.md`](./docs/example-dialogue.md) | A full example conversation |
 | ❓ [`FAQ.md`](./FAQ.md) | FAQ (Chinese) |
 | 🤝 [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to add a scenario (Chinese) |
@@ -108,6 +124,8 @@ flowchart TD
 
 Every template adapts to your real situation and proposes new functions as you chat.
 
+English templates are in [`examples/en/`](./examples/en). To see what a filled archive looks like, open [`examples/filled/`](./examples/filled).
+
 ## 🧠 How does it remember you?
 
 1. The AI has no memory and cannot read your files 📭
@@ -134,6 +152,7 @@ The archive stays with you: no upload, no account.
 | `goal` | Overall assistant goal |
 | `session_context` | Date, pasted archive, no-memory rule |
 | `compatibility` | Tolerate old archives: fill missing fields, keep unknown ones |
+| `archive_modes` | Full archive / compact archive modes |
 | `protocol` | Hard flow: first time / resume / in-session / end (with split archives) |
 | `assistant_identity` | What it is, why it exists, how it accompanies |
 | `scene` | User's scenario and goals |
@@ -169,9 +188,11 @@ The archive stays with you: no upload, no account.
 ### Regenerate and validate
 
 ```bash
-python3 scripts/generate_examples.py
+python3 scripts/generate_examples.py     # Chinese scenarios + filled samples
+python3 scripts/generate_en_examples.py  # English scenarios
 pip install jsonschema
-python3 scripts/validate.py
+python3 scripts/validate.py              # validate all JSON
+python3 scripts/migrate.py old.json -o new.json  # migrate an old archive
 ```
 
 </details>

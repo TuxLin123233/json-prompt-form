@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>存档检查器 · json-prompt-form</title>
+<meta name="description" content="粘贴 AI 输出的存档 JSON，检查格式、字段、截断和功能状态。">
+<style>
+  :root {
+    --bg: #f7f8fb; --card: #fff; --text: #1f2330; --muted: #6b7280;
+    --brand: #4f46e5; --brand-soft: #eef2ff; --line: #e5e7eb;
+    --ok: #047857; --warn: #b45309; --err: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  a { color: var(--brand); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 24px 18px 64px; }
+  header.hero {
+    background: linear-gradient(135deg, #eef2ff 0%, #fdf2f8 100%);
+    border: 1px solid var(--line); border-radius: 20px; padding: 30px 26px; text-align: center;
+  }
+  .hero h1 { margin: 0 0 8px; font-size: 27px; }
+  .hero p { margin: 0 auto; color: var(--muted); max-width: 640px; }
+  h2 { margin: 30px 0 12px; font-size: 20px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  textarea {
+    width: 100%; min-height: 300px; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: #fff; color: var(--text); resize: vertical;
+  }
+  textarea:focus { outline: 2px solid #c7d2fe; border-color: #a5b4fc; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .btn {
+    appearance: none; border: 1px solid var(--line); background: #fff; color: var(--text);
+    border-radius: 12px; padding: 10px 17px; font-size: 15px; cursor: pointer; font-weight: 600;
+    text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn:hover { border-color: #a5b4fc; }
+  .btn.primary:hover { background: #4338ca; }
+  .summary { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 6px; }
+  .pill { font-size: 13px; background: var(--brand-soft); color: #3730a3; border-radius: 999px; padding: 3px 11px; }
+  .pill.err { background: #fee2e2; color: var(--err); }
+  .pill.ok { background: #ecfdf5; color: var(--ok); }
+  .pill.warn { background: #fffbeb; color: var(--warn); }
+  ul.report { list-style: none; margin: 10px 0 0; padding: 0; }
+  ul.report li { padding: 9px 12px; border-radius: 10px; margin-bottom: 7px; font-size: 14px; }
+  ul.report li.ok { background: #ecfdf5; color: #065f46; }
+  ul.report li.warn { background: #fffbeb; color: #92400e; }
+  ul.report li.err { background: #fef2f2; color: #991b1b; }
+  ul.report li.info { background: #f8fafc; color: #334155; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+  @media (max-width: 640px) {
+    .wrap { padding: 16px 12px 48px; }
+    header.hero { padding: 24px 18px; border-radius: 16px; }
+    .hero h1 { font-size: 22px; }
+    textarea { min-height: 240px; font-size: 12px; }
+    .btn { min-height: 44px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>🔍 存档检查器</h1>
+    <p>把 AI 输出的存档整段粘贴进来，检查是否为合法 JSON、字段是否完整、有没有被截断。</p>
+  </header>
+
+  <h2>粘贴存档</h2>
+  <div class="panel">
+    <textarea id="input" placeholder="把 ```json 代码块里的内容整段粘贴到这里…" spellcheck="false"></textarea>
+    <div class="actions">
+      <button class="btn primary" id="check">检查</button>
+      <button class="btn" id="format">格式化</button>
+      <button class="btn" id="copy">复制</button>
+      <button class="btn" id="sample">载入示例</button>
+      <button class="btn" id="clear">清空</button>
+      <a class="btn" href="index.html">返回首页</a>
+    </div>
+    <div class="hint">不会上传任何内容，检查全部在本地浏览器完成。支持带 ```json 代码块外壳的文本。</div>
+  </div>
+
+  <h2>检查结果</h2>
+  <div class="summary" id="summary"></div>
+  <ul class="report" id="report"></ul>
+
+  <footer>MIT License · <a href="https://github.com/TuxLin123233/json-prompt-form">TuxLin123233/json-prompt-form</a></footer>
+</div>
+
+<script>
+const input = document.getElementById("input");
+const reportEl = document.getElementById("report");
+const summaryEl = document.getElementById("summary");
+const REQUIRED = ["schema_version", "goal", "session_context", "assistant_identity", "scene", "functions", "memory", "output_rules"];
+const FN_REQUIRED = ["id", "name", "what", "why", "how", "trigger", "frequency", "status", "source"];
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const ID = /^f_[a-z0-9_]+$/;
+
+function esc(text) {
+  return String(text).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+function stripFence(text) {
+  const t = text.trim();
+  const m = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  return m ? m[1].trim() : t;
+}
+
+function braceBalance(text) {
+  let depth = 0, inString = false, escaped = false, min = 0;
+  for (const ch of text) {
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === "\\") escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') { inString = true; continue; }
+    if (ch === "{" || ch === "[") depth++;
+    if (ch === "}" || ch === "]") { depth--; if (depth < min) min = depth; }
+  }
+  return { depth, min, inString };
+}
+
+function add(list, level, text) {
+  list.push({ level, text });
+}
+
+function analyze(raw) {
+  const list = [];
+  const text = stripFence(raw || "");
+  if (!text) {
+    add(list, "err", "没有内容：请先粘贴存档 JSON。");
+    return { list, summary: [] };
+  }
+
+  const size = new Blob([text]).size;
+  let data = null;
+  try {
+    data = JSON.parse(text);
+  } catch (err) {
+    add(list, "err", "不是合法 JSON：" + err.message);
+    const bal = braceBalance(text);
+    if (bal.depth > 0) add(list, "warn", `括号没有闭合（还剩 ${bal.depth} 层），存档可能被截断了。回复 AI「继续」让它发完。`);
+    if (bal.depth < 0) add(list, "warn", "有多余的右括号，可能粘贴了重复内容或代码块外壳。");
+    if (bal.inString) add(list, "warn", "字符串没有闭合，通常说明内容被截断。");
+    add(list, "info", "仍然不行时：让 AI「请输出完整存档 JSON」，或说「精简存档」减少体积。");
+    return { list, summary: [{ cls: "err", text: "格式错误" }, { cls: "", text: (size / 1024).toFixed(1) + " KB" }] };
+  }
+
+  if (typeof data !== "object" || data === null || Array.isArray(data)) {
+    add(list, "err", "顶层必须是 JSON 对象（以 { 开头），当前不是。");
+    return { list, summary: [{ cls: "err", text: "结构错误" }] };
+  }
+
+  REQUIRED.forEach(key => {
+    if (!(key in data)) add(list, "err", "缺少必填字段：" + key);
+  });
+
+  const version = data.schema_version;
+  if (typeof version === "string" && /^\d+\.\d+\.\d+$/.test(version)) {
+    add(list, "ok", "schema_version：" + version);
+  } else if (version === undefined) {
+    add(list, "warn", "没有 schema_version，可能是旧存档。可用 scripts/migrate.py 迁移。");
+  }
+
+  const isCompact = !("usage" in data) && !("protocol" in data) && !("safety" in data);
+  if (isCompact) {
+    add(list, "warn", "这看起来是精简存档：续接时请同时贴入原始模板，让 AI 补回省略的规则。");
+  }
+
+  const ctx = data.session_context;
+  if (ctx && typeof ctx === "object") {
+    if ("today" in ctx && ctx.today !== null) {
+      if (typeof ctx.today !== "string" || !DATE.test(ctx.today)) add(list, "err", "session_context.today 不是 YYYY-MM-DD：" + JSON.stringify(ctx.today));
+      else add(list, "ok", "今天日期：" + ctx.today);
+    } else {
+      add(list, "warn", "session_context.today 为空：续接时记得告诉 AI 今天几号。");
+    }
+  }
+
+  const functions = data.functions;
+  let fnCount = 0, active = 0;
+  if (Array.isArray(functions)) {
+    fnCount = functions.length;
+    if (fnCount === 0) add(list, "warn", "functions 是空数组：至少应有 1 个功能。");
+    if (fnCount > 12) add(list, "warn", "功能超过 12 个，建议合并或停用一些。");
+    const ids = new Set();
+    functions.forEach((f, i) => {
+      const label = "功能 #" + (i + 1) + (f && f.name ? "「" + f.name + "」" : "");
+      if (!f || typeof f !== "object") { add(list, "err", label + " 不是对象。"); return; }
+      FN_REQUIRED.forEach(k => { if (!(k in f)) add(list, "err", label + " 缺少字段：" + k); });
+      if (f.id && !ID.test(f.id)) add(list, "err", label + " 的 id 不合规：" + f.id);
+      if (f.id) {
+        if (ids.has(f.id)) add(list, "err", "id 重复：" + f.id);
+        ids.add(f.id);
+      }
+      if (f.status === "active") active++;
+      if (f.status && !["active", "paused", "retired"].includes(f.status)) add(list, "err", label + " 的 status 无效：" + f.status);
+      if (f.source && !["initial", "ai_suggest", "user_add", "user_modify"].includes(f.source)) add(list, "err", label + " 的 source 无效：" + f.source);
+      ["last_triggered_at", "created_at", "updated_at"].forEach(k => {
+        if (f[k] !== null && f[k] !== undefined && (typeof f[k] !== "string" || !DATE.test(f[k]))) add(list, "err", label + " 的 " + k + " 不是日期：" + JSON.stringify(f[k]));
+      });
+    });
+    const allIds = new Set(functions.filter(f => f && f.id).map(f => f.id));
+    functions.forEach(f => {
+      if (f && Array.isArray(f.linked_with)) {
+        f.linked_with.forEach(ref => { if (!allIds.has(ref)) add(list, "warn", "功能 " + f.id + " 的 linked_with 引用了不存在的 id：" + ref); });
+      }
+    });
+  } else {
+    add(list, "err", "functions 必须是数组。");
+  }
+
+  const state = data.memory && data.memory.state;
+  if (!state || typeof state !== "object") {
+    add(list, "err", "memory.state 缺失或不是对象。");
+  } else {
+    const sessions = state.recent_sessions;
+    if (Array.isArray(sessions)) {
+      sessions.forEach((s, i) => {
+        if (s && typeof s.summary === "string" && s.summary.length > 120) add(list, "warn", "recent_sessions #" + (i + 1) + " 摘要超过 120 字，建议压缩。");
+      });
+    }
+    add(list, "ok", "记忆摘要：" + (sessions && sessions.length ? sessions.length + " 条" : "暂无记录"));
+  }
+
+  if (data.output_rules && typeof data.output_rules === "object" && data.output_rules.on_session_end) {
+    add(list, "ok", "输出规则已包含 on_session_end。");
+  } else if (!isCompact) {
+    add(list, "warn", "output_rules.on_session_end 缺失：AI 可能不知道收尾要输出存档。");
+  }
+
+  if (!list.some(x => x.level === "err")) add(list, "ok", "没有发现结构性错误。");
+
+  const summary = [
+    { cls: list.some(x => x.level === "err") ? "err" : "ok", text: list.some(x => x.level === "err") ? "有错误" : "基本通过" },
+    { cls: "", text: (size / 1024).toFixed(1) + " KB" },
+    { cls: "", text: "功能 " + fnCount + " 个 / 启用 " + active + " 个" },
+    { cls: "", text: version ? "v" + version : "无版本号" },
+    { cls: isCompact ? "warn" : "", text: isCompact ? "精简存档" : "完整存档" }
+  ];
+  return { list, summary };
+}
+
+function render(result) {
+  summaryEl.innerHTML = result.summary.map(s => `<span class="pill ${s.cls}">${esc(s.text)}</span>`).join("");
+  reportEl.innerHTML = result.list.map(x => `<li class="${x.level}">${esc(x.text)}</li>`).join("");
+}
+
+function run() {
+  render(analyze(input.value));
+}
+
+document.getElementById("check").addEventListener("click", run);
+document.getElementById("format").addEventListener("click", () => {
+  try {
+    input.value = JSON.stringify(JSON.parse(stripFence(input.value)), null, 4) + "\n";
+    run();
+  } catch (err) {
+    render(analyze(input.value));
+  }
+});
+document.getElementById("copy").addEventListener("click", async () => {
+  try {
+    if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(input.value);
+    else {
+      input.select();
+      document.execCommand("copy");
+    }
+  } catch (err) {}
+});
+document.getElementById("clear").addEventListener("click", () => {
+  input.value = "";
+  summaryEl.innerHTML = "";
+  reportEl.innerHTML = "";
+});
+document.getElementById("sample").addEventListener("click", async () => {
+  try {
+    const res = await fetch("examples/filled/study-exam.json", { cache: "no-cache" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    input.value = await res.text();
+    run();
+  } catch (err) {
+    reportEl.innerHTML = '<li class="err">无法载入示例：请通过 GitHub Pages 打开。</li>';
+  }
+});
+
+let timer = null;
+input.addEventListener("input", () => {
+  clearTimeout(timer);
+  timer = setTimeout(run, 500);
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>

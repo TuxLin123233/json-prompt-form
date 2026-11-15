@@ -25,13 +25,13 @@
 ## 🚀 三步开始
 
 **1️⃣ 选一个场景**
-去 [`examples/`](./examples) 找一个最像你的；都不像就用 [`form.json`](./form.json)。也可以打开[一键复制网页](https://tuxlin123233.github.io/json-prompt-form/)，点一下直接复制。
+去 [`examples/`](./examples) 找一个最像你的；都不像就用 [`form.json`](./form.json)。也可以打开[一键复制网页](https://tuxlin123233.github.io/json-prompt-form/)，点一下直接复制。想自己组合功能，用[自定义生成器](https://tuxlin123233.github.io/json-prompt-form/builder.html)。
 
 **2️⃣ 整份复制，发给 AI**
 把选好的 JSON **全部内容**粘贴给 AI，再补一句你的真实情况。
 
 **3️⃣ 聊完说「存档」**
-AI 会给你一段 JSON，整段保存下来。下次开场贴「今天日期 + 存档」，就能接着来。
+AI 会给你一段 JSON，整段保存下来。下次开场贴「今天日期 + 存档」，就能接着来。存档太长时，对 AI 说「精简存档」，它只保留关键字段；续接时把原始模板和精简存档一起贴入。
 
 ### 📋 照着复制就行
 
@@ -53,6 +53,14 @@ AI 会给你一段 JSON，整段保存下来。下次开场贴「今天日期 + 
 
 > 💡 小提醒：只复制代码块里的 JSON，不要复制 AI 的寒暄和解释。存档太长被截断时，回复「继续」让它分段发完。
 
+### 🧰 更多工具
+
+- 🛠️ [自定义生成器](https://tuxlin123233.github.io/json-prompt-form/builder.html)：回答几个问题，现场生成自己的模板。
+- 🔍 [存档检查器](https://tuxlin123233.github.io/json-prompt-form/checker.html)：粘贴存档，检查格式、字段和截断。
+- 🕘 首页支持搜索和「最近使用」，会记住你点过的场景。
+- 📱 可添加到手机主屏幕，离线也能打开。
+- 🧩 英文模板在 [`examples/en/`](./examples/en)，填好日期和记忆的示例存档在 [`examples/filled/`](./examples/filled)。
+
 ## 🔄 它怎么运转
 
 ```mermaid
@@ -70,7 +78,15 @@ flowchart TD
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
 | 🎯 [`examples/`](./examples) | 二十六个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
+| 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
+| 🔍 [`checker.html`](./checker.html) | 存档检查器：校验 / 格式化 / 查截断 |
+| 🧩 [`examples/en/`](./examples/en) | 26 个英文场景模板 |
+| 💾 [`examples/filled/`](./examples/filled) | 填好日期和记忆的示例存档 |
+| 🌐 [`form.en.json`](./form.en.json) | 英文版通用模板 |
 | 🔍 [`schema.json`](./schema.json) | 可选：给懂技术的人检查存档格式 |
+| 🔁 [`scripts/migrate.py`](./scripts/migrate.py) | 旧存档迁移工具 |
+| 🤖 [`llms.txt`](./llms.txt) | 给 AI 搜索工具的项目说明 |
+| 📜 [`CHANGELOG.md`](./CHANGELOG.md) | 版本更新记录 |
 | 💬 [`docs/example-dialogue.md`](./docs/example-dialogue.md) | 一段完整示例对话 |
 | ❓ [`FAQ.md`](./FAQ.md) | 常见问题 |
 | 🤝 [`CONTRIBUTING.md`](./CONTRIBUTING.md) | 如何新增场景 |
@@ -108,6 +124,8 @@ flowchart TD
 
 每个模板都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
 
+英文模板在 [`examples/en/`](./examples/en)；想看填好的存档长什么样，打开 [`examples/filled/`](./examples/filled)。
+
 ## 🧠 它怎么记住你？
 
 1. AI 本身不记事，也看不到你的文件 📭
@@ -131,6 +149,8 @@ flowchart TD
 
 👉 见 [FAQ.md](./FAQ.md)，或直接看[完整示例对话](./docs/example-dialogue.md)。
 
+延伸阅读：[为什么普通提示词记不住你](./docs/why-prompts-forget.md) · [30 秒演示脚本](./docs/demo-script.md) · [发布清单](./docs/publish-checklist.md)。
+
 ## 🔧 进阶：内部结构（给想改的人）
 
 <details>
@@ -143,6 +163,7 @@ flowchart TD
 | `goal` | 助手总目标 |
 | `session_context` | 本次日期、贴入的存档、无记忆规则 |
 | `compatibility` | 旧存档容错：缺字段补齐、未知字段保留 |
+| `archive_modes` | 完整存档 / 精简存档两种模式 |
 | `protocol` | 硬流程：首次 / 续接 / 会话中 / 收尾（含分段存档） |
 | `assistant_identity` | 助手是什么、为什么存在、怎么陪伴 |
 | `scene` | 用户要什么场景、为什么、怎么用 |
@@ -178,9 +199,11 @@ flowchart TD
 ### 新增场景 / 修改模板
 
 ```bash
-python3 scripts/generate_examples.py   # 从 form.json 生成全部场景
+python3 scripts/generate_examples.py     # 从 form.json 生成中文场景 + 已填示例
+python3 scripts/generate_en_examples.py  # 从 form.en.json 生成英文场景
 pip install jsonschema
-python3 scripts/validate.py            # 校验全部 JSON
+python3 scripts/validate.py              # 校验全部 JSON
+python3 scripts/migrate.py 旧存档.json -o 新存档.json  # 迁移旧存档
 ```
 
 新增场景的步骤见 [CONTRIBUTING.md](./CONTRIBUTING.md)。把 [`docs/ci/validate.yml`](./docs/ci/validate.yml) 放到 `.github/workflows/` 后，CI 会在每次 push 时自动校验。

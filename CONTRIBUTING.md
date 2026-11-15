@@ -15,12 +15,14 @@
 3. 运行生成与校验：
 
    ```bash
-   python3 scripts/generate_examples.py
+   python3 scripts/generate_examples.py     # 中文场景 + examples/filled/
+   python3 scripts/generate_en_examples.py  # 英文场景 examples/en/
    pip install jsonschema
    python3 scripts/validate.py
    ```
 
 4. 在 `README.md` 和 `README.en.md` 的场景表里加一行。
+5. 如果想提供英文版，在 `scripts/generate_en_examples.py` 的 `SCENARIOS` 和 `META` 里加对应条目。英文场景使用 `form.en.json` 作为基础规范。
 
 ## 修改通用规则
 
@@ -31,7 +33,7 @@ python3 scripts/generate_examples.py
 python3 scripts/validate.py
 ```
 
-不要直接手改 `examples/*.json`，它们由脚本生成，CI 会检查是否一致（启用方式见 [`docs/ci/README.md`](./docs/ci/README.md)）。
+不要直接手改 `examples/*.json`、`examples/filled/*.json`、`examples/en/*.json`，它们由脚本生成，CI 会检查是否一致（启用方式见 [`docs/ci/README.md`](./docs/ci/README.md)）。
 
 ## 安全检查
 

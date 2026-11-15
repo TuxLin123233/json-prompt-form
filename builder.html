@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>自定义生成器 · json-prompt-form</title>
+<meta name="description" content="回答几个问题，现场生成属于你的长期陪伴 AI 模板。">
+<style>
+  :root {
+    --bg: #f7f8fb; --card: #fff; --text: #1f2330; --muted: #6b7280;
+    --brand: #4f46e5; --brand-soft: #eef2ff; --line: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  a { color: var(--brand); }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 18px 64px; }
+  header.hero {
+    background: linear-gradient(135deg, #eef2ff 0%, #fdf2f8 100%);
+    border: 1px solid var(--line); border-radius: 20px; padding: 30px 26px; text-align: center;
+  }
+  .hero h1 { margin: 0 0 8px; font-size: 27px; }
+  .hero p { margin: 0 auto; color: var(--muted); max-width: 620px; }
+  h2 { margin: 32px 0 12px; font-size: 20px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  label { display: block; font-weight: 600; margin: 14px 0 6px; font-size: 14px; }
+  label:first-child { margin-top: 0; }
+  input[type=text], input[type=number], textarea {
+    width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px;
+    font: inherit; font-size: 15px; background: #fff; color: var(--text);
+  }
+  textarea { min-height: 78px; resize: vertical; }
+  input:focus, textarea:focus { outline: 2px solid #c7d2fe; border-color: #a5b4fc; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .row { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+  .checks { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); margin-top: 6px; }
+  .check { display: flex; align-items: center; gap: 8px; background: #f9fafb; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 14px; }
+  .check input { width: 16px; height: 16px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .btn {
+    appearance: none; border: 1px solid var(--line); background: #fff; color: var(--text);
+    border-radius: 12px; padding: 11px 18px; font-size: 15px; cursor: pointer; font-weight: 600; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn:hover { border-color: #a5b4fc; }
+  .btn.primary:hover { background: #4338ca; }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .status { margin-top: 14px; font-size: 14px; color: var(--muted); }
+  .status.error { color: #b91c1c; }
+  .status.ok { color: #047857; }
+  pre.code {
+    background: #0f172a; color: #e2e8f0; border-radius: 14px; padding: 16px;
+    overflow: auto; font-size: 12px; line-height: 1.5; max-height: 480px; white-space: pre;
+  }
+  .result { display: none; margin-top: 18px; }
+  footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+  @media (max-width: 640px) {
+    .wrap { padding: 16px 12px 48px; }
+    header.hero { padding: 24px 18px; border-radius: 16px; }
+    .hero h1 { font-size: 22px; }
+    .row { grid-template-columns: 1fr; }
+    .btn { min-height: 44px; }
+    pre.code { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>🛠️ 自定义生成器</h1>
+    <p>回答几个问题，现场生成一份属于你的长期陪伴模板。生成后复制整份 JSON 给 AI 即可。</p>
+  </header>
+
+  <h2>1. 你的情况</h2>
+  <div class="panel">
+    <div class="row">
+      <div>
+        <label for="name">场景名</label>
+        <input id="name" type="text" placeholder="例如：考研、减脂、写作、戒手机" maxlength="30">
+      </div>
+      <div>
+        <label for="minutes">每天大概投入（分钟）</label>
+        <input id="minutes" type="number" min="1" max="120" value="5">
+      </div>
+    </div>
+    <label for="who">你是谁 / 你的情况</label>
+    <textarea id="who" placeholder="例如：在职备考，晚上只有 1 小时，容易焦虑拖延。" maxlength="300"></textarea>
+    <label for="goal">长期目标</label>
+    <textarea id="goal" placeholder="例如：明年 6 月前通过考试；或者半年减 10 斤并保持。" maxlength="300"></textarea>
+    <label for="pain">最大痛点</label>
+    <textarea id="pain" placeholder="例如：计划总完不成、一焦虑就摆烂、没人提醒。" maxlength="300"></textarea>
+  </div>
+
+  <h2>2. 想要哪些功能</h2>
+  <div class="panel">
+    <div class="checks" id="checks"></div>
+    <label for="custom" style="margin-top:18px">还想加的自定义功能（每行一个，可选）</label>
+    <textarea id="custom" placeholder="例如：每周给家人打一次电话&#10;睡前不看手机"></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="generate">生成我的模板</button>
+    <a class="btn" href="index.html">返回首页</a>
+    <a class="btn" href="checker.html">检查存档</a>
+  </div>
+  <div class="status" id="status"></div>
+
+  <div class="result" id="result">
+    <h2>3. 复制给 AI</h2>
+    <p class="hint">整段复制下面的 JSON，发给 AI，再补一句「今天是几号，我的情况是……」。</p>
+    <div class="actions" style="margin-top:0">
+      <button class="btn primary" id="copy">复制 JSON</button>
+      <button class="btn" id="download">下载 .json</button>
+      <button class="btn" id="regen">重新生成</button>
+    </div>
+    <pre class="code" id="output"></pre>
+  </div>
+
+  <footer>MIT License · <a href="https://github.com/TuxLin123233/json-prompt-form">TuxLin123233/json-prompt-form</a></footer>
+</div>
+
+<script>
+const PRESETS = [
+  { id: "f_checkin",  name: "每日签到", what: "每天用一句话记录状态", why: "先看见自己，才谈改变", how: "每天问一句今天怎么样，记录一句，不评判", trigger: "每天", frequency: "每日" },
+  { id: "f_plan",     name: "每日计划", what: "帮你排出今天最重要的 1–3 件事", why: "事多时容易乱，先做重要的", how: "结合目标和精力，给 1–3 件可完成的小事", trigger: "每天开始时", frequency: "每日" },
+  { id: "f_review",   name: "周复盘",   what: "每周回看进展和卡点", why: "只看一天容易灰心，看一周才有趋势", how: "每周日回顾完成度、卡点和下周调整", trigger: "每周日", frequency: "每周" },
+  { id: "f_emotion",  name: "情绪支持", what: "在低落、焦虑、想放弃时接住情绪", why: "情绪是长期坚持的隐性成本", how: "先共情不急着讲道理，再给一个 5 分钟小动作", trigger: "用户表达负面情绪时", frequency: "按需" },
+  { id: "f_track",    name: "记录追踪", what: "记录关键数据或进展", why: "没有记录就看不到变化", how: "每次用一两句话记录，定期汇总趋势", trigger: "完成时", frequency: "按需" },
+  { id: "f_remind",   name: "提醒",     what: "在容易忘记的节点提醒你", why: "长期目标最怕断档", how: "按约定频率问一句，语气简短不唠叨", trigger: "约定时间", frequency: "每日" },
+  { id: "f_practice", name: "学习/练习", what: "安排并跟进每天的练习", why: "技能靠稳定重复，不靠突击", how: "给一个小任务，完成后简单反馈", trigger: "每天", frequency: "每日" },
+  { id: "f_money",    name: "预算记账", what: "记录收支并看住预算", why: "钱的问题需要持续看见", how: "每天记一笔，每周给一次汇总和建议", trigger: "每天", frequency: "每日" },
+  { id: "f_relation", name: "关系沟通", what: "在沟通卡住时帮你换位表达", why: "关系问题容易反复", how: "先听你说，再给一句可以照着说的话", trigger: "沟通冲突时", frequency: "按需" },
+  { id: "f_safety",   name: "安全应对", what: "在危机信号出现时优先保证安全", why: "任何目标都不如安全重要", how: "先关心，建议联系可信任的人或当地热线", trigger: "出现危机信号时", frequency: "按需" }
+];
+
+let baseSpec = null;
+const checks = document.getElementById("checks");
+checks.innerHTML = PRESETS.map(p => `<label class="check"><input type="checkbox" value="${p.id}" ${p.id === "f_checkin" || p.id === "f_emotion" ? "checked" : ""}> ${p.name}</label>`).join("");
+
+function makeFn(id, name, what, why, how, trigger, frequency) {
+  return {
+    id, name, what, why, how, trigger, frequency,
+    linked_with: [], status: "active", source: "initial",
+    last_triggered_at: null, created_at: null, updated_at: null
+  };
+}
+
+async function loadSpec() {
+  if (baseSpec) return baseSpec;
+  const res = await fetch("form.json", { cache: "no-cache" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  baseSpec = await res.json();
+  return baseSpec;
+}
+
+function buildTemplate() {
+  const spec = JSON.parse(JSON.stringify(baseSpec));
+  const name = document.getElementById("name").value.trim() || "我的长期目标";
+  const who = document.getElementById("who").value.trim();
+  const goal = document.getElementById("goal").value.trim();
+  const pain = document.getElementById("pain").value.trim();
+  const minutes = Math.max(1, Math.min(120, Number(document.getElementById("minutes").value) || 5));
+
+  const picked = new Set([...checks.querySelectorAll("input:checked")].map(x => x.value));
+  const functions = PRESETS.filter(p => picked.has(p.id)).map(p => {
+    const why = pain ? `${p.why}（你的痛点：${pain}）` : p.why;
+    return makeFn(p.id, p.name, p.what, why, p.how, p.trigger, p.frequency);
+  });
+
+  document.getElementById("custom").value.split("\n").map(x => x.trim()).filter(Boolean).forEach((line, i) => {
+    functions.push(makeFn(
+      "f_custom_" + (i + 1), line.slice(0, 40),
+      `按你的需要：${line}`,
+      pain || "你希望长期坚持这件事",
+      "结合你的目标和痛点，给出具体、今天就能做的一步",
+      "按需", "按需"
+    ));
+  });
+
+  if (!functions.length) {
+    functions.push(makeFn("f_checkin", "每日签到", "每天用一句话记录状态", pain || "先看见自己，才谈改变", "每天问一句今天怎么样，记录一句", "每天", "每日"));
+  }
+
+  spec.meta = { category: "自定义", audience: who.slice(0, 80), daily_minutes: minutes, difficulty: "自定义" };
+  spec.goal = `根据用户的描述，设计并长期陪同一个「${name}」助手。开场读取用户贴入的存档续接；会话中可提议新增/调整/停用功能；结束时输出更新后的完整存档 JSON 供用户保存。`;
+  spec.assistant_identity = {
+    fill_rule: "首次会话由 AI 根据用户输入填入具体内容；续接时沿用存档中的值，除非用户要求调整。",
+    what: `${name}长期陪伴型助手`,
+    why: pain || "帮助用户长期坚持一个目标",
+    how: `友好、具体、每次只推进一步；每天约 ${minutes} 分钟，不堆任务`
+  };
+  spec.scene = {
+    fill_rule: "同 assistant_identity.fill_rule。",
+    what: goal || name,
+    why: pain || "需要有人长期陪着推进",
+    how: `结合${who ? "用户的情况" : "日常节奏"}，用签到、计划、复盘和情绪支持把目标拆小`
+  };
+  spec.functions = functions;
+  spec.session_context.today = null;
+  spec.session_context.save_file = null;
+  spec.examples.first_open = {
+    desc: "自定义场景首次使用时的开场",
+    user: `今天是 <日期>。我想做一个长期陪我的${name}助手。${who ? "我的情况是：" + who + "。" : ""}${goal ? "我的目标是：" + goal + "。" : ""}${pain ? "我最大的痛点是：" + pain + "。" : ""}请帮我确认功能并开始。`,
+    ai_should: "确认今天日期 → 确认 assistant_identity / scene → 逐个确认 functions → 输出完整存档 JSON"
+  };
+  spec.examples.session_end = {
+    desc: "会话结束时的输出",
+    ai_should: "输出更新后的完整存档 JSON，用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加解释；过长时分段输出；用户说『精简存档』时只输出 archive_modes.compact.must_keep 字段"
+  };
+  return { spec, name };
+}
+
+function setStatus(text, cls) {
+  const el = document.getElementById("status");
+  el.textContent = text;
+  el.className = "status" + (cls ? " " + cls : "");
+}
+
+document.getElementById("generate").addEventListener("click", async () => {
+  const btn = document.getElementById("generate");
+  btn.disabled = true;
+  setStatus("正在生成…");
+  try {
+    await loadSpec();
+    const { spec, name } = buildTemplate();
+    const text = JSON.stringify(spec, null, 4) + "\n";
+    document.getElementById("output").textContent = text;
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").dataset.name = name;
+    window.__generated = text;
+    setStatus("生成好了，往下复制即可。", "ok");
+    document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  } catch (err) {
+    setStatus("生成失败：请通过 GitHub Pages 打开，或检查网络。", "error");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById("copy").addEventListener("click", async () => {
+  if (!window.__generated) return;
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(window.__generated);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = window.__generated;
+      ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+    }
+    setStatus("已复制 ✓", "ok");
+  } catch (err) {
+    setStatus("复制失败，请手动选择代码块。", "error");
+  }
+});
+
+document.getElementById("download").addEventListener("click", () => {
+  if (!window.__generated) return;
+  const name = (document.getElementById("result").dataset.name || "custom").replace(/[\\/:*?"<>|]+/g, "-");
+  const blob = new Blob([window.__generated], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus("已下载 ✓", "ok");
+});
+
+document.getElementById("regen").addEventListener("click", () => {
+  document.getElementById("generate").click();
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>

@@ -23,4 +23,5 @@ jobs:
       - name: Check examples are up to date
         run: |
           python3 scripts/generate_examples.py
+          python3 scripts/generate_en_examples.py
           git diff --exit-code

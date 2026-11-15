@@ -5,6 +5,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(BASE_DIR, "examples")
+FILLED_DIR = os.path.join(OUT_DIR, "filled")
 
 with open(os.path.join(BASE_DIR, "form.json"), encoding="utf-8") as f:
     BASE = json.load(f)
@@ -118,6 +119,28 @@ def build(name, scenario):
         **copy.deepcopy(PROCESS_EXAMPLES),
     }
     return data
+
+
+def fill_sample(data, today="2026-11-15"):
+    """Return a copy with dates, memory and status filled like a real archive."""
+    d = copy.deepcopy(data)
+    d["session_context"]["today"] = today
+    d["session_context"]["save_file"] = None
+    for i, f in enumerate(d["functions"]):
+        f["created_at"] = today
+        f["updated_at"] = today
+        f["last_triggered_at"] = today if i == 0 else None
+    d["memory"]["state"]["global"]["notes"] = (
+        "示例存档：功能、时间字段和记忆都已填好，可直接照着改。"
+    )
+    d["memory"]["state"]["recent_sessions"] = [
+        {"date": today, "summary": "首次使用，确认了助手定位与功能。"}
+    ]
+    if d["functions"]:
+        d["memory"]["state"]["per_function"] = {
+            d["functions"][0]["id"]: {"last_note": "已完成一次，状态正常。"}
+        }
+    return d
 
 
 def safety(scope, privacy, boundary=None):
@@ -1262,6 +1285,7 @@ SCENARIOS["plant-care"] = {
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(FILLED_DIR, exist_ok=True)
     for name, scenario in SCENARIOS.items():
         data = build(name, scenario)
         path = os.path.join(OUT_DIR, name + ".json")
@@ -1269,6 +1293,11 @@ def main():
             json.dump(data, f, ensure_ascii=False, indent=4)
             f.write("\n")
         print("wrote", path)
+        filled_path = os.path.join(FILLED_DIR, name + ".json")
+        with open(filled_path, "w", encoding="utf-8") as f:
+            json.dump(fill_sample(data), f, ensure_ascii=False, indent=4)
+            f.write("\n")
+        print("wrote", filled_path)
 
 
 if __name__ == "__main__":

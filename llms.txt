@@ -1,0 +1,57 @@
+# json-prompt-form
+
+> 让网页版 AI 长期记住你：一份 JSON 提示词规范 + 26 个场景模板。聊完说「存档」，保存 AI 输出的 JSON；下次把存档贴回来，就能接着聊。
+
+## 这是什么
+
+网页版大模型（DeepSeek、ChatGPT 等）跨会话不共享记忆，也读不到本地文件。本项目用一份自包含的 JSON 规范解决这个问题：
+
+- AI 不读写文件、不联网、不设定时任务。
+- 「存档」就是模板的完整副本，用户手动复制保存。
+- 下次开场贴入存档 + 今天日期，AI 按存档续接。
+- 支持新增 / 调整 / 停用功能，记录拒绝过的建议，提醒长期未用的功能。
+
+## 关键文件
+
+- [form.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/form.json)：核心规范，包含流程、功能规则、记忆、安全边界、输出规则。
+- [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：26 个场景模板，直接复制给 AI。
+- [examples/filled/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/filled)：填好日期和记忆的示例存档。
+- [examples/en/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/en)：英文场景模板。
+- [schema.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/schema.json)：存档 JSON Schema。
+- [builder.html](https://tuxlin123233.github.io/json-prompt-form/builder.html)：回答几个问题，现场生成模板。
+- [checker.html](https://tuxlin123233.github.io/json-prompt-form/checker.html)：粘贴存档，检查格式、统计字段、发现截断。
+- [index.html](https://tuxlin123233.github.io/json-prompt-form/)：一键复制页。
+- [scripts/migrate.py](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/scripts/migrate.py)：旧存档迁移工具。
+
+## 怎么用
+
+第一次：
+
+```text
+<把选好的模板整份粘贴给 AI>
+
+今天是 2026-11-15。我的情况是：……
+```
+
+结束时：
+
+```text
+存档
+```
+
+把 AI 输出的 ```json 代码块整段复制保存。下次：
+
+```text
+今天是 2026-11-20。这是我的存档，请继续：
+<粘贴上次的 JSON>
+```
+
+## 精简存档
+
+对 AI 说「精简存档」，它只输出携带状态的字段（`archive_modes.compact.must_keep`）。续接时把原始模板和精简存档一起贴入。
+
+## 链接
+
+- 在线使用：https://tuxlin123233.github.io/json-prompt-form/
+- 仓库：https://github.com/TuxLin123233/json-prompt-form
+- 许可证：MIT

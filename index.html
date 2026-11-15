@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>json-prompt-form · 一键复制 AI 长期陪伴模板</title>
 <meta name="description" content="选一个场景，一键复制给 AI，让网页版 AI 长期记住你、陪着你。">
 <style>
@@ -64,6 +67,16 @@
     background: var(--brand-soft); border: 1px solid #c7d2fe; display: none;
   }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .search {
+    width: 100%; border: 1px solid var(--line); background: #fff; color: var(--text);
+    border-radius: 12px; padding: 12px 16px; font-size: 15px; margin-bottom: 14px;
+  }
+  .search:focus { outline: 2px solid #c7d2fe; border-color: #a5b4fc; }
+  .recent {
+    display: none; background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 14px 16px 4px; margin-bottom: 18px;
+  }
+  .recent-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
   .chip {
     border: 1px solid var(--line); background: #fff; border-radius: 999px;
     padding: 6px 14px; cursor: pointer; font-size: 14px;
@@ -150,6 +163,8 @@
     <div class="hero-actions">
       <button class="btn primary" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">🎯 帮我选一个</button>
       <button class="btn" onclick="document.getElementById('scenarios').scrollIntoView({behavior:'smooth'})">📋 直接浏览</button>
+      <a class="btn" href="builder.html">🛠️ 自定义生成</a>
+      <a class="btn" href="checker.html">🔍 存档检查</a>
       <a class="btn" href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">⭐ GitHub</a>
     </div>
   </header>
@@ -183,7 +198,15 @@
 
   <h2 id="scenarios">🎯 全部场景</h2>
   <p class="lead">点「复制模板」，再粘贴给 AI。每个模板都会根据你的真实情况调整功能。</p>
+  <input class="search" id="search" type="search" placeholder="搜索场景，例如：焦虑、跑步、存钱、英语…" autocomplete="off">
   <div class="chips" id="chips"></div>
+  <div class="recent" id="recent-wrap">
+    <div class="recent-head">
+      <strong>🕘 最近使用</strong>
+      <button class="btn small" id="recent-clear">清除</button>
+    </div>
+    <div class="chips" id="recent"></div>
+  </div>
   <div class="grid" id="grid"></div>
 
   <h2>🚀 复制之后怎么用</h2>
@@ -220,7 +243,8 @@
   </div>
 
   <footer>
-    MIT License · <a href="https://github.com/TuxLin123233/json-prompt-form">TuxLin123233/json-prompt-form</a>
+    MIT License · <a href="https://github.com/TuxLin123233/json-prompt-form">TuxLin123233/json-prompt-form</a><br>
+    可添加到手机主屏幕，离线也能打开。
   </footer>
 </div>
 
@@ -230,6 +254,7 @@
   <div class="modal-head">
     <strong id="modal-title">预览</strong>
     <div>
+      <a class="btn small" id="modal-filled" target="_blank" rel="noopener">已填示例</a>
       <button class="btn small primary" id="modal-copy">复制全部</button>
       <button class="btn small" onclick="document.getElementById('modal').close()">关闭</button>
     </div>
@@ -271,10 +296,15 @@ const CATS = ["全部", "学习", "健康", "生活", "情绪", "职业", "创�
 let activeCat = "全部";
 let quizCat = null;
 let quizMin = null;
+let query = "";
 
 const grid = document.getElementById('grid');
 const chips = document.getElementById('chips');
 const toast = document.getElementById('toast');
+const search = document.getElementById('search');
+const recentWrap = document.getElementById('recent-wrap');
+const recent = document.getElementById('recent');
+const RECENT_KEY = 'jpf.recent';
 
 function showToast(msg, isError) {
   toast.textContent = msg;
@@ -302,8 +332,42 @@ function cardHTML(s) {
 }
 
 function render() {
-  const list = SCENARIOS.filter(s => activeCat === "全部" || s.cat === activeCat);
-  grid.innerHTML = list.map(cardHTML).join('');
+  const q = query.trim().toLowerCase();
+  const list = SCENARIOS.filter(s => {
+    const inCat = activeCat === "全部" || s.cat === activeCat;
+    const hay = (s.name + " " + s.desc + " " + s.cat + " " + s.file).toLowerCase();
+    return inCat && (!q || hay.includes(q));
+  });
+  grid.innerHTML = list.length
+    ? list.map(cardHTML).join('')
+    : '<div class="safe">没有找到这个场景。试试别的关键词，或到 <a href="builder.html">自定义生成</a> 做一个。</div>';
+}
+
+function readRecent() {
+  try {
+    const list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    return Array.isArray(list) ? list.filter(f => SCENARIOS.some(s => s.file === f)) : [];
+  } catch (err) {
+    return [];
+  }
+}
+
+function renderRecent() {
+  const list = readRecent();
+  recentWrap.style.display = list.length ? 'block' : 'none';
+  recent.innerHTML = list.map(file => {
+    const s = SCENARIOS.find(x => x.file === file);
+    return `<button class="chip" data-copy="${file}">${s.emoji} ${s.name}</button>`;
+  }).join('');
+}
+
+function pushRecent(file) {
+  const list = readRecent().filter(f => f !== file);
+  list.unshift(file);
+  try {
+    localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 6)));
+  } catch (err) {}
+  renderRecent();
 }
 
 function renderChips() {
@@ -316,6 +380,16 @@ chips.addEventListener('click', e => {
   activeCat = btn.dataset.cat;
   renderChips();
   render();
+});
+
+search.addEventListener('input', () => {
+  query = search.value;
+  render();
+});
+
+document.getElementById('recent-clear').addEventListener('click', () => {
+  try { localStorage.removeItem(RECENT_KEY); } catch (err) {}
+  renderRecent();
 });
 
 document.getElementById('q1').addEventListener('click', e => {
@@ -360,6 +434,7 @@ document.addEventListener('click', async e => {
     try {
       const text = await fetchText(file);
       await copyText(text);
+      pushRecent(file);
       showToast('已复制 ✓ 去粘贴给 AI 吧');
     } catch (err) {
       showToast('复制失败：请通过 GitHub Pages 打开，或到 examples/ 手动复制', true);
@@ -374,6 +449,7 @@ document.addEventListener('click', async e => {
       document.getElementById('modal-title').textContent = file;
       document.getElementById('modal-body').textContent = text;
       document.getElementById('modal-copy').dataset.copy = file;
+      document.getElementById('modal-filled').href = 'examples/filled/' + file;
       document.getElementById('modal').showModal();
     } catch (err) {
       showToast('无法读取文件：请通过 GitHub Pages 打开', true);
@@ -405,6 +481,13 @@ async function copyText(text) {
 
 renderChips();
 render();
+renderRecent();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
