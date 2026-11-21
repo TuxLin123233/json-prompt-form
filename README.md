@@ -22,6 +22,7 @@
 - 👌 不用会写代码
 - 💬 打开网页版 AI（如 DeepSeek）就能用
 - 🚀 **一键复制网页**：[tuxlin123233.github.io/json-prompt-form](https://tuxlin123233.github.io/json-prompt-form/)
+- 🎯 **每个练点都有训练计划**：练什么能力、建议节奏、什么算过关
 
 ## 🚀 三步开始
 
@@ -79,7 +80,7 @@ flowchart TD
 | 文件 | 是什么 |
 | --- | --- |
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
-| 🧭 [`scenarios.json`](./scenarios.json) | 场景索引：名称/分类/时长/关键词（机器可读，校验基准） |
+| 🧭 [`scenarios.json`](./scenarios.json) | 练点索引：名称/分类/时长/关键词/能力点/过关标准（机器可读，校验基准） |
 | 🎛️ [`assets/icons/`](./assets/icons) | 场景图标（来自 Lucide，ISC 许可） |
 | 🎯 [`examples/`](./examples) | 六十个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
@@ -162,7 +163,7 @@ flowchart TD
 | 旅行规划 | [`travel.json`](./examples/travel.json) | 想出去玩，但做攻略太累 | 10 分钟 |
 | 独居生活 | [`solo-living.json`](./examples/solo-living.json) | 一个人住，生活容易乱套 | 10 分钟 |
 
-每个练点都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
+每个练点都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。点开「预览」可以看到该练点的训练计划：练什么能力、建议节奏、过关标准。
 
 英文模板在 [`examples/en/`](./examples/en)；想看填好的存档长什么样，打开 [`examples/filled/`](./examples/filled)。
 

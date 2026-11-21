@@ -19,7 +19,9 @@
                 "搬家",
                 "里程碑"
             ],
-            "icon": "target"
+            "icon": "target",
+            "ability": "拆解与推进",
+            "checkpoint": "连续两周完成每周关键动作，能说清当前阶段和下一步"
         },
         {
             "file": "running.json",
@@ -38,7 +40,9 @@
                 "跑鞋",
                 "晨跑"
             ],
-            "icon": "footprints"
+            "icon": "footprints",
+            "ability": "耐力与节奏",
+            "checkpoint": "连续两周每周跑 3 次，能轻松完成跑走结合"
         },
         {
             "file": "posture.json",
@@ -58,7 +62,9 @@
                 "拉伸",
                 "驼背"
             ],
-            "icon": "person-standing"
+            "icon": "person-standing",
+            "ability": "觉察与舒展",
+            "checkpoint": "连续两周每天拉伸 5 分钟，肩颈僵硬感有下降"
         },
         {
             "file": "social-anxiety.json",
@@ -77,7 +83,9 @@
                 "聚会",
                 "社死"
             ],
-            "icon": "users-round"
+            "icon": "users-round",
+            "ability": "小步与复盘",
+            "checkpoint": "连续两周每周完成一个小步社交并复盘一次"
         },
         {
             "file": "self-compassion.json",
@@ -96,7 +104,9 @@
                 "内耗",
                 "不够好"
             ],
-            "icon": "heart-handshake"
+            "icon": "heart-handshake",
+            "ability": "觉察与公平",
+            "checkpoint": "连续两周每天记一件小成就，自责时能换一种说法"
         },
         {
             "file": "driving.json",
@@ -115,7 +125,9 @@
                 "科目三",
                 "倒车入库"
             ],
-            "icon": "car"
+            "icon": "car",
+            "ability": "反馈与稳定",
+            "checkpoint": "连续两次练车记录易错点，考前能复述操作流程"
         },
         {
             "file": "thesis.json",
@@ -134,7 +146,9 @@
                 "导师",
                 "文献"
             ],
-            "icon": "file-text"
+            "icon": "file-text",
+            "ability": "拆解与持续",
+            "checkpoint": "连续两周每天推进一个最小写作单位"
         },
         {
             "file": "workplace-comm.json",
@@ -153,7 +167,9 @@
                 "汇报",
                 "同事"
             ],
-            "icon": "message-square"
+            "icon": "message-square",
+            "ability": "预演与边界",
+            "checkpoint": "连续两周完成一次沟通预演和一次复盘"
         },
         {
             "file": "side-hustle.json",
@@ -172,7 +188,9 @@
                 "兼职",
                 "第二收入"
             ],
-            "icon": "rocket"
+            "icon": "rocket",
+            "ability": "验证与节奏",
+            "checkpoint": "两周内完成一次最小验证动作并记录结果"
         },
         {
             "file": "focus.json",
@@ -191,7 +209,9 @@
                 "深度工作",
                 "番茄钟"
             ],
-            "icon": "focus"
+            "icon": "focus",
+            "ability": "启动与专注",
+            "checkpoint": "连续两周每天完成一个 25 分钟专注块"
         },
         {
             "file": "study-exam.json",
@@ -210,7 +230,9 @@
                 "高考",
                 "考证"
             ],
-            "icon": "graduation-cap"
+            "icon": "graduation-cap",
+            "ability": "计划与复盘",
+            "checkpoint": "连续两周按计划完成每日任务并做一次错题复盘"
         },
         {
             "file": "fitness.json",
@@ -229,7 +251,9 @@
                 "塑形",
                 "减肥"
             ],
-            "icon": "dumbbell"
+            "icon": "dumbbell",
+            "ability": "持续与恢复",
+            "checkpoint": "连续两周每周训练 3 次，能记录饮食和恢复"
         },
         {
             "file": "job-search.json",
@@ -248,7 +272,9 @@
                 "找工作",
                 "跳槽"
             ],
-            "icon": "briefcase"
+            "icon": "briefcase",
+            "ability": "推进与心态",
+            "checkpoint": "连续两周每周投递并复盘一次简历或面试"
         },
         {
             "file": "emotion-support.json",
@@ -267,7 +293,9 @@
                 "情绪",
                 "难过"
             ],
-            "icon": "cloud-sun"
+            "icon": "cloud-sun",
+            "ability": "识别与调节",
+            "checkpoint": "连续两周每天记录一次情绪，能用一个小动作调节"
         },
         {
             "file": "finance.json",
@@ -286,7 +314,9 @@
                 "还债",
                 "理财"
             ],
-            "icon": "wallet"
+            "icon": "wallet",
+            "ability": "预算与自控",
+            "checkpoint": "连续两周记录支出，能说出本月最大一笔非必要开销"
         },
         {
             "file": "writing.json",
@@ -305,7 +335,9 @@
                 "日更",
                 "卡文"
             ],
-            "icon": "pen-line"
+            "icon": "pen-line",
+            "ability": "输出与坚持",
+            "checkpoint": "连续两周每天写 200 字，并完成一次复盘"
         },
         {
             "file": "sleep.json",
@@ -324,7 +356,9 @@
                 "睡眠",
                 "早睡"
             ],
-            "icon": "moon"
+            "icon": "moon",
+            "ability": "作息与放松",
+            "checkpoint": "连续两周固定上床时间，睡前 30 分钟离开屏幕"
         },
         {
             "file": "quit-habits.json",
@@ -343,7 +377,9 @@
                 "习惯",
                 "上瘾"
             ],
-            "icon": "cigarette-off"
+            "icon": "cigarette-off",
+            "ability": "触发与替代",
+            "checkpoint": "连续两周记录冲动，并为高频触发找到一个替代动作"
         },
         {
             "file": "language-learning.json",
@@ -362,7 +398,9 @@
                 "语言",
                 "考试"
             ],
-            "icon": "languages"
+            "icon": "languages",
+            "ability": "输入与开口",
+            "checkpoint": "连续两周每天 10 分钟，并完成一次开口练习"
         },
         {
             "file": "parenting.json",
@@ -381,7 +419,9 @@
                 "家长",
                 "沟通"
             ],
-            "icon": "baby"
+            "icon": "baby",
+            "ability": "沟通与耐心",
+            "checkpoint": "连续两周每天一次具体肯定，冲突时能暂停"
         },
         {
             "file": "caregiver.json",
@@ -400,7 +440,9 @@
                 "疲惫",
                 "家属"
             ],
-            "icon": "hand-heart"
+            "icon": "hand-heart",
+            "ability": "照护与自我照顾",
+            "checkpoint": "连续两周每天留 10 分钟给自己，并记录一次疲惫点"
         },
         {
             "file": "adhd.json",
@@ -419,7 +461,9 @@
                 "多动",
                 "专注"
             ],
-            "icon": "brain"
+            "icon": "brain",
+            "ability": "启动与专注",
+            "checkpoint": "连续两周用 25 分钟专注块启动任务，记录分心触发"
         },
         {
             "file": "reading.json",
@@ -437,7 +481,9 @@
                 "买书",
                 "书单"
             ],
-            "icon": "book-open"
+            "icon": "book-open",
+            "ability": "阅读与沉淀",
+            "checkpoint": "连续两周每天读 10 页并写一句话"
         },
         {
             "file": "pet.json",
@@ -456,7 +502,9 @@
                 "养宠",
                 "铲屎"
             ],
-            "icon": "paw-print"
+            "icon": "paw-print",
+            "ability": "照料与观察",
+            "checkpoint": "连续两周记录宠物状态，形成固定照料节奏"
         },
         {
             "file": "time-management.json",
@@ -475,7 +523,9 @@
                 "效率",
                 "优先级"
             ],
-            "icon": "timer"
+            "icon": "timer",
+            "ability": "优先级与执行",
+            "checkpoint": "连续两周每天只定三件重要事并完成至少两件"
         },
         {
             "file": "morning-routine.json",
@@ -493,7 +543,9 @@
                 "赖床",
                 "作息"
             ],
-            "icon": "sunrise"
+            "icon": "sunrise",
+            "ability": "起床与节奏",
+            "checkpoint": "连续两周固定起床时间，完成一个 10 分钟晨间动作"
         },
         {
             "file": "meditation.json",
@@ -511,7 +563,9 @@
                 "呼吸",
                 "放松"
             ],
-            "icon": "flower-2"
+            "icon": "flower-2",
+            "ability": "觉察与呼吸",
+            "checkpoint": "连续两周每天 5 分钟呼吸练习"
         },
         {
             "file": "healthy-diet.json",
@@ -530,7 +584,9 @@
                 "减脂餐",
                 "营养"
             ],
-            "icon": "salad"
+            "icon": "salad",
+            "ability": "饮食与选择",
+            "checkpoint": "连续两周每天记录一餐，能说出一个更好的选择"
         },
         {
             "file": "journaling.json",
@@ -548,7 +604,9 @@
                 "情绪记录",
                 "复盘"
             ],
-            "icon": "notebook-pen"
+            "icon": "notebook-pen",
+            "ability": "记录与觉察",
+            "checkpoint": "连续两周每天写三句话，周末回顾一次情绪"
         },
         {
             "file": "public-speaking.json",
@@ -567,7 +625,9 @@
                 "表达",
                 "紧张"
             ],
-            "icon": "mic"
+            "icon": "mic",
+            "ability": "结构与表达",
+            "checkpoint": "连续两周准备一次 3 分钟表达并演练"
         },
         {
             "file": "relationship.json",
@@ -586,7 +646,9 @@
                 "沟通",
                 "亲密关系"
             ],
-            "icon": "heart"
+            "icon": "heart",
+            "ability": "表达与修复",
+            "checkpoint": "连续两周完成一次表达需求和一次事后复盘"
         },
         {
             "file": "declutter.json",
@@ -605,7 +667,9 @@
                 "房间乱",
                 "极简"
             ],
-            "icon": "boxes"
+            "icon": "boxes",
+            "ability": "取舍与整理",
+            "checkpoint": "连续两周每天整理 15 分钟，完成一个区域"
         },
         {
             "file": "instrument.json",
@@ -624,7 +688,9 @@
                 "钢琴",
                 "练习"
             ],
-            "icon": "guitar"
+            "icon": "guitar",
+            "ability": "练习与坚持",
+            "checkpoint": "连续两周每天练 15 分钟，并完成一次录音复盘"
         },
         {
             "file": "coding.json",
@@ -643,7 +709,9 @@
                 "调试",
                 "项目"
             ],
-            "icon": "code-xml"
+            "icon": "code-xml",
+            "ability": "拆解与调试",
+            "checkpoint": "连续两周每天写一点代码，记录一个卡点及解决过程"
         },
         {
             "file": "cooking.json",
@@ -661,7 +729,9 @@
                 "菜谱",
                 "厨房"
             ],
-            "icon": "chef-hat"
+            "icon": "chef-hat",
+            "ability": "动手与规划",
+            "checkpoint": "连续两周每周做 3 次饭，形成一份常做菜单"
         },
         {
             "file": "plant-care.json",
@@ -679,7 +749,9 @@
                 "绿植",
                 "浇水"
             ],
-            "icon": "sprout"
+            "icon": "sprout",
+            "ability": "观察与照料",
+            "checkpoint": "连续两周记录浇水与光照，形成固定养护节奏"
         },
         {
             "file": "yoga.json",
@@ -698,7 +770,9 @@
                 "放松",
                 "体态"
             ],
-            "icon": "accessibility"
+            "icon": "accessibility",
+            "ability": "柔韧与呼吸",
+            "checkpoint": "连续两周每天 10 分钟，能独立完成一套入门流动"
         },
         {
             "file": "cycling.json",
@@ -717,7 +791,9 @@
                 "有氧",
                 "户外"
             ],
-            "icon": "bike"
+            "icon": "bike",
+            "ability": "耐力与安全",
+            "checkpoint": "连续两周每周骑 2–3 次，能完成一次 10 公里"
         },
         {
             "file": "swimming.json",
@@ -736,7 +812,9 @@
                 "自由泳",
                 "有氧"
             ],
-            "icon": "waves"
+            "icon": "waves",
+            "ability": "呼吸与水性",
+            "checkpoint": "连续两周每周游 2 次，能连续换气 25 米"
         },
         {
             "file": "hiking.json",
@@ -755,7 +833,9 @@
                 "露营",
                 "周末"
             ],
-            "icon": "mountain"
+            "icon": "mountain",
+            "ability": "准备与体能",
+            "checkpoint": "连续两周完成两次短途徒步，出发前能独立准备"
         },
         {
             "file": "eye-care.json",
@@ -774,7 +854,9 @@
                 "干涩",
                 "屏幕"
             ],
-            "icon": "eye"
+            "icon": "eye",
+            "ability": "休息与用眼",
+            "checkpoint": "连续两周每小时起身远眺，睡前 1 小时离开屏幕"
         },
         {
             "file": "emotional-eating.json",
@@ -793,7 +875,9 @@
                 "零食",
                 "情绪"
             ],
-            "icon": "cookie"
+            "icon": "cookie",
+            "ability": "识别与替代",
+            "checkpoint": "连续两周记录冲动，成功暂停三次以上"
         },
         {
             "file": "breakup.json",
@@ -812,7 +896,9 @@
                 "难过",
                 "放下"
             ],
-            "icon": "heart-crack"
+            "icon": "heart-crack",
+            "ability": "情绪与重建",
+            "checkpoint": "连续两周记录情绪，并完成每日一件小步生活"
         },
         {
             "file": "anger.json",
@@ -831,7 +917,9 @@
                 "冲突",
                 "情绪"
             ],
-            "icon": "flame"
+            "icon": "flame",
+            "ability": "暂停与表达",
+            "checkpoint": "连续两周做到三次以上暂停 6 秒，并用需求表达一次"
         },
         {
             "file": "confidence.json",
@@ -850,7 +938,9 @@
                 "自我否定",
                 "勇气"
             ],
-            "icon": "sparkles"
+            "icon": "sparkles",
+            "ability": "表达与证据",
+            "checkpoint": "连续两周每周完成一次表达练习，并记下证据"
         },
         {
             "file": "parents.json",
@@ -869,7 +959,9 @@
                 "沟通",
                 "边界"
             ],
-            "icon": "phone-call"
+            "icon": "phone-call",
+            "ability": "边界与沟通",
+            "checkpoint": "连续两周完成一次沟通预演和一次边界练习"
         },
         {
             "file": "chores.json",
@@ -888,7 +980,9 @@
                 "公平",
                 "家庭"
             ],
-            "icon": "list-checks"
+            "icon": "list-checks",
+            "ability": "分工与表达",
+            "checkpoint": "连续两周按分工表执行，并完成一次公平对话"
         },
         {
             "file": "friendship.json",
@@ -907,7 +1001,9 @@
                 "联系",
                 "孤独"
             ],
-            "icon": "party-popper"
+            "icon": "party-popper",
+            "ability": "主动与倾听",
+            "checkpoint": "连续两周每周主动联系一位朋友"
         },
         {
             "file": "study-parenting.json",
@@ -926,7 +1022,9 @@
                 "亲子",
                 "作业"
             ],
-            "icon": "pencil-ruler"
+            "icon": "pencil-ruler",
+            "ability": "陪伴与情绪",
+            "checkpoint": "连续两周每天一次具体肯定，发火次数下降"
         },
         {
             "file": "study-abroad.json",
@@ -945,7 +1043,9 @@
                 "文书",
                 "offer"
             ],
-            "icon": "plane"
+            "icon": "plane",
+            "ability": "规划与执行",
+            "checkpoint": "连续两周按时间线推进一项申请任务"
         },
         {
             "file": "new-job.json",
@@ -964,7 +1064,9 @@
                 "试用期",
                 "同事"
             ],
-            "icon": "badge"
+            "icon": "badge",
+            "ability": "提问与融入",
+            "checkpoint": "连续两周每周问清三个问题并认识一位同事"
         },
         {
             "file": "promotion.json",
@@ -983,7 +1085,9 @@
                 "加薪",
                 "汇报"
             ],
-            "icon": "trending-up"
+            "icon": "trending-up",
+            "ability": "成果与表达",
+            "checkpoint": "两周内整理出三个可量化成果并完成一次演练"
         },
         {
             "file": "team-management.json",
@@ -1002,7 +1106,9 @@
                 "一对一",
                 "反馈"
             ],
-            "icon": "users"
+            "icon": "users",
+            "ability": "反馈与对齐",
+            "checkpoint": "连续两周完成一对一和目标对齐各一次"
         },
         {
             "file": "freelance.json",
@@ -1021,7 +1127,9 @@
                 "客户",
                 "副业"
             ],
-            "icon": "laptop"
+            "icon": "laptop",
+            "ability": "获客与交付",
+            "checkpoint": "连续两周记录线索，并完成一次报价练习"
         },
         {
             "file": "painting.json",
@@ -1040,7 +1148,9 @@
                 "素描",
                 "练习"
             ],
-            "icon": "palette"
+            "icon": "palette",
+            "ability": "观察与动笔",
+            "checkpoint": "连续两周每天画 15 分钟，完成一次作品复盘"
         },
         {
             "file": "photography.json",
@@ -1059,7 +1169,9 @@
                 "构图",
                 "练习"
             ],
-            "icon": "camera"
+            "icon": "camera",
+            "ability": "观察与取舍",
+            "checkpoint": "连续两周每周完成一个主题拍摄并复盘一张"
         },
         {
             "file": "singing.json",
@@ -1078,7 +1190,9 @@
                 "声乐",
                 "练习"
             ],
-            "icon": "music"
+            "icon": "music",
+            "ability": "气息与音准",
+            "checkpoint": "连续两周每天开嗓，并录音对比一次"
         },
         {
             "file": "calligraphy.json",
@@ -1097,7 +1211,9 @@
                 "临帖",
                 "手写"
             ],
-            "icon": "pen-tool"
+            "icon": "pen-tool",
+            "ability": "结构与手感",
+            "checkpoint": "连续两周每天临 3 个字，完成一次前后对比"
         },
         {
             "file": "travel.json",
@@ -1116,7 +1232,9 @@
                 "行程",
                 "预算"
             ],
-            "icon": "map"
+            "icon": "map",
+            "ability": "规划与弹性",
+            "checkpoint": "完成一次行程、预算和备选方案三件套"
         },
         {
             "file": "solo-living.json",
@@ -1135,7 +1253,9 @@
                 "自律",
                 "做饭"
             ],
-            "icon": "house"
+            "icon": "house",
+            "ability": "节奏与照顾",
+            "checkpoint": "连续两周稳定三个生活锚点，并每周联系朋友"
         }
     ]
 }

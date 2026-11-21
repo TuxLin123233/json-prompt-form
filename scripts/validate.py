@@ -113,6 +113,8 @@ SCENARIO_FIELDS = {
     "note": str,
     "keywords": list,
     "icon": str,
+    "ability": str,
+    "checkpoint": str,
 }
 
 
@@ -150,6 +152,7 @@ def parse_index_scenarios(errors):
             "difficulty": text_field(chunk, "diff"),
             "featured": "featured: true" in chunk,
             "note": text_field(chunk, "note") or "",
+            "ability": text_field(chunk, "ability"),
         })
     return items
 
@@ -183,6 +186,10 @@ def check_scenarios(errors):
             not keywords or not all(isinstance(k, str) and k.strip() for k in keywords)
         ):
             errors.append(label + ": keywords 必须是非空字符串数组")
+        for key in ("ability", "checkpoint"):
+            value = entry.get(key)
+            if isinstance(value, str) and not value.strip():
+                errors.append("%s: %s 不能为空" % (label, key))
         file = entry.get("file")
         name = entry.get("name")
         if not isinstance(file, str) or not file.endswith(".json"):
@@ -250,6 +257,7 @@ def check_scenarios(errors):
                 ("difficulty", "difficulty"),
                 ("featured", "featured"),
                 ("note", "note"),
+                ("ability", "ability"),
             ):
                 if item[index_key] != entry.get(scenario_key):
                     errors.append(

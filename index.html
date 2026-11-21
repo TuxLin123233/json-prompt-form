@@ -346,6 +346,17 @@
   dialog[open] { animation: modal-in .3s var(--ease) both; }
   dialog::backdrop { background: rgba(16, 16, 16, .62); }
   dialog[open]::backdrop { animation: backdrop-in .3s var(--ease) both; }
+  .plan {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 18px; padding: 14px 16px;
+    border-bottom: 1px solid var(--line); background: var(--paper);
+  }
+  .plan-item { display: flex; flex-direction: column; gap: 3px; }
+  .plan-label {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .plan-value { font-size: 13px; line-height: 1.5; color: var(--ink); }
   .modal-head {
     display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--white);
@@ -401,6 +412,7 @@
     .how-step img { max-height: 120px; }
     .foot-links { grid-template-columns: 1fr 1fr; }
     .foot-bottom { flex-direction: column; gap: 6px; }
+    .plan { grid-template-columns: 1fr; gap: 10px; }
     .modal-body { max-height: 68vh; }
     .modal-head { align-items: flex-start; }
     .modal-actions { width: 100%; }
@@ -542,7 +554,7 @@
     <div class="section-head" data-reveal>
       <p class="eyebrow">60 个练点</p>
       <h2 id="scenarios-title">选一件你想练的事</h2>
-      <p>每个练点都会根据你的真实情况调整功能。找不到合适的，用自定义生成器。</p>
+      <p>每个练点都会根据你的真实情况调整功能，并标出练什么能力、建议节奏和过关标准。点「预览」可以看到训练计划。</p>
     </div>
     <div class="scenario-tools" data-reveal>
       <input class="search" id="search" type="search" placeholder="搜索：焦虑、存钱、论文、健身…" autocomplete="off" aria-label="搜索场景">
@@ -660,6 +672,7 @@
       <button class="btn btn-line btn-small" id="modal-close" type="button">关闭</button>
     </div>
   </div>
+  <div class="plan" id="modal-plan"></div>
   <div class="modal-body"><pre id="modal-body"></pre></div>
 </dialog>
 
@@ -667,74 +680,80 @@
 document.documentElement.classList.add('js');
 
 const SCENARIOS = [
-  { file: "project.json",           name: "项目推进",   desc: "论文、作品、副业、搬家……把一个大目标拆成每周能推进的事", cat: "效率", min: 10, diff: "进阶", featured: true, note: "新增" },
-  { file: "running.json",          name: "跑步",       desc: "从零开始跑步，想坚持又怕受伤",                        cat: "健康", min: 15, diff: "入门" },
-  { file: "posture.json",          name: "久坐体态",   desc: "肩颈腰背僵硬、圆肩驼背，想每天舒展一下",              cat: "健康", min: 10, diff: "入门" },
-  { file: "social-anxiety.json",   name: "社交焦虑",   desc: "社交前紧张、社交后反复回想",                          cat: "情绪", min: 10, diff: "进阶" },
-  { file: "self-compassion.json",  name: "自我关怀",   desc: "容易自责、完美主义，对自己太苛刻",                    cat: "情绪", min: 5,  diff: "进阶" },
-  { file: "driving.json",          name: "学车考驾照", desc: "科目二紧张、练车间隔长、易错点反复错",                cat: "学习", min: 10, diff: "入门" },
-  { file: "thesis.json",           name: "论文毕设",   desc: "论文拖延、不知道从哪段开始写",                        cat: "学习", min: 20, diff: "进阶" },
-  { file: "workplace-comm.json",   name: "职场沟通",   desc: "和领导说话紧张、不会拒绝、汇报没重点",                cat: "职业", min: 10, diff: "进阶" },
-  { file: "side-hustle.json",      name: "副业启动",   desc: "想做副业但不知道从哪开始",                            cat: "职业", min: 15, diff: "进阶" },
-  { file: "focus.json",            name: "专注力",     desc: "一坐下就刷手机、注意力碎片化",                        cat: "效率", min: 10, diff: "入门" },
-  { file: "study-exam.json",        name: "备考",       desc: "中高考、考研、考证，容易拖延焦虑",                    cat: "学习", min: 5,  diff: "入门" },
-  { file: "fitness.json",           name: "健身",       desc: "想增肌减脂塑形，但总坚持不下来",                      cat: "健康", min: 5,  diff: "入门" },
-  { file: "job-search.json",        name: "求职",       desc: "投简历没回音、面试紧张、求职焦虑",                    cat: "职业", min: 10, diff: "进阶" },
-  { file: "emotion-support.json",   name: "情绪支持",   desc: "焦虑、低落、压力大，想有个出口",                      cat: "情绪", min: 5,  diff: "入门" },
-  { file: "finance.json",           name: "财务",       desc: "月光、超支、想存钱或还债",                            cat: "生活", min: 5,  diff: "入门" },
-  { file: "writing.json",           name: "写作",       desc: "小说、公众号、日更，总卡文拖延",                      cat: "创作", min: 10, diff: "进阶" },
-  { file: "sleep.json",             name: "睡眠",       desc: "入睡难、熬夜、睡眠质量差",                            cat: "健康", min: 5,  diff: "入门" },
-  { file: "quit-habits.json",       name: "戒烟戒糖",   desc: "想戒烟、戒糖、戒手机等习惯",                          cat: "健康", min: 5,  diff: "进阶" },
-  { file: "language-learning.json", name: "语言学习",   desc: "练口语、背单词、备考语言考试",                        cat: "学习", min: 10, diff: "入门" },
-  { file: "parenting.json",         name: "亲子沟通",   desc: "想改善亲子沟通、减少吼叫",                            cat: "关系", min: 10, diff: "进阶" },
-  { file: "caregiver.json",         name: "照护者支持", desc: "照顾老人病人、容易疲惫的人",                          cat: "关系", min: 5,  diff: "进阶" },
-  { file: "adhd.json",              name: "ADHD 支持",  desc: "注意力涣散、拖延、容易忘事",                          cat: "学习", min: 5,  diff: "进阶" },
-  { file: "reading.json",           name: "读书",       desc: "买书不读、想建立阅读习惯",                            cat: "学习", min: 10, diff: "入门" },
-  { file: "pet.json",               name: "宠物",       desc: "养猫狗，想科学陪伴和记录",                            cat: "生活", min: 5,  diff: "入门" },
-  { file: "time-management.json",   name: "时间管理",   desc: "事多拖延、忙但没产出",                                cat: "效率", min: 5,  diff: "入门" },
-  { file: "morning-routine.json",   name: "早起晨间",   desc: "起不来、早晨手忙脚乱",                                cat: "生活", min: 5,  diff: "入门" },
-  { file: "meditation.json",        name: "正念练习",   desc: "紧绷焦虑、睡前脑子停不下来",                          cat: "情绪", min: 5,  diff: "入门" },
-  { file: "healthy-diet.json",      name: "健康饮食",   desc: "外卖多、饮食不规律、想吃得健康",                      cat: "健康", min: 5,  diff: "入门" },
-  { file: "journaling.json",        name: "日记觉察",   desc: "想写日记但坚持不了、想梳理情绪",                      cat: "情绪", min: 5,  diff: "入门" },
-  { file: "public-speaking.json",   name: "演讲表达",   desc: "当众发言紧张、汇报没结构",                            cat: "职业", min: 10, diff: "进阶" },
-  { file: "relationship.json",      name: "恋爱沟通",   desc: "恋爱或伴侣沟通中容易争吵",                            cat: "关系", min: 5,  diff: "进阶" },
-  { file: "declutter.json",         name: "整理收纳",   desc: "房间乱、东西多、舍不得扔",                            cat: "生活", min: 15, diff: "入门" },
-  { file: "instrument.json",        name: "乐器练习",   desc: "学乐器、练琴容易中断",                                cat: "兴趣", min: 15, diff: "进阶" },
-  { file: "coding.json",            name: "编程学习",   desc: "自学编程、容易卡住或迷路",                            cat: "学习", min: 20, diff: "进阶" },
-  { file: "cooking.json",           name: "学做饭",     desc: "不会做饭、想开始带饭",                                cat: "生活", min: 20, diff: "入门" },
-  { file: "plant-care.json",        name: "植物养护",   desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门" },
-  { file: "yoga.json", name: "瑜伽", desc: "想在家练瑜伽，但不知道怎么开始", cat: "健康", min: 10, diff: "入门" },
-  { file: "cycling.json", name: "骑行", desc: "想靠骑车锻炼，但坚持不下来", cat: "健康", min: 20, diff: "入门" },
-  { file: "swimming.json", name: "游泳", desc: "想学游泳或坚持游泳，但怕水、没节奏", cat: "健康", min: 20, diff: "入门" },
-  { file: "hiking.json", name: "徒步户外", desc: "想开始徒步，但不知道准备什么", cat: "健康", min: 20, diff: "进阶" },
-  { file: "eye-care.json", name: "护眼用眼", desc: "长时间看屏幕，眼睛干涩疲劳", cat: "健康", min: 5, diff: "入门" },
-  { file: "emotional-eating.json", name: "情绪化进食", desc: "压力一大就想吃东西", cat: "健康", min: 10, diff: "进阶" },
-  { file: "breakup.json", name: "失恋恢复", desc: "分手后走不出来，反复回想", cat: "情绪", min: 10, diff: "进阶" },
-  { file: "anger.json", name: "愤怒管理", desc: "容易发火，事后又后悔", cat: "情绪", min: 5, diff: "进阶" },
-  { file: "confidence.json", name: "自信表达", desc: "想表达自己，却总是不敢开口", cat: "情绪", min: 10, diff: "进阶" },
-  { file: "parents.json", name: "与父母沟通", desc: "和父母说不到两句就吵起来", cat: "关系", min: 10, diff: "进阶" },
-  { file: "chores.json", name: "家庭分工", desc: "家务总是自己干，心里不平衡", cat: "关系", min: 10, diff: "进阶" },
-  { file: "friendship.json", name: "友情维护", desc: "朋友越来越少，不知道该怎么联系", cat: "关系", min: 5, diff: "入门" },
-  { file: "study-parenting.json", name: "陪写作业", desc: "陪孩子写作业，天天鸡飞狗跳", cat: "学习", min: 15, diff: "进阶" },
-  { file: "study-abroad.json", name: "留学申请", desc: "想申请留学，但流程复杂没头绪", cat: "学习", min: 20, diff: "进阶" },
-  { file: "new-job.json", name: "职场新人", desc: "刚入职，不知道怎么融入", cat: "职业", min: 10, diff: "入门" },
-  { file: "promotion.json", name: "升职述职", desc: "想争取升职，但不知道怎么准备", cat: "职业", min: 10, diff: "进阶" },
-  { file: "team-management.json", name: "团队管理", desc: "第一次带团队，不知道怎么管", cat: "职业", min: 15, diff: "进阶" },
-  { file: "freelance.json", name: "自由职业接单", desc: "想做自由职业，但接单不稳定", cat: "职业", min: 15, diff: "进阶" },
-  { file: "painting.json", name: "绘画练习", desc: "想学画画，但总是画两笔就停", cat: "兴趣", min: 15, diff: "入门" },
-  { file: "photography.json", name: "摄影", desc: "想学摄影，但拍来拍去没进步", cat: "兴趣", min: 15, diff: "入门" },
-  { file: "singing.json", name: "唱歌练习", desc: "想学唱歌，但总跑调、没气息", cat: "兴趣", min: 15, diff: "入门" },
-  { file: "calligraphy.json", name: "练字书法", desc: "想练字，但总坚持不下来", cat: "兴趣", min: 10, diff: "入门" },
-  { file: "travel.json", name: "旅行规划", desc: "想出去玩，但做攻略太累", cat: "生活", min: 10, diff: "入门" },
-  { file: "solo-living.json", name: "独居生活", desc: "一个人住，生活容易乱套", cat: "生活", min: 10, diff: "入门" },
+  { file: "project.json",           name: "项目推进",   desc: "论文、作品、副业、搬家……把一个大目标拆成每周能推进的事", cat: "效率", min: 10, diff: "进阶", ability: "拆解与推进", featured: true, note: "新增" },
+  { file: "running.json",          name: "跑步",       desc: "从零开始跑步，想坚持又怕受伤",                        cat: "健康", min: 15, diff: "入门", ability: "耐力与节奏" },
+  { file: "posture.json",          name: "久坐体态",   desc: "肩颈腰背僵硬、圆肩驼背，想每天舒展一下",              cat: "健康", min: 10, diff: "入门", ability: "觉察与舒展" },
+  { file: "social-anxiety.json",   name: "社交焦虑",   desc: "社交前紧张、社交后反复回想",                          cat: "情绪", min: 10, diff: "进阶", ability: "小步与复盘" },
+  { file: "self-compassion.json",  name: "自我关怀",   desc: "容易自责、完美主义，对自己太苛刻",                    cat: "情绪", min: 5,  diff: "进阶", ability: "觉察与公平" },
+  { file: "driving.json",          name: "学车考驾照", desc: "科目二紧张、练车间隔长、易错点反复错",                cat: "学习", min: 10, diff: "入门", ability: "反馈与稳定" },
+  { file: "thesis.json",           name: "论文毕设",   desc: "论文拖延、不知道从哪段开始写",                        cat: "学习", min: 20, diff: "进阶", ability: "拆解与持续" },
+  { file: "workplace-comm.json",   name: "职场沟通",   desc: "和领导说话紧张、不会拒绝、汇报没重点",                cat: "职业", min: 10, diff: "进阶", ability: "预演与边界" },
+  { file: "side-hustle.json",      name: "副业启动",   desc: "想做副业但不知道从哪开始",                            cat: "职业", min: 15, diff: "进阶", ability: "验证与节奏" },
+  { file: "focus.json",            name: "专注力",     desc: "一坐下就刷手机、注意力碎片化",                        cat: "效率", min: 10, diff: "入门", ability: "启动与专注" },
+  { file: "study-exam.json",        name: "备考",       desc: "中高考、考研、考证，容易拖延焦虑",                    cat: "学习", min: 5,  diff: "入门", ability: "计划与复盘" },
+  { file: "fitness.json",           name: "健身",       desc: "想增肌减脂塑形，但总坚持不下来",                      cat: "健康", min: 5,  diff: "入门", ability: "持续与恢复" },
+  { file: "job-search.json",        name: "求职",       desc: "投简历没回音、面试紧张、求职焦虑",                    cat: "职业", min: 10, diff: "进阶", ability: "推进与心态" },
+  { file: "emotion-support.json",   name: "情绪支持",   desc: "焦虑、低落、压力大，想有个出口",                      cat: "情绪", min: 5,  diff: "入门", ability: "识别与调节" },
+  { file: "finance.json",           name: "财务",       desc: "月光、超支、想存钱或还债",                            cat: "生活", min: 5,  diff: "入门", ability: "预算与自控" },
+  { file: "writing.json",           name: "写作",       desc: "小说、公众号、日更，总卡文拖延",                      cat: "创作", min: 10, diff: "进阶", ability: "输出与坚持" },
+  { file: "sleep.json",             name: "睡眠",       desc: "入睡难、熬夜、睡眠质量差",                            cat: "健康", min: 5,  diff: "入门", ability: "作息与放松" },
+  { file: "quit-habits.json",       name: "戒烟戒糖",   desc: "想戒烟、戒糖、戒手机等习惯",                          cat: "健康", min: 5,  diff: "进阶", ability: "触发与替代" },
+  { file: "language-learning.json", name: "语言学习",   desc: "练口语、背单词、备考语言考试",                        cat: "学习", min: 10, diff: "入门", ability: "输入与开口" },
+  { file: "parenting.json",         name: "亲子沟通",   desc: "想改善亲子沟通、减少吼叫",                            cat: "关系", min: 10, diff: "进阶", ability: "沟通与耐心" },
+  { file: "caregiver.json",         name: "照护者支持", desc: "照顾老人病人、容易疲惫的人",                          cat: "关系", min: 5,  diff: "进阶", ability: "照护与自我照顾" },
+  { file: "adhd.json",              name: "ADHD 支持",  desc: "注意力涣散、拖延、容易忘事",                          cat: "学习", min: 5,  diff: "进阶", ability: "启动与专注" },
+  { file: "reading.json",           name: "读书",       desc: "买书不读、想建立阅读习惯",                            cat: "学习", min: 10, diff: "入门", ability: "阅读与沉淀" },
+  { file: "pet.json",               name: "宠物",       desc: "养猫狗，想科学陪伴和记录",                            cat: "生活", min: 5,  diff: "入门", ability: "照料与观察" },
+  { file: "time-management.json",   name: "时间管理",   desc: "事多拖延、忙但没产出",                                cat: "效率", min: 5,  diff: "入门", ability: "优先级与执行" },
+  { file: "morning-routine.json",   name: "早起晨间",   desc: "起不来、早晨手忙脚乱",                                cat: "生活", min: 5,  diff: "入门", ability: "起床与节奏" },
+  { file: "meditation.json",        name: "正念练习",   desc: "紧绷焦虑、睡前脑子停不下来",                          cat: "情绪", min: 5,  diff: "入门", ability: "觉察与呼吸" },
+  { file: "healthy-diet.json",      name: "健康饮食",   desc: "外卖多、饮食不规律、想吃得健康",                      cat: "健康", min: 5,  diff: "入门", ability: "饮食与选择" },
+  { file: "journaling.json",        name: "日记觉察",   desc: "想写日记但坚持不了、想梳理情绪",                      cat: "情绪", min: 5,  diff: "入门", ability: "记录与觉察" },
+  { file: "public-speaking.json",   name: "演讲表达",   desc: "当众发言紧张、汇报没结构",                            cat: "职业", min: 10, diff: "进阶", ability: "结构与表达" },
+  { file: "relationship.json",      name: "恋爱沟通",   desc: "恋爱或伴侣沟通中容易争吵",                            cat: "关系", min: 5,  diff: "进阶", ability: "表达与修复" },
+  { file: "declutter.json",         name: "整理收纳",   desc: "房间乱、东西多、舍不得扔",                            cat: "生活", min: 15, diff: "入门", ability: "取舍与整理" },
+  { file: "instrument.json",        name: "乐器练习",   desc: "学乐器、练琴容易中断",                                cat: "兴趣", min: 15, diff: "进阶", ability: "练习与坚持" },
+  { file: "coding.json",            name: "编程学习",   desc: "自学编程、容易卡住或迷路",                            cat: "学习", min: 20, diff: "进阶", ability: "拆解与调试" },
+  { file: "cooking.json",           name: "学做饭",     desc: "不会做饭、想开始带饭",                                cat: "生活", min: 20, diff: "入门", ability: "动手与规划" },
+  { file: "plant-care.json",        name: "植物养护",   desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门", ability: "观察与照料" },
+  { file: "yoga.json", name: "瑜伽", desc: "想在家练瑜伽，但不知道怎么开始", cat: "健康", min: 10, diff: "入门", ability: "柔韧与呼吸" },
+  { file: "cycling.json", name: "骑行", desc: "想靠骑车锻炼，但坚持不下来", cat: "健康", min: 20, diff: "入门", ability: "耐力与安全" },
+  { file: "swimming.json", name: "游泳", desc: "想学游泳或坚持游泳，但怕水、没节奏", cat: "健康", min: 20, diff: "入门", ability: "呼吸与水性" },
+  { file: "hiking.json", name: "徒步户外", desc: "想开始徒步，但不知道准备什么", cat: "健康", min: 20, diff: "进阶", ability: "准备与体能" },
+  { file: "eye-care.json", name: "护眼用眼", desc: "长时间看屏幕，眼睛干涩疲劳", cat: "健康", min: 5, diff: "入门", ability: "休息与用眼" },
+  { file: "emotional-eating.json", name: "情绪化进食", desc: "压力一大就想吃东西", cat: "健康", min: 10, diff: "进阶", ability: "识别与替代" },
+  { file: "breakup.json", name: "失恋恢复", desc: "分手后走不出来，反复回想", cat: "情绪", min: 10, diff: "进阶", ability: "情绪与重建" },
+  { file: "anger.json", name: "愤怒管理", desc: "容易发火，事后又后悔", cat: "情绪", min: 5, diff: "进阶", ability: "暂停与表达" },
+  { file: "confidence.json", name: "自信表达", desc: "想表达自己，却总是不敢开口", cat: "情绪", min: 10, diff: "进阶", ability: "表达与证据" },
+  { file: "parents.json", name: "与父母沟通", desc: "和父母说不到两句就吵起来", cat: "关系", min: 10, diff: "进阶", ability: "边界与沟通" },
+  { file: "chores.json", name: "家庭分工", desc: "家务总是自己干，心里不平衡", cat: "关系", min: 10, diff: "进阶", ability: "分工与表达" },
+  { file: "friendship.json", name: "友情维护", desc: "朋友越来越少，不知道该怎么联系", cat: "关系", min: 5, diff: "入门", ability: "主动与倾听" },
+  { file: "study-parenting.json", name: "陪写作业", desc: "陪孩子写作业，天天鸡飞狗跳", cat: "学习", min: 15, diff: "进阶", ability: "陪伴与情绪" },
+  { file: "study-abroad.json", name: "留学申请", desc: "想申请留学，但流程复杂没头绪", cat: "学习", min: 20, diff: "进阶", ability: "规划与执行" },
+  { file: "new-job.json", name: "职场新人", desc: "刚入职，不知道怎么融入", cat: "职业", min: 10, diff: "入门", ability: "提问与融入" },
+  { file: "promotion.json", name: "升职述职", desc: "想争取升职，但不知道怎么准备", cat: "职业", min: 10, diff: "进阶", ability: "成果与表达" },
+  { file: "team-management.json", name: "团队管理", desc: "第一次带团队，不知道怎么管", cat: "职业", min: 15, diff: "进阶", ability: "反馈与对齐" },
+  { file: "freelance.json", name: "自由职业接单", desc: "想做自由职业，但接单不稳定", cat: "职业", min: 15, diff: "进阶", ability: "获客与交付" },
+  { file: "painting.json", name: "绘画练习", desc: "想学画画，但总是画两笔就停", cat: "兴趣", min: 15, diff: "入门", ability: "观察与动笔" },
+  { file: "photography.json", name: "摄影", desc: "想学摄影，但拍来拍去没进步", cat: "兴趣", min: 15, diff: "入门", ability: "观察与取舍" },
+  { file: "singing.json", name: "唱歌练习", desc: "想学唱歌，但总跑调、没气息", cat: "兴趣", min: 15, diff: "入门", ability: "气息与音准" },
+  { file: "calligraphy.json", name: "练字书法", desc: "想练字，但总坚持不下来", cat: "兴趣", min: 10, diff: "入门", ability: "结构与手感" },
+  { file: "travel.json", name: "旅行规划", desc: "想出去玩，但做攻略太累", cat: "生活", min: 10, diff: "入门", ability: "规划与弹性" },
+  { file: "solo-living.json", name: "独居生活", desc: "一个人住，生活容易乱套", cat: "生活", min: 10, diff: "入门", ability: "节奏与照顾" },
 ];
 
-// 搜索同义词来自 scenarios.json；加载失败时退回名称/描述搜索
+// 同义词与训练计划来自 scenarios.json；加载失败时退回名称/描述搜索
+let PLAN = new Map();
 fetch("scenarios.json")
   .then(res => (res.ok ? res.json() : Promise.reject()))
   .then(data => {
-    const map = new Map((data.scenarios || []).map(item => [item.file, item.keywords || []]));
-    SCENARIOS.forEach(item => { item.kw = map.get(item.file) || []; });
+    const list = data.scenarios || [];
+    const kwMap = new Map(list.map(item => [item.file, item.keywords || []]));
+    PLAN = new Map(list.map(item => [item.file, {
+      ability: item.ability || "",
+      checkpoint: item.checkpoint || ""
+    }]));
+    SCENARIOS.forEach(item => { item.kw = kwMap.get(item.file) || []; });
     if (query.trim()) render();
   })
   .catch(() => {});
@@ -767,7 +786,7 @@ function showToast(msg, isError) {
 function cardHTML(s, i) {
   const index = String(i + 1).padStart(2, "0");
   const delay = (i % 3) * 60;
-  const meta = `<span>每天约 ${s.min} 分钟</span><span>${s.diff}</span>`;
+  const meta = `<span>每天约 ${s.min} 分钟</span><span>${s.diff}</span>${s.ability ? `<span>练 · ${s.ability}</span>` : ""}`;
   if (s.featured) {
     return `<article class="card card-featured" data-reveal style="--delay:${delay}ms">
       <div class="feature-copy">
@@ -949,6 +968,12 @@ document.addEventListener("click", async e => {
     try {
       const text = await fetchText(file);
       document.getElementById("modal-title").textContent = file;
+      const item = SCENARIOS.find(x => x.file === file) || {};
+      const plan = PLAN.get(file) || {};
+      document.getElementById("modal-plan").innerHTML = `
+        <div class="plan-item"><span class="plan-label">练什么</span><span class="plan-value">${item.ability || item.name || "—"}</span></div>
+        <div class="plan-item"><span class="plan-label">建议节奏</span><span class="plan-value">每天约 ${item.min || "?"} 分钟，先坚持两周</span></div>
+        <div class="plan-item"><span class="plan-label">过关标准</span><span class="plan-value">${plan.checkpoint || "连续两周按建议节奏练，并说清一个变化。"}</span></div>`;
       document.getElementById("modal-body").textContent = text;
       document.getElementById("modal-copy").dataset.copy = file;
       document.getElementById("modal-filled").href = "examples/filled/" + file;
