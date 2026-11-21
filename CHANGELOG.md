@@ -2,6 +2,16 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。存档结构变化会提升 `schema_version`。
 
+## v2.9.0 — 2026-11-21
+
+### 新增
+- [`week.html`](./week.html)「本周练习卡」：选练点与起始日期，按 training_plan 和模板 functions 生成 7 天安排（启动 / 主练 / 巩固 / 查漏 / 复盘）。
+- 练习卡支持复制、复制给 AI 的版本、下载 Markdown、打印；预览弹窗和页脚加入入口。
+- 文案与布局适配桌面与手机，打印时自动隐藏导航和操作区。
+
+### 变更
+- README、llms、demo 增加练习卡说明；sw 缓存升到 jpf-v16，预缓存 week.html。
+
 ## v2.8.0 — 2026-11-21
 
 ### 新增

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4f4f4">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>本周练习卡 · 一事一练</title>
+<meta name="description" content="选一个练点，生成一张可复制的 7 天练习安排：每天练什么、周末怎么复盘。">
+<style>
+  :root {
+    --paper: #f4f4f4; --paper-deep: #ebebeb; --card: #ffffff;
+    --ink: #111111; --ink-soft: #2c2c2c; --muted: #6e6e6e;
+    --line: #dedede; --line-strong: #bdbdbd; --black: #0a0a0a;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-display: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+    --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--font-sans); line-height: 1.65;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+  a { color: inherit; text-underline-offset: 3px; }
+  button, input, select { font: inherit; color: inherit; }
+  .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap; min-height: 64px; border-bottom: 1px solid var(--line);
+  }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-mark {
+    width: 32px; height: 32px; display: grid; place-items: center;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: -1px;
+  }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; font-weight: 700; }
+  .brand-text small {
+    margin-top: 3px; font-size: 9px; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .topnav { display: flex; gap: 18px; font-size: 12px; color: var(--muted); }
+  .topnav a { text-decoration: none; }
+  .topnav a:hover { color: var(--ink); }
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); }
+  .eyebrow {
+    margin: 0 0 12px; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  .hero h1 {
+    margin: 0 0 14px; font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.12; letter-spacing: -.02em;
+    text-wrap: balance;
+  }
+  .hero p { margin: 0; max-width: 46em; color: var(--muted); font-size: 15px; }
+  .controls {
+    display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .8fr) auto;
+    gap: 12px; align-items: end;
+    padding: clamp(16px, 2.4vw, 24px); border: 1px solid var(--line); background: var(--card);
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .field select, .field input {
+    width: 100%; border: 1px solid var(--line-strong); border-radius: 2px;
+    background: var(--card); padding: 11px 12px; font-size: 15px;
+  }
+  .field select:focus, .field input:focus { outline: none; border-color: var(--ink); }
+  .controls .btn { min-height: 44px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 44px; padding: 0 18px; border: 1px solid var(--ink); border-radius: 2px;
+    background: transparent; color: var(--ink); text-decoration: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s, transform .15s var(--ease);
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn:active { transform: translateY(1px); }
+  .btn-solid { background: var(--ink); color: var(--paper); }
+  .btn:disabled { opacity: .45; cursor: wait; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+  .actions .btn { min-height: 40px; font-size: 13px; }
+  .week-card {
+    border: 1px solid var(--line-strong); background: var(--card);
+    padding: clamp(20px, 3vw, 34px);
+  }
+  .week-head { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+  .week-head h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 600; }
+  .week-meta { margin: 0; font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .03em; }
+  .week-plan { text-align: right; font-size: 13px; color: var(--ink-soft); max-width: 36em; }
+  .week-plan span { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .week-days { list-style: none; margin: 0; padding: 0; }
+  .day {
+    display: grid; grid-template-columns: 108px minmax(0, 1fr) auto;
+    gap: 16px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line);
+  }
+  .day:last-child { border-bottom: 0; }
+  .day-date { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; padding-top: 3px; }
+  .day-body strong { display: block; font-size: 15px; margin-bottom: 4px; }
+  .day-body p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+  .day-mins { font-family: var(--font-mono); font-size: 10px; color: var(--muted); padding-top: 4px; white-space: nowrap; }
+  .day.is-review { background: var(--paper); margin: 0 -12px; padding: 16px 12px; }
+  .week-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 18px; font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .note { margin: 18px 0 0; color: var(--muted); font-size: 12px; }
+  .site-foot { padding: clamp(40px, 6vw, 64px) 0 calc(28px + env(safe-area-inset-bottom)); background: var(--black); color: #d8d8d8; }
+  .foot-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid #2a2a2a; }
+  .foot-brand .brand-mark { background: var(--paper); color: var(--ink); }
+  .foot-brand .brand-text { color: var(--paper); }
+  .foot-brand .brand-text small { color: #8c8c8c; }
+  .foot-brand p { max-width: 32em; margin: 16px 0 0; color: #9a9a9a; font-size: 13px; }
+  .foot-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; font-size: 13px; align-content: start; }
+  .foot-links a { color: #bdbdbd; text-decoration: none; }
+  .foot-links a:hover { color: var(--paper); }
+  .foot-bottom {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding-top: 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .03em; color: #8c8c8c;
+  }
+  .toast {
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 50;
+    transform: translate(-50%, 16px); max-width: 92vw;
+    padding: 11px 16px; border: 1px solid #333; border-radius: 2px;
+    background: var(--ink); color: var(--paper); font-size: 13px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.error { background: #1a1a1a; border-color: #5a5a5a; }
+  @media (min-width: 1440px) { .shell { width: min(1320px, calc(100% - 96px)); } }
+  @media (max-width: 860px) {
+    .controls { grid-template-columns: 1fr; }
+    .day { grid-template-columns: 92px minmax(0, 1fr); }
+    .day-mins { grid-column: 2; padding-top: 0; }
+    .foot-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .shell { width: calc(100% - 28px); }
+    .topnav { gap: 12px; font-size: 11px; }
+    .topnav a[href="https://github.com/TuxLin123233/json-prompt-form"] { display: none; }
+    .brand-text small { display: none; }
+    .week-plan { text-align: left; }
+    .day { grid-template-columns: 1fr; gap: 6px; }
+    .day-mins { grid-column: 1; }
+    .actions .btn { flex: 1 1 140px; }
+    .foot-links { grid-template-columns: 1fr 1fr; }
+    .foot-bottom { flex-direction: column; gap: 6px; }
+  }
+  @media print {
+    body { background: #fff; color: #000; }
+    .site-head, .controls, .actions, .hero, .site-foot, .note, .toast { display: none !important; }
+    .shell { width: 100%; }
+    .week-card { border-color: #000; padding: 0; }
+    .day { break-inside: avoid; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="shell topbar">
+    <a class="brand" href="index.html" aria-label="一事一练 首页">
+      <span class="brand-mark" aria-hidden="true">一</span>
+      <span class="brand-text">一事一练<small>AI 长期陪练</small></span>
+    </a>
+    <nav class="topnav" aria-label="页面导航">
+      <a href="index.html">首页</a>
+      <a href="index.html#scenarios">练点</a>
+      <a href="transfer.html">换 AI</a>
+      <a href="checker.html">存档检查器</a>
+      <a href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="hero">
+    <p class="eyebrow">本周练习卡</p>
+    <h1>把一件事，排进这周</h1>
+    <p>选一个练点，生成一张 7 天安排：每天练什么、多少分钟、周日记着复盘。可复制、可下载、可打印。</p>
+  </section>
+
+  <section class="controls" aria-label="生成设置">
+    <div class="field">
+      <label for="scenario">练点</label>
+      <select id="scenario"></select>
+    </div>
+    <div class="field">
+      <label for="start">从哪天开始</label>
+      <input id="start" type="date">
+    </div>
+    <button class="btn btn-solid" id="generate" type="button">生成练习卡</button>
+  </section>
+
+  <div class="actions">
+    <button class="btn btn-solid" id="copy-card" type="button">复制练习卡</button>
+    <button class="btn" id="copy-ai" type="button">复制给 AI 的版本</button>
+    <button class="btn" id="download" type="button">下载 .md</button>
+    <button class="btn" id="print" type="button">打印</button>
+    <a class="btn" href="index.html#scenarios">换个练点</a>
+  </div>
+
+  <article class="week-card" id="week-card" aria-live="polite">
+    <div class="week-head">
+      <div>
+        <h2 id="card-title">加载中…</h2>
+        <p class="week-meta" id="card-meta"></p>
+      </div>
+      <div class="week-plan">
+        <span>过关标准</span>
+        <p id="card-checkpoint" style="margin:6px 0 0"></p>
+      </div>
+    </div>
+    <ol class="week-days" id="days"></ol>
+    <div class="week-foot">
+      <span id="card-range"></span>
+      <span>一事一练 · 一次只练一件事</span>
+    </div>
+  </article>
+  <p class="note">练习卡只是安排，不替代模板和存档。第一次用请先复制模板发给 AI；每次结束说「存档」，本周的进度也会跟着存档走。</p>
+</main>
+
+<footer class="site-foot">
+  <div class="shell foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="index.html" aria-label="一事一练 首页">
+        <span class="brand-mark" aria-hidden="true">一</span>
+        <span class="brand-text">一事一练<small>AI 长期陪练</small></span>
+      </a>
+      <p>一次只练一件事。存档自己留着，换 AI 也能接着练。</p>
+    </div>
+    <nav class="foot-links" aria-label="页脚导航">
+      <a href="index.html">首页</a>
+      <a href="index.html#scenarios">全部练点</a>
+      <a href="transfer.html">换 AI 续接</a>
+      <a href="builder.html">自定义生成器</a>
+      <a href="checker.html">存档检查器</a>
+      <a href="README.md">项目说明</a>
+      <a href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
+      <a href="LICENSE">MIT License</a>
+    </nav>
+  </div>
+  <div class="shell foot-bottom">
+    <span>© 2026 LinSifan. All rights reserved.</span>
+    <span>插画来自 <a href="https://undraw.co/illustrations" target="_blank" rel="noopener">unDraw</a> · 图标来自 <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a>（ISC）</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const WEEKDAYS = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+const state = { scenarios: [], current: null, plan: null, archive: null };
+
+const scenarioSelect = document.getElementById("scenario");
+const startInput = document.getElementById("start");
+const generateBtn = document.getElementById("generate");
+const toast = document.getElementById("toast");
+
+function showToast(msg, isError) {
+  toast.textContent = msg;
+  toast.classList.toggle("error", !!isError);
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function todayISO() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+}
+
+function parseISO(iso) {
+  const parts = String(iso || "").split("-").map(Number);
+  if (parts.length !== 3 || parts.some(isNaN)) return new Date();
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+function addDays(date, days) {
+  const d = new Date(date.getTime());
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function fmtDate(date) {
+  const pad = n => String(n).padStart(2, "0");
+  return pad(date.getMonth() + 1) + "-" + pad(date.getDate());
+}
+
+function pickPlanFunctions(functions) {
+  const list = Array.isArray(functions) ? functions.slice() : [];
+  const isReview = f => /复盘|review/i.test(f.name || "") || /review/i.test(f.id || "");
+  const review = list.find(isReview) || null;
+  const rest = list.filter(f => f !== review);
+  const daily = rest.filter(f => /每日/.test(f.frequency || "") || /每天/.test(f.trigger || ""));
+  const ordered = daily.concat(rest.filter(f => !daily.includes(f)));
+  return { ordered, review };
+}
+
+function buildPlan(scenario, archive) {
+  const plan = archive.training_plan || {};
+  const functions = pickPlanFunctions(archive.functions);
+  const minutes = scenario.daily_minutes || 10;
+  const ordered = functions.ordered.length ? functions.ordered : [{ name: "开始练", how: "做 10 分钟就算启动" }];
+  const review = functions.review || { name: "周复盘", how: "回看本周完成情况，只调整一个变量" };
+  const start = parseISO(startInput.value || todayISO());
+  const pick = i => ordered[i % ordered.length];
+
+  const days = [];
+  const templates = [
+    { fn: pick(0), tag: "启动", note: "先做 " + Math.min(minutes, 10) + " 分钟，完成就算赢" },
+    { fn: pick(1), tag: "主练", note: "" },
+    { fn: pick(2), tag: "主练", note: "" },
+    { fn: pick(0), tag: "巩固", note: "比第一次多做 5 分钟，或换一个更难的小变体" },
+    { fn: pick(3), tag: "主练", note: "" },
+    { fn: null, tag: "补练", note: "选一个这周没练够的功能，补一次 10 分钟" },
+    { fn: review, tag: "复盘", note: "", review: true }
+  ];
+
+  templates.forEach((tpl, i) => {
+    const date = addDays(start, i);
+    const focus = tpl.fn;
+    const lines = [];
+    if (tpl.review) {
+      lines.push(focus.name + "：" + (focus.how || "回看本周完成情况，只调整一个变量"));
+      lines.push("自检过关标准：" + (plan.checkpoint || "按节奏坚持两周，说清一个变化"));
+      lines.push("下周决定：继续 / 调整节奏 / 升级");
+    } else if (focus) {
+      lines.push(focus.name + "：" + (focus.how || "按模板里的方式练一次"));
+      if (tpl.note) lines.push(tpl.note);
+      lines.push("结束记一句：今天最顺的和最卡的各是什么");
+    } else {
+      lines.push(tpl.note);
+    }
+    days.push({
+      weekday: WEEKDAYS[i],
+      date: fmtDate(date),
+      tag: tpl.tag,
+      review: !!tpl.review,
+      title: focus ? focus.name : "补一次没练够的",
+      lines,
+      minutes: tpl.review || !focus ? 10 : minutes
+    });
+  });
+
+  return {
+    title: scenario.name,
+    ability: plan.ability || "",
+    cadence: plan.cadence || "每天约 " + minutes + " 分钟，先坚持两周",
+    checkpoint: plan.checkpoint || "连续两周按节奏练，并说清一个变化",
+    range: fmtDate(start) + " ~ " + fmtDate(addDays(start, 6)),
+    days
+  };
+}
+
+function planText(plan) {
+  const head = [
+    "一事一练 · 本周练习卡",
+    "",
+    "练点：" + plan.title + (plan.ability ? "（" + plan.ability + "）" : ""),
+    "节奏：" + plan.cadence,
+    "过关：" + plan.checkpoint,
+    "本周：" + plan.range,
+    ""
+  ];
+  const body = [];
+  plan.days.forEach(d => {
+    body.push(d.weekday + " " + d.date + " · " + d.tag + "：" + d.title);
+    d.lines.forEach(line => body.push("  " + line));
+    body.push("");
+  });
+  return head.concat(body).join("\n").trim() + "\n";
+}
+
+function renderCard(plan) {
+  document.getElementById("card-title").textContent = plan.title;
+  document.getElementById("card-meta").textContent = (plan.ability ? "练 · " + plan.ability + " · " : "") + plan.cadence + " · " + plan.range;
+  document.getElementById("card-checkpoint").textContent = plan.checkpoint;
+  document.getElementById("card-range").textContent = "本周 " + plan.range;
+  document.getElementById("days").innerHTML = plan.days.map(d => `
+    <li class="day${d.review ? " is-review" : ""}">
+      <span class="day-date">${d.weekday}<br>${d.date}</span>
+      <div class="day-body">
+        <strong>${d.tag} · ${d.title}</strong>
+        ${d.lines.map(line => `<p>${line}</p>`).join("")}
+      </div>
+      <span class="day-mins">${d.minutes} 分钟</span>
+    </li>`).join("");
+}
+
+async function loadScenario(file) {
+  const res = await fetch("examples/" + file, { cache: "no-cache" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return await res.json();
+}
+
+async function generate() {
+  const file = scenarioSelect.value;
+  const scenario = state.scenarios.find(s => s.file === file);
+  if (!scenario) return;
+  generateBtn.disabled = true;
+  try {
+    const archive = await loadScenario(file);
+    state.archive = archive;
+    state.plan = buildPlan(scenario, archive);
+    renderCard(state.plan);
+  } catch (err) {
+    document.getElementById("card-title").textContent = "读取失败";
+    document.getElementById("card-meta").textContent = "请通过 GitHub Pages 打开本页，或在本地启动静态服务器。";
+    document.getElementById("days").innerHTML = "";
+  } finally {
+    generateBtn.disabled = false;
+  }
+}
+
+async function init() {
+  startInput.value = todayISO();
+  try {
+    const res = await fetch("scenarios.json", { cache: "no-cache" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    state.scenarios = data.scenarios || [];
+    const groups = new Map();
+    state.scenarios.forEach(s => {
+      if (!groups.has(s.category)) groups.set(s.category, []);
+      groups.get(s.category).push(s);
+    });
+    let html = "";
+    groups.forEach((list, category) => {
+      html += `<optgroup label="${category}">`;
+      list.forEach(s => { html += `<option value="${s.file}">${s.name}</option>`; });
+      html += "</optgroup>";
+    });
+    scenarioSelect.innerHTML = html;
+    const param = new URLSearchParams(location.search).get("file");
+    const initial = state.scenarios.find(s => s.file === param) || state.scenarios[0];
+    if (initial) scenarioSelect.value = initial.file;
+    await generate();
+  } catch (err) {
+    document.getElementById("card-title").textContent = "无法读取场景索引";
+    document.getElementById("card-meta").textContent = "请通过 GitHub Pages 打开本页。";
+  }
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  const ok = document.execCommand("copy");
+  document.body.removeChild(ta);
+  if (!ok) throw new Error("copy failed");
+}
+
+function aiText(plan) {
+  return "今天是 " + todayISO() + "。这是我本周的练习计划，请按这个节奏陪我练：\n\n"
+    + planText(plan)
+    + "\n请每天只问我一个问题，周末带我复盘；如果我卡住了，按模板里的功能给我一个小步骤。";
+}
+
+document.getElementById("copy-card").addEventListener("click", async () => {
+  if (!state.plan) return;
+  try { await copyText(planText(state.plan)); showToast("已复制本周练习卡"); }
+  catch (err) { showToast("复制失败，请手动选择文本", true); }
+});
+
+document.getElementById("copy-ai").addEventListener("click", async () => {
+  if (!state.plan) return;
+  try { await copyText(aiText(state.plan)); showToast("已复制给 AI 的版本"); }
+  catch (err) { showToast("复制失败，请手动选择文本", true); }
+});
+
+document.getElementById("download").addEventListener("click", () => {
+  if (!state.plan) return;
+  const blob = new Blob([planText(state.plan)], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = state.plan.title + "-本周练习卡.md";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("已下载本周练习卡");
+});
+
+document.getElementById("print").addEventListener("click", () => window.print());
+generateBtn.addEventListener("click", generate);
+scenarioSelect.addEventListener("change", generate);
+startInput.addEventListener("change", generate);
+
+init();
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>

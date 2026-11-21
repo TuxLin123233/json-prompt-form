@@ -85,6 +85,7 @@ flowchart TD
 | 🎯 [`examples/`](./examples) | 六十个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 练点选择网页 |
 | 🔁 [`transfer.html`](./transfer.html) | 换 AI 续接演示：同一份存档换模型接着练 |
+| 🗓️ [`week.html`](./week.html) | 本周练习卡：选练点生成 7 天安排，可复制/下载/打印 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
 | 🔍 [`checker.html`](./checker.html) | 存档检查器：校验 / 格式化 / 查截断 |
 | 🧩 [`examples/en/`](./examples/en) | 27 个英文场景模板 |

@@ -19,6 +19,7 @@
 - [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：60 个场景模板，直接复制给 AI。
 - [examples/filled/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/filled)：填好日期和记忆的示例存档。
 - [transfer.html](https://tuxlin123233.github.io/json-prompt-form/transfer.html)：换 AI 续接演示，证明同一份存档可跨模型使用。
+- [week.html](https://tuxlin123233.github.io/json-prompt-form/week.html)：本周练习卡，选练点生成 7 天练习安排。
 - [examples/en/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/en)：英文场景模板。
 - [schema.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/schema.json)：存档 JSON Schema。
 - [updates.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/updates.json)：版本迁移清单，旧存档如何升级到当前模板。
