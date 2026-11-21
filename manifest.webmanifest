@@ -1,7 +1,7 @@
 {
-    "name": "json-prompt-form · 让 AI 长期记住你",
-    "short_name": "长期任务",
-    "description": "60 个场景的 JSON 长期任务提示词模板。聊完存档，下次续接。",
+    "name": "一事一练 · 让 AI 陪你练成一件事",
+    "short_name": "一事一练",
+    "description": "60 个练点的 JSON 长期陪练提示词模板。一次只练一件事，聊完存档，下次接着练。",
     "start_url": "./",
     "scope": "./",
     "display": "standalone",

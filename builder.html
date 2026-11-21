@@ -6,8 +6,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#f4f4f4">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>自定义生成器 · json-prompt-form</title>
-<meta name="description" content="回答几个问题，现场生成属于你的长期任务 AI 模板。">
+<title>自定义生成器 · 一事一练</title>
+<meta name="description" content="回答几个问题，现场生成属于你的一件事长期陪练 AI 模板。">
 <style>
   :root {
     --paper: #f4f4f4; --paper-deep: #ebebeb; --card: #ffffff;
@@ -132,8 +132,8 @@
 <div class="wrap">
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="回到首页">
-      <span class="brand-mark" aria-hidden="true">{}</span>
-      <span class="brand-text">长期任务<small>json-prompt-form</small></span>
+      <span class="brand-mark" aria-hidden="true">一</span>
+      <span class="brand-text">一事一练<small>AI 长期陪练</small></span>
     </a>
     <nav class="topnav" aria-label="页面导航">
       <a href="index.html">首页</a>
@@ -144,8 +144,8 @@
 
   <header class="hero">
     <p class="eyebrow">自定义生成器</p>
-    <h1>生成你自己的模板</h1>
-    <p>按你的情况回答几个问题，现场生成一份 JSON 长期任务模板。复制整段给 AI，就能开始。</p>
+    <h1>生成你自己的陪练模板</h1>
+    <p>按你的情况回答几个问题，现场生成一份 JSON 长期陪练模板。复制整段给 AI，就能开始练。</p>
   </header>
 
   <h2>1. 你的情况</h2>
@@ -265,7 +265,7 @@ function buildTemplate() {
   spec.goal = `根据用户的描述，设计并长期陪同一个「${name}」助手。开场读取用户贴入的存档续接；会话中可提议新增/调整/停用功能；结束时输出更新后的完整存档 JSON 供用户保存。`;
   spec.assistant_identity = {
     fill_rule: "首次会话由 AI 根据用户输入填入具体内容；续接时沿用存档中的值，除非用户要求调整。",
-    what: `${name}长期任务型助手`,
+    what: `${name}长期陪练助手`,
     why: pain || "帮助用户长期坚持一个目标",
     how: `友好、具体、每次只推进一步；每天约 ${minutes} 分钟，不堆任务`
   };

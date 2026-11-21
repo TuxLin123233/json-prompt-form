@@ -1,4 +1,6 @@
-# 🤖 json-prompt-form
+# 一事一练
+
+> 仓库名沿用 `json-prompt-form`，在线地址与存档格式保持不变。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![JSON](https://img.shields.io/badge/format-JSON-blue.svg)](./form.json)
@@ -6,13 +8,13 @@
 [![Last commit](https://img.shields.io/github/last-commit/TuxLin123233/json-prompt-form)](https://github.com/TuxLin123233/json-prompt-form/commits/main)
 
 
-<img src="./assets/social-preview.png" alt="让 AI 陪你做完一件长期的事" width="100%">
+<img src="./assets/social-preview.png" alt="让 AI 陪你练成一件事" width="100%">
 
-> 一个能「记住你」的 AI 助手模板。会复制粘贴，就能用。✨
+> 一次只练一件事。一个能「记住你」的 AI 长期陪练模板，会复制粘贴就能用。✨
 
 ## ✨ 这是什么？
 
-把它想成一张**给 AI 的长期任务说明书**，外加一份**可以反复续上的存档**。
+把它想成一张**给 AI 的长期陪练说明书**，外加一份**可以反复续上的存档**。
 
 普通提示词聊完就忘；这个模板能让 AI 每次读你的存档，接着上次继续聊、继续帮你。
 
@@ -95,7 +97,7 @@ flowchart TD
 | ❓ [`FAQ.md`](./FAQ.md) | 常见问题 |
 | 🤝 [`CONTRIBUTING.md`](./CONTRIBUTING.md) | 如何新增场景 |
 
-## 🎯 现成场景
+## 🎯 60 个练点
 
 | 场景 | 文件 | 适合谁 | 每日 |
 | --- | --- | --- | --- |
@@ -160,7 +162,7 @@ flowchart TD
 | 旅行规划 | [`travel.json`](./examples/travel.json) | 想出去玩，但做攻略太累 | 10 分钟 |
 | 独居生活 | [`solo-living.json`](./examples/solo-living.json) | 一个人住，生活容易乱套 | 10 分钟 |
 
-每个模板都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
+每个练点都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
 
 英文模板在 [`examples/en/`](./examples/en)；想看填好的存档长什么样，打开 [`examples/filled/`](./examples/filled)。
 
