@@ -229,6 +229,13 @@
     font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
     text-transform: uppercase; color: var(--muted);
   }
+  .card-icon {
+    display: inline-block; width: 26px; height: 26px; margin-top: 18px;
+    background-color: var(--ink);
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+  .card-icon + h3 { margin-top: 10px; }
   .card h3 { margin: 18px 0 8px; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.25; letter-spacing: -.01em; }
   .card-desc { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
   .card-meta {
@@ -594,7 +601,7 @@
   </div>
   <div class="shell foot-bottom" data-reveal style="--delay:80ms">
     <span>© 2026 LinSifan. All rights reserved.</span>
-    <span>插画来自 <a href="https://undraw.co/illustrations" target="_blank" rel="noopener">unDraw</a>，已改为灰白配色 · 手机可添加到主屏幕</span>
+    <span>插画来自 <a href="https://undraw.co/illustrations" target="_blank" rel="noopener">unDraw</a> · 图标来自 <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a>（ISC）· 均已改为灰白配色</span>
   </div>
 </footer>
 
@@ -708,8 +715,10 @@ function cardHTML(s, i) {
       <img class="feature-art" src="assets/illustrations/feature.svg" alt="" loading="lazy">
     </article>`;
   }
+  const slug = s.file.replace(/\.json$/, "");
   return `<article class="card" data-reveal style="--delay:${delay}ms">
     <div class="card-top"><span>${index}</span><span>${s.cat}</span></div>
+    <span class="card-icon" style="--icon:url(assets/icons/${slug}.svg)" aria-hidden="true"></span>
     <h3>${s.name}</h3>
     <p class="card-desc">${s.desc}</p>
     <div class="card-meta">${meta}</div>

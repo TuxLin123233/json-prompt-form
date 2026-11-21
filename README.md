@@ -78,6 +78,7 @@ flowchart TD
 | --- | --- |
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
 | 🧭 [`scenarios.json`](./scenarios.json) | 场景索引：名称/分类/时长/关键词（机器可读，校验基准） |
+| 🎛️ [`assets/icons/`](./assets/icons) | 场景图标（来自 Lucide，ISC 许可） |
 | 🎯 [`examples/`](./examples) | 三十六个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
@@ -234,6 +235,7 @@ npx ajv-cli validate -s schema.json -d 存档.json
 ## 🙏 致谢与版权
 
 - 首页插画来自 [unDraw](https://undraw.co/illustrations)，已统一改为灰白配色，遵循其开源许可；插画版权归 unDraw 原作者所有。
+- 场景图标来自 [Lucide](https://lucide.dev)，遵循 [ISC 许可](./assets/icons/LICENSE)；图标已随卡片颜色适配。
 - 感谢所有提出场景建议和反馈的人。
 
 © 2026 LinSifan。代码以 [MIT](./LICENSE) 许可发布。

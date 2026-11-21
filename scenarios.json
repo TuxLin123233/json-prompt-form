@@ -18,7 +18,8 @@
                 "副业",
                 "搬家",
                 "里程碑"
-            ]
+            ],
+            "icon": "target"
         },
         {
             "file": "running.json",
@@ -36,7 +37,8 @@
                 "5公里",
                 "跑鞋",
                 "晨跑"
-            ]
+            ],
+            "icon": "footprints"
         },
         {
             "file": "posture.json",
@@ -55,7 +57,8 @@
                 "腰背",
                 "拉伸",
                 "驼背"
-            ]
+            ],
+            "icon": "person-standing"
         },
         {
             "file": "social-anxiety.json",
@@ -73,7 +76,8 @@
                 "紧张",
                 "聚会",
                 "社死"
-            ]
+            ],
+            "icon": "users-round"
         },
         {
             "file": "self-compassion.json",
@@ -91,7 +95,8 @@
                 "自我批评",
                 "内耗",
                 "不够好"
-            ]
+            ],
+            "icon": "heart-handshake"
         },
         {
             "file": "driving.json",
@@ -109,7 +114,8 @@
                 "科目二",
                 "科目三",
                 "倒车入库"
-            ]
+            ],
+            "icon": "car"
         },
         {
             "file": "thesis.json",
@@ -127,7 +133,8 @@
                 "毕业论文",
                 "导师",
                 "文献"
-            ]
+            ],
+            "icon": "file-text"
         },
         {
             "file": "workplace-comm.json",
@@ -145,7 +152,8 @@
                 "拒绝",
                 "汇报",
                 "同事"
-            ]
+            ],
+            "icon": "message-square"
         },
         {
             "file": "side-hustle.json",
@@ -163,7 +171,8 @@
                 "接单",
                 "兼职",
                 "第二收入"
-            ]
+            ],
+            "icon": "rocket"
         },
         {
             "file": "focus.json",
@@ -181,7 +190,8 @@
                 "刷手机",
                 "深度工作",
                 "番茄钟"
-            ]
+            ],
+            "icon": "focus"
         },
         {
             "file": "study-exam.json",
@@ -199,7 +209,8 @@
                 "考研",
                 "高考",
                 "考证"
-            ]
+            ],
+            "icon": "graduation-cap"
         },
         {
             "file": "fitness.json",
@@ -217,7 +228,8 @@
                 "增肌",
                 "塑形",
                 "减肥"
-            ]
+            ],
+            "icon": "dumbbell"
         },
         {
             "file": "job-search.json",
@@ -235,7 +247,8 @@
                 "简历",
                 "找工作",
                 "跳槽"
-            ]
+            ],
+            "icon": "briefcase"
         },
         {
             "file": "emotion-support.json",
@@ -253,7 +266,8 @@
                 "压力",
                 "情绪",
                 "难过"
-            ]
+            ],
+            "icon": "cloud-sun"
         },
         {
             "file": "finance.json",
@@ -271,7 +285,8 @@
                 "月光",
                 "还债",
                 "理财"
-            ]
+            ],
+            "icon": "wallet"
         },
         {
             "file": "writing.json",
@@ -289,7 +304,8 @@
                 "公众号",
                 "日更",
                 "卡文"
-            ]
+            ],
+            "icon": "pen-line"
         },
         {
             "file": "sleep.json",
@@ -307,7 +323,8 @@
                 "入睡",
                 "睡眠",
                 "早睡"
-            ]
+            ],
+            "icon": "moon"
         },
         {
             "file": "quit-habits.json",
@@ -325,7 +342,8 @@
                 "戒手机",
                 "习惯",
                 "上瘾"
-            ]
+            ],
+            "icon": "cigarette-off"
         },
         {
             "file": "language-learning.json",
@@ -343,7 +361,8 @@
                 "单词",
                 "语言",
                 "考试"
-            ]
+            ],
+            "icon": "languages"
         },
         {
             "file": "parenting.json",
@@ -361,7 +380,8 @@
                 "吼叫",
                 "家长",
                 "沟通"
-            ]
+            ],
+            "icon": "baby"
         },
         {
             "file": "caregiver.json",
@@ -379,7 +399,8 @@
                 "病人",
                 "疲惫",
                 "家属"
-            ]
+            ],
+            "icon": "hand-heart"
         },
         {
             "file": "adhd.json",
@@ -397,7 +418,8 @@
                 "忘事",
                 "多动",
                 "专注"
-            ]
+            ],
+            "icon": "brain"
         },
         {
             "file": "reading.json",
@@ -414,7 +436,8 @@
                 "阅读",
                 "买书",
                 "书单"
-            ]
+            ],
+            "icon": "book-open"
         },
         {
             "file": "pet.json",
@@ -432,7 +455,8 @@
                 "狗",
                 "养宠",
                 "铲屎"
-            ]
+            ],
+            "icon": "paw-print"
         },
         {
             "file": "time-management.json",
@@ -450,7 +474,8 @@
                 "拖延",
                 "效率",
                 "优先级"
-            ]
+            ],
+            "icon": "timer"
         },
         {
             "file": "morning-routine.json",
@@ -467,7 +492,8 @@
                 "晨间",
                 "赖床",
                 "作息"
-            ]
+            ],
+            "icon": "sunrise"
         },
         {
             "file": "meditation.json",
@@ -484,7 +510,8 @@
                 "冥想",
                 "呼吸",
                 "放松"
-            ]
+            ],
+            "icon": "flower-2"
         },
         {
             "file": "healthy-diet.json",
@@ -502,7 +529,8 @@
                 "健康",
                 "减脂餐",
                 "营养"
-            ]
+            ],
+            "icon": "salad"
         },
         {
             "file": "journaling.json",
@@ -519,7 +547,8 @@
                 "觉察",
                 "情绪记录",
                 "复盘"
-            ]
+            ],
+            "icon": "notebook-pen"
         },
         {
             "file": "public-speaking.json",
@@ -537,7 +566,8 @@
                 "当众发言",
                 "表达",
                 "紧张"
-            ]
+            ],
+            "icon": "mic"
         },
         {
             "file": "relationship.json",
@@ -555,7 +585,8 @@
                 "争吵",
                 "沟通",
                 "亲密关系"
-            ]
+            ],
+            "icon": "heart"
         },
         {
             "file": "declutter.json",
@@ -573,7 +604,8 @@
                 "断舍离",
                 "房间乱",
                 "极简"
-            ]
+            ],
+            "icon": "boxes"
         },
         {
             "file": "instrument.json",
@@ -591,7 +623,8 @@
                 "吉他",
                 "钢琴",
                 "练习"
-            ]
+            ],
+            "icon": "guitar"
         },
         {
             "file": "coding.json",
@@ -609,7 +642,8 @@
                 "自学",
                 "调试",
                 "项目"
-            ]
+            ],
+            "icon": "code-xml"
         },
         {
             "file": "cooking.json",
@@ -626,7 +660,8 @@
                 "带饭",
                 "菜谱",
                 "厨房"
-            ]
+            ],
+            "icon": "chef-hat"
         },
         {
             "file": "plant-care.json",
@@ -643,7 +678,8 @@
                 "养花",
                 "绿植",
                 "浇水"
-            ]
+            ],
+            "icon": "sprout"
         }
     ]
 }

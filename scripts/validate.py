@@ -112,6 +112,7 @@ SCENARIO_FIELDS = {
     "featured": bool,
     "note": str,
     "keywords": list,
+    "icon": str,
 }
 
 
@@ -199,6 +200,11 @@ def check_scenarios(errors):
             if not os.path.exists(target):
                 errors.append("scenarios.json: 缺少示例文件 examples/%s%s"
                               % (sub + "/" if sub else "", file))
+
+        icon_path = os.path.join(ROOT, "assets", "icons", file.replace(".json", ".svg"))
+        if not os.path.exists(icon_path):
+            errors.append("scenarios.json: 缺少场景图标 assets/icons/%s.svg"
+                          % file.replace(".json", ""))
 
         example_path = os.path.join(ROOT, "examples", file)
         if os.path.exists(example_path):

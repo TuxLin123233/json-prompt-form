@@ -15,6 +15,7 @@
    - `file`（如 `running.json`）、`name`、`desc`
    - `category / daily_minutes / difficulty / audience`
    - `keywords`（搜索同义词，如「失眠」对应睡眠）
+   - `icon`（Lucide 图标名，同时把图标存为 `assets/icons/<场景 slug>.svg`）
    - `featured`、`note`（非精选场景都填 `false` / `""`）
 3. 在 `index.html` 的 `SCENARIOS` 数组里加一条展示信息（`file / name / desc / cat / min / diff`），字段需与 `scenarios.json` 一致。
 4. 运行生成与校验：

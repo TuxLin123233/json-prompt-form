@@ -2,6 +2,13 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。存档结构变化会提升 `schema_version`。
 
+## v2.3.0 — 2026-11-21
+
+### 新增
+- 36 个场景各配一个 Lucide 线性图标，卡片一眼可区分；图标通过 CSS mask 跟随卡片颜色，保持灰白极简。
+- `assets/icons/` 收录 36 个 SVG 与 Lucide 的 ISC 许可；README、页脚增加 Lucide 致谢。
+- `scenarios.json` 每项增加 `icon` 字段，`validate.py` 校验对应图标文件存在。
+
 ## v2.2.1 — 2026-11-21
 
 ### 新增
