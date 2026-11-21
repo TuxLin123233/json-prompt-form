@@ -70,13 +70,15 @@ PROCESS_EXAMPLES = {
     },
     "session_end": {
         "desc": "会话结束时的输出",
-        "ai_should": "输出更新后的完整存档 JSON，包含全部字段（schema_version、usage、goal、session_context、compatibility、protocol、assistant_identity、scene、functions、function_rules、evolution、rejected_suggestions、rejected_suggestion_format、memory、safety、output_rules、examples）；用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字；若过长则分段输出并标注第 i/N 段，用户回复『继续』后续发",
+        "ai_should": "输出更新后的完整存档 JSON，包含全部字段（schema_version、usage、goal、session_context、compatibility、protocol、archive_modes、assistant_identity、scene、training_plan、functions、function_rules、evolution、rejected_suggestions、rejected_suggestion_format、memory、safety、output_rules、examples）；用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字；若过长则分段输出并标注第 i/N 段，用户回复『继续』后续发",
     },
 }
 
 
 with open(os.path.join(BASE_DIR, "scenarios.json"), encoding="utf-8") as f:
     SCENARIO_INDEX = json.load(f)["scenarios"]
+
+SCENARIO_BY_SLUG = {entry["file"][:-5]: entry for entry in SCENARIO_INDEX}
 
 META = {
     entry["file"][:-5]: {
@@ -96,6 +98,14 @@ def build(name, scenario):
     data["goal"] = scenario["goal"]
     data["assistant_identity"] = scenario["identity"]
     data["scene"] = scenario["scene"]
+    index_entry = SCENARIO_BY_SLUG.get(name, {})
+    data["training_plan"] = {
+        "fill_rule": BASE["training_plan"]["fill_rule"],
+        "ability": index_entry.get("ability", ""),
+        "cadence": "每天约 %d 分钟，先坚持两周" % index_entry.get("daily_minutes", 10),
+        "checkpoint": index_entry.get("checkpoint", ""),
+        "status": "active",
+    }
     data["functions"] = scenario["functions"]
     data["safety"] = scenario["safety"]
     data["examples"] = {

@@ -1,5 +1,5 @@
 {
-    "current": "2.1.0",
+    "current": "2.2.0",
     "policy": {
         "on_resume": "若存档的 schema_version 低于 current，按 updates 从旧到新依次应用迁移；只补齐缺失字段、映射改名、写入默认值，绝不覆盖用户已有数据；未知字段原样保留；迁移完成后用一行说明升级结果，再继续 protocol.on_resume。",
         "announce": "已把存档从 v{from} 升级到 v{to}，继续。",
@@ -86,6 +86,25 @@
             "removed_fields": [],
             "defaults": {},
             "notes": "迁移清单由本文件维护，并内嵌到 form.json / form.en.json 的 compatibility.updates；两者必须一致。"
+        },
+        {
+            "version": "2.2.0",
+            "released": "2026-11-21",
+            "summary": "新增训练计划 training_plan：能力点、建议节奏、过关标准",
+            "added_fields": [
+                "training_plan"
+            ],
+            "renamed_fields": [],
+            "removed_fields": [],
+            "defaults": {
+                "training_plan": {
+                    "ability": "",
+                    "cadence": "",
+                    "checkpoint": "",
+                    "status": "active"
+                }
+            },
+            "notes": "旧存档缺少 training_plan 时补空值；续接时由 AI 按场景补齐能力点、节奏与过关标准。"
         }
     ]
 }

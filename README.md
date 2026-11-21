@@ -16,7 +16,7 @@
 
 把它想成一张**给 AI 的长期陪练说明书**，外加一份**可以反复续上的存档**。
 
-普通提示词聊完就忘；这个模板能让 AI 每次读你的存档，接着上次继续聊、继续帮你。
+普通提示词聊完就忘；这个模板能让 AI 每次读你的存档，接着上次继续聊、继续帮你。存档是纯文本 JSON，换一个 AI 也能继续用。
 
 - 🧰 不用安装任何软件
 - 👌 不用会写代码
@@ -83,7 +83,8 @@ flowchart TD
 | 🧭 [`scenarios.json`](./scenarios.json) | 练点索引：名称/分类/时长/关键词/能力点/过关标准（机器可读，校验基准） |
 | 🎛️ [`assets/icons/`](./assets/icons) | 场景图标（来自 Lucide，ISC 许可） |
 | 🎯 [`examples/`](./examples) | 六十个现成场景，复制即用 |
-| 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
+| 🖥️ [`index.html`](./index.html) | 一键复制 + 练点选择网页 |
+| 🔁 [`transfer.html`](./transfer.html) | 换 AI 续接演示：同一份存档换模型接着练 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
 | 🔍 [`checker.html`](./checker.html) | 存档检查器：校验 / 格式化 / 查截断 |
 | 🧩 [`examples/en/`](./examples/en) | 27 个英文场景模板 |

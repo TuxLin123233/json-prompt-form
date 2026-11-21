@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4f4f4">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>换 AI 续接 · 一事一练</title>
+<meta name="description" content="存档是纯文本 JSON，不属于任何一个 AI。把同一份存档贴给另一个模型，它会接着上次继续陪你练。">
+<style>
+  :root {
+    --paper: #f4f4f4; --paper-deep: #ebebeb; --card: #ffffff;
+    --ink: #111111; --ink-soft: #2c2c2c; --muted: #6e6e6e;
+    --line: #dedede; --line-strong: #bdbdbd; --black: #0a0a0a;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-display: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+    --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--font-sans); line-height: 1.65;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+  a { color: inherit; text-underline-offset: 3px; }
+  button, input { font: inherit; }
+  .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap; min-height: 64px; border-bottom: 1px solid var(--line);
+  }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-mark {
+    width: 32px; height: 32px; display: grid; place-items: center;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: -1px;
+  }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; font-weight: 700; }
+  .brand-text small {
+    margin-top: 3px; font-size: 9px; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .topnav { display: flex; gap: 18px; font-size: 12px; color: var(--muted); }
+  .topnav a { text-decoration: none; }
+  .topnav a:hover { color: var(--ink); }
+  .eyebrow {
+    margin: 0 0 12px; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(28px, 6vw, 72px); align-items: center;
+    padding: clamp(48px, 8vw, 96px) 0 clamp(40px, 6vw, 72px);
+  }
+  .hero h1 {
+    margin: 0 0 20px; font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(2.5rem, 5.6vw, 4.4rem); line-height: 1.1; letter-spacing: -.02em;
+    text-wrap: balance;
+  }
+  .hero-lead { max-width: 36em; margin: 0 0 26px; font-size: clamp(15px, 1.5vw, 18px); color: var(--ink-soft); }
+  .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-note { margin: 18px 0 0; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .hero-art {
+    margin: 0; border: 1px solid var(--line); background: var(--card);
+    padding: clamp(14px, 2.5vw, 28px);
+  }
+  .hero-art img { display: block; width: 100%; height: auto; }
+  .hero-art figcaption { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 46px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 2px;
+    background: transparent; color: var(--ink); text-decoration: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s, transform .15s var(--ease);
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn:active { transform: translateY(1px); }
+  .btn-solid { background: var(--ink); color: var(--paper); }
+  .btn-line { background: transparent; }
+  .btn-small { min-height: 36px; padding: 0 12px; font-size: 12px; }
+  .btn:disabled { opacity: .45; cursor: wait; }
+  .section { padding: clamp(48px, 7vw, 84px) 0; border-top: 1px solid var(--line); }
+  .section-head { max-width: 720px; margin-bottom: clamp(24px, 4vw, 40px); }
+  .section-head h2 { margin: 0 0 12px; font-size: clamp(1.6rem, 3.2vw, 2.4rem); line-height: 1.2; letter-spacing: -.01em; }
+  .section-head p { margin: 0; color: var(--muted); }
+  .flow {
+    list-style: none; margin: 0; padding: 0; display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+  }
+  .flow li { background: var(--paper); padding: clamp(16px, 2.4vw, 24px); }
+  .flow span { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+  .flow h3 { margin: 10px 0 6px; font-size: 16px; }
+  .flow p { margin: 0; color: var(--muted); font-size: 13px; }
+  .demo { border: 1px solid var(--line); background: var(--card); }
+  .demo-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  }
+  .demo-body { padding: clamp(16px, 2.4vw, 24px); display: grid; gap: 16px; }
+  #demo-stats { text-transform: none; letter-spacing: 0; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 2px; background: transparent;
+    color: var(--ink); padding: 8px 12px; font-size: 13px; cursor: pointer;
+    transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .demo-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .demo-meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  #demo-stats { text-transform: none; letter-spacing: 0; }
+  .preview {
+    margin: 0; padding: 14px; border: 1px solid var(--line);
+    background: var(--black); color: #e8e8e8; overflow: auto;
+    font-family: var(--font-mono); font-size: 12px; line-height: 1.6;
+    max-height: 360px; white-space: pre-wrap; word-break: break-word;
+  }
+  .hint { color: var(--muted); font-size: 13px; margin: 0; }
+  .ai-links { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .ai-links a { color: var(--ink); }
+  .grid {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+  }
+  .card { background: var(--paper); padding: clamp(18px, 2.4vw, 26px); }
+  .card h3 { margin: 0 0 8px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 13px; }
+  .tips { border-top: 1px solid var(--line); margin: 0; padding: 0; list-style: none; }
+  .tips li { display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .tips strong { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+  .site-foot { padding: clamp(40px, 6vw, 64px) 0 calc(28px + env(safe-area-inset-bottom)); background: var(--black); color: #d8d8d8; }
+  .foot-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid #2a2a2a; }
+  .foot-brand .brand-mark { background: var(--paper); color: var(--ink); }
+  .foot-brand .brand-text { color: var(--paper); }
+  .foot-brand .brand-text small { color: #8c8c8c; }
+  .foot-brand p { max-width: 32em; margin: 16px 0 0; color: #9a9a9a; font-size: 13px; }
+  .foot-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; font-size: 13px; align-content: start; }
+  .foot-links a { color: #bdbdbd; text-decoration: none; }
+  .foot-links a:hover { color: var(--paper); }
+  .foot-bottom {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding-top: 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .03em; color: #8c8c8c;
+  }
+  .foot-bottom a { color: #bdbdbd; }
+  .toast {
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 50;
+    transform: translate(-50%, 16px); max-width: 92vw;
+    padding: 11px 16px; border: 1px solid #333; border-radius: 2px;
+    background: var(--ink); color: var(--paper); font-size: 13px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.error { background: #1a1a1a; border-color: #5a5a5a; }
+  @media (min-width: 1440px) {
+    .shell { width: min(1320px, calc(100% - 96px)); }
+    .hero h1 { font-size: clamp(2.8rem, 5.2vw, 4.6rem); }
+  }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-art { order: 2; }
+    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .shell { width: calc(100% - 28px); }
+    .topnav { gap: 12px; font-size: 11px; }
+    .topnav a[href="https://github.com/TuxLin123233/json-prompt-form"] { display: none; }
+    .hero { padding-top: 36px; }
+    .hero h1 { font-size: clamp(2.25rem, 10vw, 3rem); }
+    .hero-actions .btn { flex: 1 1 140px; }
+    .flow { grid-template-columns: 1fr; }
+    .brand-text small { display: none; }
+    .foot-links { grid-template-columns: 1fr 1fr; }
+    .foot-bottom { flex-direction: column; gap: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main" style="position:absolute;left:12px;top:-60px;z-index:100;background:var(--ink);color:var(--paper);padding:10px 14px;text-decoration:none">跳到主要内容</a>
+
+<header class="site-head">
+  <div class="shell topbar">
+    <a class="brand" href="index.html" aria-label="一事一练 首页">
+      <span class="brand-mark" aria-hidden="true">一</span>
+      <span class="brand-text">一事一练<small>AI 长期陪练</small></span>
+    </a>
+    <nav class="topnav" aria-label="页面导航">
+      <a href="index.html">首页</a>
+      <a href="index.html#scenarios">练点</a>
+      <a href="checker.html">存档检查器</a>
+      <a href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="shell hero">
+    <div>
+      <p class="eyebrow">存档 · 跨 AI 续接</p>
+      <h1>换一个 AI，<br>记忆不丢</h1>
+      <p class="hero-lead">存档是纯文本 JSON，不属于任何一个平台。把同一份存档贴给另一个 AI，它会接着上次继续陪你练。</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#demo">试一下续接</a>
+        <a class="btn btn-line" href="checker.html">检查我的存档</a>
+      </div>
+      <p class="hero-note">不登录 · 不上传 · DeepSeek / ChatGPT / 豆包 / Kimi 通用</p>
+    </div>
+    <figure class="hero-art">
+      <img src="assets/illustrations/step-resume.svg" alt="把存档贴回给另一个 AI，接着上次继续" width="744" height="800" loading="eager">
+      <figcaption>同一份存档，换一个 AI 也能接着练。</figcaption>
+    </figure>
+  </section>
+
+  <section class="section shell" id="how">
+    <div class="section-head">
+      <p class="eyebrow">为什么能带得走</p>
+      <h2>存档是你的，不是平台的</h2>
+      <p>大多数 AI 的记忆只留在它的账号里。这里每次结束都会给你一份完整 JSON，换平台时贴过去就行。</p>
+    </div>
+    <ol class="flow">
+      <li><span>01</span><h3>在 AI A 开始</h3><p>选一个练点，把模板整份发给 AI。</p></li>
+      <li><span>02</span><h3>说「存档」</h3><p>AI 输出一份完整 JSON，你把整段保存下来。</p></li>
+      <li><span>03</span><h3>换 AI B</h3><p>新开对话，贴上今天日期和这份存档。</p></li>
+      <li><span>04</span><h3>接着练</h3><p>训练计划、功能和记忆都还在。</p></li>
+    </ol>
+  </section>
+
+  <section class="section shell" id="demo">
+    <div class="section-head">
+      <p class="eyebrow">现场演示</p>
+      <h2>同一份存档，换个 AI 接着练</h2>
+      <p>下面用的是填好的示例存档。选一个练点，复制续接开场，粘贴到你正在用的任意 AI 里试试。</p>
+    </div>
+    <div class="demo">
+      <div class="demo-head">
+        <span>示例存档 · 可直接使用</span>
+        <span id="demo-stats">加载中…</span>
+      </div>
+      <div class="demo-body">
+        <div class="chips" id="sample-chips" role="group" aria-label="选择示例练点"></div>
+        <div class="demo-actions">
+          <button class="btn btn-solid" id="copy-resume" type="button">复制续接开场</button>
+          <button class="btn btn-line" id="download-archive" type="button">下载示例存档</button>
+          <a class="btn btn-line" href="checker.html">先检查存档</a>
+        </div>
+        <p class="hint">复制出来的是：今天日期 + 完整存档 JSON + 一句续接指令。贴给 AI 后，它应当先读存档，再问你上次练到哪。</p>
+        <pre class="preview" id="preview">正在读取示例存档…</pre>
+        <div class="ai-links">
+          <span>换到：</span>
+          <a href="https://chat.deepseek.com" target="_blank" rel="noopener">DeepSeek</a>
+          <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT</a>
+          <a href="https://www.doubao.com" target="_blank" rel="noopener">豆包</a>
+          <a href="https://kimi.moonshot.cn" target="_blank" rel="noopener">Kimi</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell" id="why">
+    <div class="section-head">
+      <p class="eyebrow">核心资产</p>
+      <h2>为什么是存档，而不是账号</h2>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>纯文本 JSON</h3><p>没有数据库、没有私有格式，任何能读长文本的模型都能读懂。</p></div>
+      <div class="card"><h3>模型无关</h3><p>同一份存档可以从 DeepSeek 换到 ChatGPT、豆包、Kimi，记忆不跟着平台走。</p></div>
+      <div class="card"><h3>可校验、可迁移</h3><p>存档带版本号，旧格式按 updates.json 自动升级，也能用检查器先验证。</p></div>
+    </div>
+  </section>
+
+  <section class="section shell" id="tips">
+    <div class="section-head">
+      <p class="eyebrow">换 AI 的小提醒</p>
+      <h2>三件事注意一下</h2>
+    </div>
+    <ul class="tips">
+      <li><strong>01</strong><span>如果存档来自旧模板，把当前的 <a href="form.json">form.json</a> 和存档一起贴入，AI 会先按迁移清单升级。</span></li>
+      <li><strong>02</strong><span>存档很长时，让 AI 分段输出、分段贴入；用「存档检查器」可以确认没有截断。</span></li>
+      <li><strong>03</strong><span>存档里可能有情绪、健康、财务信息，别发到公开群；换 AI 时也先确认对方的隐私政策。</span></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="shell foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="index.html" aria-label="一事一练 首页">
+        <span class="brand-mark" aria-hidden="true">一</span>
+        <span class="brand-text">一事一练<small>AI 长期陪练</small></span>
+      </a>
+      <p>一次只练一件事。存档自己留着，换 AI 也能接着练。</p>
+    </div>
+    <nav class="foot-links" aria-label="页脚导航">
+      <a href="index.html">首页</a>
+      <a href="index.html#scenarios">全部练点</a>
+      <a href="builder.html">自定义生成器</a>
+      <a href="checker.html">存档检查器</a>
+      <a href="FAQ.md">完整 FAQ</a>
+      <a href="README.md">项目说明</a>
+      <a href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
+      <a href="LICENSE">MIT License</a>
+    </nav>
+  </div>
+  <div class="shell foot-bottom">
+    <span>© 2026 LinSifan. All rights reserved.</span>
+    <span>插画来自 <a href="https://undraw.co/illustrations" target="_blank" rel="noopener">unDraw</a>，已改为灰白配色</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const SAMPLES = [
+  { file: "project.json", name: "项目推进" },
+  { file: "sleep.json", name: "睡眠" },
+  { file: "running.json", name: "跑步" },
+  { file: "thesis.json", name: "论文毕设" },
+  { file: "emotion-support.json", name: "情绪支持" },
+  { file: "plant-care.json", name: "植物养护" }
+];
+const chips = document.getElementById("sample-chips");
+const preview = document.getElementById("preview");
+const stats = document.getElementById("demo-stats");
+const copyBtn = document.getElementById("copy-resume");
+const downloadBtn = document.getElementById("download-archive");
+const toast = document.getElementById("toast");
+const cache = new Map();
+let active = SAMPLES[0].file;
+let archiveText = "";
+
+function showToast(msg, isError) {
+  toast.textContent = msg;
+  toast.classList.toggle("error", !!isError);
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function today() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+}
+
+function resumeMessage(text) {
+  return "今天是 " + today() + "。这是我的存档，请继续：\n\n"
+    + "```json\n" + text.trim() + "\n```\n\n"
+    + "请按存档里的 training_plan 继续，先问我上次练到哪、卡在哪，再决定今天练什么。";
+}
+
+function renderChips() {
+  chips.innerHTML = SAMPLES.map(s =>
+    `<button class="chip ${s.file === active ? "active" : ""}" type="button" data-file="${s.file}">${s.name}</button>`
+  ).join("");
+}
+
+function shortPreview(text) {
+  const full = resumeMessage(text);
+  if (full.length <= 1400) return full;
+  return full.slice(0, 1400) + "\n\n…（复制时包含完整存档）";
+}
+
+async function loadArchive(file) {
+  if (cache.has(file)) return cache.get(file);
+  const res = await fetch("examples/filled/" + file, { cache: "no-cache" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const text = await res.text();
+  cache.set(file, text);
+  return text;
+}
+
+async function selectSample(file) {
+  active = file;
+  renderChips();
+  preview.textContent = "正在读取示例存档…";
+  stats.textContent = "加载中…";
+  try {
+    archiveText = await loadArchive(file);
+    const kb = (new TextEncoder().encode(archiveText).length / 1024).toFixed(1);
+    const hasPlan = archiveText.includes('"training_plan"');
+    stats.textContent = kb + " KB · " + (hasPlan ? "含 training_plan" : "缺训练计划");
+    preview.textContent = shortPreview(archiveText);
+    copyBtn.disabled = false;
+    downloadBtn.disabled = false;
+  } catch (err) {
+    archiveText = "";
+    stats.textContent = "读取失败";
+    preview.textContent = "无法读取示例存档：请通过 GitHub Pages 打开本页，或在本地启动一个静态服务器。";
+    copyBtn.disabled = true;
+    downloadBtn.disabled = true;
+  }
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  const ok = document.execCommand("copy");
+  document.body.removeChild(ta);
+  if (!ok) throw new Error("copy failed");
+}
+
+chips.addEventListener("click", e => {
+  const btn = e.target.closest(".chip");
+  if (btn) selectSample(btn.dataset.file);
+});
+
+copyBtn.addEventListener("click", async () => {
+  if (!archiveText) return;
+  copyBtn.disabled = true;
+  try {
+    await copyText(resumeMessage(archiveText));
+    showToast("已复制续接开场，去粘给另一个 AI 吧。");
+  } catch (err) {
+    showToast("复制失败，请手动选择下方文本", true);
+  } finally {
+    copyBtn.disabled = false;
+  }
+});
+
+downloadBtn.addEventListener("click", () => {
+  if (!archiveText) return;
+  const blob = new Blob([archiveText], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = active.replace(".json", "-archive.json");
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("已下载示例存档");
+});
+
+renderChips();
+selectSample(active);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>

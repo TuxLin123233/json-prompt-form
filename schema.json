@@ -12,7 +12,8 @@
         "scene",
         "functions",
         "memory",
-        "output_rules"
+        "output_rules",
+        "training_plan"
     ],
     "properties": {
         "schema_version": {
@@ -46,10 +47,17 @@
         },
         "session_context": {
             "type": "object",
-            "required": ["today", "save_file", "rule"],
+            "required": [
+                "today",
+                "save_file",
+                "rule"
+            ],
             "properties": {
                 "today": {
-                    "type": ["string", "null"],
+                    "type": [
+                        "string",
+                        "null"
+                    ],
                     "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "save_file": {
@@ -99,7 +107,17 @@
             "maxItems": 12,
             "items": {
                 "type": "object",
-                "required": ["id", "name", "what", "why", "how", "trigger", "frequency", "status", "source"],
+                "required": [
+                    "id",
+                    "name",
+                    "what",
+                    "why",
+                    "how",
+                    "trigger",
+                    "frequency",
+                    "status",
+                    "source"
+                ],
                 "properties": {
                     "id": {
                         "type": "string",
@@ -131,21 +149,39 @@
                         }
                     },
                     "status": {
-                        "enum": ["active", "paused", "retired"]
+                        "enum": [
+                            "active",
+                            "paused",
+                            "retired"
+                        ]
                     },
                     "source": {
-                        "enum": ["initial", "ai_suggest", "user_add", "user_modify"]
+                        "enum": [
+                            "initial",
+                            "ai_suggest",
+                            "user_add",
+                            "user_modify"
+                        ]
                     },
                     "last_triggered_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                     },
                     "created_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                     },
                     "updated_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                     }
                 },
@@ -185,7 +221,9 @@
         },
         "memory": {
             "type": "object",
-            "required": ["state"],
+            "required": [
+                "state"
+            ],
             "properties": {
                 "state": {
                     "type": "object",
@@ -230,7 +268,10 @@
         },
         "output_rules": {
             "type": "object",
-            "required": ["tone", "on_session_end"],
+            "required": [
+                "tone",
+                "on_session_end"
+            ],
             "properties": {
                 "tone": {
                     "type": "string"
@@ -258,6 +299,32 @@
         },
         "examples": {
             "type": "object"
+        },
+        "training_plan": {
+            "type": "object",
+            "required": [
+                "ability",
+                "cadence",
+                "checkpoint"
+            ],
+            "properties": {
+                "ability": {
+                    "type": "string"
+                },
+                "cadence": {
+                    "type": "string"
+                },
+                "checkpoint": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "fill_rule": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true
         }
     },
     "additionalProperties": true,
@@ -272,7 +339,10 @@
         },
         "rename": {
             "type": "object",
-            "required": ["from", "to"],
+            "required": [
+                "from",
+                "to"
+            ],
             "properties": {
                 "from": {
                     "$ref": "#/$defs/field_path"
@@ -285,7 +355,13 @@
         },
         "update_entry": {
             "type": "object",
-            "required": ["version", "added_fields", "renamed_fields", "removed_fields", "defaults"],
+            "required": [
+                "version",
+                "added_fields",
+                "renamed_fields",
+                "removed_fields",
+                "defaults"
+            ],
             "properties": {
                 "version": {
                     "$ref": "#/$defs/version"
@@ -329,7 +405,13 @@
         },
         "migration": {
             "type": "object",
-            "required": ["version", "added_fields", "renamed_fields", "removed_fields", "defaults"],
+            "required": [
+                "version",
+                "added_fields",
+                "renamed_fields",
+                "removed_fields",
+                "defaults"
+            ],
             "properties": {
                 "version": {
                     "$ref": "#/$defs/version"
@@ -409,7 +491,11 @@
         },
         "update_manifest": {
             "type": "object",
-            "required": ["current", "policy", "updates"],
+            "required": [
+                "current",
+                "policy",
+                "updates"
+            ],
             "properties": {
                 "current": {
                     "$ref": "#/$defs/version"
@@ -428,7 +514,10 @@
         },
         "embedded_updates": {
             "type": "object",
-            "required": ["current", "migrations"],
+            "required": [
+                "current",
+                "migrations"
+            ],
             "properties": {
                 "current": {
                     "$ref": "#/$defs/version"

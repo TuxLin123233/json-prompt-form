@@ -2,6 +2,18 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。存档结构变化会提升 `schema_version`。
 
+## v2.8.0 — 2026-11-21
+
+### 新增
+- 存档 schema 升级到 2.2.0：新增 `training_plan`（能力点 / 建议节奏 / 过关标准 / 状态），模板、示例、精简存档同步，旧存档按 `updates.json` 自动迁移。
+- 训练计划进入模板本身：AI 首次使用时填写、续接时读取，并按 checkpoint 判断进展。
+- 新增 [`transfer.html`](./transfer.html)「换 AI 续接」演示页：选择示例练点，一键复制日期 + 完整存档 + 续接指令，可下载示例存档在任意 AI 中试用。
+- 首页新增「换一个 AI，记忆不丢」入口；导航、页脚、生成器、检查器加入演示页链接。
+
+### 变更
+- schema.json、form.json、form.en.json、updates.json、migrate.py 兼容性同步。
+- sw 缓存升到 jpf-v15，预缓存 transfer.html。
+
 ## v2.7.0 — 2026-11-21
 
 ### 新增

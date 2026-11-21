@@ -1,9 +1,10 @@
-const CACHE = "jpf-v14";
+const CACHE = "jpf-v15";
 const CORE = [
   "./",
   "index.html",
   "builder.html",
   "checker.html",
+  "transfer.html",
   "manifest.webmanifest",
   "assets/icon-192.png",
   "assets/icon-512.png",

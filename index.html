@@ -310,6 +310,17 @@
     color: var(--muted); font-size: 13px;
   }
 
+  .portable {
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    padding: clamp(22px, 3vw, 34px); border: 1px solid var(--line); background: var(--white);
+  }
+  .portable h2 { margin: 0 0 8px; font-size: clamp(1.3rem, 2.2vw, 1.8rem); line-height: 1.25; }
+  .portable p { margin: 0; max-width: 48em; color: var(--muted); font-size: 14px; }
+  .portable .btn { flex: 0 0 auto; }
+  @media (max-width: 600px) {
+    .portable { flex-direction: column; align-items: flex-start; }
+    .portable .btn { width: 100%; }
+  }
   .site-foot { padding: clamp(40px, 6vw, 64px) 0 calc(28px + env(safe-area-inset-bottom)); background: var(--black); color: #d8d8d8; }
   .foot-grid {
     display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px;
@@ -489,6 +500,7 @@
     <nav class="head-nav" aria-label="主导航">
       <a href="#how">怎么用</a>
       <a href="#scenarios">练点</a>
+      <a href="transfer.html">换 AI</a>
       <a href="#faq">FAQ</a>
       <a class="head-gh" href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
     </nav>
@@ -547,6 +559,17 @@
       <pre><code>&lt;把复制的模板整份粘贴在这里&gt;
 
 今天是 2026-11-21。我的情况是：……</code></pre>
+    </div>
+  </section>
+
+  <section class="section shell" id="portable" aria-labelledby="portable-title">
+    <div class="portable" data-reveal>
+      <div>
+        <p class="eyebrow">存档 · 跨 AI 续接</p>
+        <h2 id="portable-title">换一个 AI，记忆不丢</h2>
+        <p>存档是纯文本 JSON，不属于任何一个平台。换模型时把存档贴过去，功能、记忆和训练计划都还在。</p>
+      </div>
+      <a class="btn btn-line" href="transfer.html">看换 AI 演示</a>
     </div>
   </section>
 
@@ -647,6 +670,7 @@
     <nav class="foot-links" aria-label="页脚导航">
       <a href="#how">怎么用</a>
       <a href="#scenarios">全部练点</a>
+      <a href="transfer.html">换 AI 续接</a>
       <a href="builder.html">自定义生成器</a>
       <a href="checker.html">存档检查器</a>
       <a href="FAQ.md">完整 FAQ</a>

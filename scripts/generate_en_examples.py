@@ -13,6 +13,7 @@ with open(os.path.join(BASE_DIR, "form.en.json"), encoding="utf-8") as f:
 GOAL = (
     "Design and accompany a long-term companion AI for the following scenario: %s. "
     "Read the archive the user pastes at the start to resume; "
+    "fill in training_plan (ability, cadence, checkpoint); "
     "during a session, suggest adding/adjusting/retiring functions; "
     "at the end, output an updated complete archive JSON for the user to save."
 )
@@ -80,6 +81,37 @@ META = {
     "cooking": {"category": "Life", "audience": "People who cannot cook or want to start meal prepping", "daily_minutes": 20, "difficulty": "Beginner"},
     "plant-care": {"category": "Hobby", "audience": "Plant lovers who keep losing houseplants", "daily_minutes": 5, "difficulty": "Beginner"},
     "project": {"category": "Productivity", "audience": "People pushing papers, side projects, moves, or events", "daily_minutes": 10, "difficulty": "Intermediate"},
+}
+
+
+EN_PLAN = {
+    'study-exam': ('Exam planning & consistency', 'Two weeks of daily study blocks plus one mistake review'),
+    'fitness': ('Consistency & recovery', 'Three workouts a week for two weeks with diet logging'),
+    'job-search': ('Applications & mindset', 'Two weeks of weekly applications plus one resume or interview review'),
+    'emotion-support': ('Awareness & regulation', 'Two weeks of daily emotion logging and one small regulation action'),
+    'finance': ('Budgeting & control', 'Two weeks of expense logging and one clear non-essential cut'),
+    'writing': ('Output & consistency', 'Two weeks of 200 words a day plus one review'),
+    'sleep': ('Routine & wind-down', 'Two weeks of a fixed bedtime and no screens 30 minutes before'),
+    'quit-habits': ('Triggers & replacement', 'Two weeks of urge logging and one alternative action'),
+    'language-learning': ('Input & speaking', 'Two weeks of 10 minutes a day plus one speaking attempt'),
+    'parenting': ('Communication & patience', 'Two weeks of one specific affirmation a day and a pause in conflict'),
+    'caregiver': ('Care & self-care', 'Two weeks of 10 minutes a day for yourself'),
+    'adhd': ('Starting & focus', 'Two weeks of 25-minute focus blocks and distraction logging'),
+    'reading': ('Reading & reflection', 'Two weeks of 10 pages a day and one-sentence notes'),
+    'pet': ('Care & observation', 'Two weeks of daily pet check-ins'),
+    'time-management': ('Priorities & execution', 'Two weeks of three priorities a day, completing at least two'),
+    'morning-routine': ('Wake-up & rhythm', 'Two weeks of a fixed wake-up time and a 10-minute routine'),
+    'meditation': ('Awareness & breath', 'Two weeks of 5 minutes of breathing a day'),
+    'healthy-diet': ('Food & choices', 'Two weeks of logging one meal and one better choice'),
+    'journaling': ('Recording & awareness', 'Two weeks of three sentences a day and a weekly reflection'),
+    'public-speaking': ('Structure & delivery', 'Two weeks of preparing and rehearsing one 3-minute talk'),
+    'relationship': ('Expression & repair', 'Two weeks of one need expressed and one review'),
+    'declutter': ('Letting go & organizing', 'Two weeks of 15 minutes of decluttering a day'),
+    'instrument': ('Practice & consistency', 'Two weeks of 15 minutes a day and one recording review'),
+    'coding': ('Breaking down & debugging', 'Two weeks of daily code and one blocker logged'),
+    'cooking': ('Cooking & planning', 'Two weeks of three home-cooked meals a week'),
+    'plant-care': ('Observation & care', 'Two weeks of watering and light logs'),
+    'project': ('Breaking down & momentum', 'Two weeks of weekly key actions'),
 }
 
 
@@ -591,6 +623,14 @@ def build(name, data):
         "why": data["scene_why"],
         "how": data["scene_how"],
     }
+    ability, checkpoint = EN_PLAN[name]
+    spec["training_plan"] = {
+        "fill_rule": BASE["training_plan"]["fill_rule"],
+        "ability": ability,
+        "cadence": "About %d minutes a day, two weeks to start" % META[name]["daily_minutes"],
+        "checkpoint": checkpoint,
+        "status": "active",
+    }
     spec["functions"] = data["functions"]
     spec["safety"] = {
         "scope": data["scope"],
@@ -602,7 +642,7 @@ def build(name, data):
     spec["examples"]["first_open"] = {
         "desc": "The user's opening message on first use",
         "user": data["first_user"],
-        "ai_should": "Confirm the date → confirm assistant_identity / scene → generate and confirm functions (%s) → output the complete archive JSON" % names,
+        "ai_should": "Confirm the date → confirm assistant_identity / scene → fill training_plan → generate and confirm functions (%s) → output the complete archive JSON" % names,
     }
     spec["examples"]["first_generated_function"] = {
         "desc": "How a single function should look when first generated",
