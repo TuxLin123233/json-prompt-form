@@ -1,4 +1,4 @@
-const CACHE = "jpf-v6";
+const CACHE = "jpf-v7";
 const CORE = [
   "./",
   "index.html",
@@ -43,7 +43,16 @@ const CORE = [
   "examples/coding.json",
   "examples/cooking.json",
   "examples/plant-care.json",
-  "examples/project.json"
+  "examples/project.json",
+  "examples/running.json",
+  "examples/posture.json",
+  "examples/social-anxiety.json",
+  "examples/self-compassion.json",
+  "examples/driving.json",
+  "examples/thesis.json",
+  "examples/workplace-comm.json",
+  "examples/side-hustle.json",
+  "examples/focus.json"
 ];
 
 self.addEventListener("install", event => {

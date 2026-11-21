@@ -77,7 +77,7 @@ flowchart TD
 | 文件 | 是什么 |
 | --- | --- |
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
-| 🎯 [`examples/`](./examples) | 二十六个现成场景，复制即用 |
+| 🎯 [`examples/`](./examples) | 三十六个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
 | 🔍 [`checker.html`](./checker.html) | 存档检查器：校验 / 格式化 / 查截断 |
@@ -123,6 +123,16 @@ flowchart TD
 | 💻 编程学习 | [`coding.json`](./examples/coding.json) | 自学编程、容易卡住或迷路 | 20 分钟 |
 | 🍳 学做饭 | [`cooking.json`](./examples/cooking.json) | 不会做饭、想开始带饭 | 20 分钟 |
 | 🪴 植物养护 | [`plant-care.json`](./examples/plant-care.json) | 喜欢绿植但总养死 | 5 分钟 |
+| 🗂️ 项目推进 | [`project.json`](./examples/project.json) | 论文、作品、副业等长期项目推进 | 10 分钟 |
+| 🏃 跑步 | [`running.json`](./examples/running.json) | 从零开始跑步，想坚持又怕受伤 | 15 分钟 |
+| 🪑 久坐体态 | [`posture.json`](./examples/posture.json) | 肩颈腰背僵硬、圆肩驼背 | 10 分钟 |
+| 😶‍🌫️ 社交焦虑 | [`social-anxiety.json`](./examples/social-anxiety.json) | 社交前紧张、事后反复回想 | 10 分钟 |
+| 🫂 自我关怀 | [`self-compassion.json`](./examples/self-compassion.json) | 容易自责、完美主义 | 5 分钟 |
+| 🚗 学车考驾照 | [`driving.json`](./examples/driving.json) | 科目二紧张、易错点反复错 | 10 分钟 |
+| 📑 论文毕设 | [`thesis.json`](./examples/thesis.json) | 论文拖延、不知道从哪写起 | 20 分钟 |
+| 💬 职场沟通 | [`workplace-comm.json`](./examples/workplace-comm.json) | 和领导沟通紧张、不会拒绝 | 10 分钟 |
+| 💡 副业启动 | [`side-hustle.json`](./examples/side-hustle.json) | 想做副业但不知道从哪开始 | 15 分钟 |
+| 🎯 专注力 | [`focus.json`](./examples/focus.json) | 一坐下就刷手机、注意力碎片化 | 10 分钟 |
 
 每个模板都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
 

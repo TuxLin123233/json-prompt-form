@@ -10,7 +10,7 @@
 <title>长期任务 · AI 提示词模板 | json-prompt-form</title>
 <meta name="description" content="把长期任务交给 AI 陪你推进。选一个模板复制给 AI，聊完存档，下次接着来。手机可用，无需安装。">
 <meta property="og:title" content="长期任务 · AI 提示词模板">
-<meta property="og:description" content="把长期任务拆小，和 AI 一起推进。27 个场景，复制即用，手机优先。">
+<meta property="og:description" content="把长期任务拆小，和 AI 一起推进。36 个场景，复制即用，手机优先。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/social-preview.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -442,7 +442,7 @@
         <a class="btn btn-solid" href="#how">看怎么用</a>
         <a class="btn btn-line" href="#scenarios">选一个场景</a>
       </div>
-      <p class="hero-note">27 个场景 · 手机优先 · 存档只在你自己手里</p>
+      <p class="hero-note">36 个场景 · 手机优先 · 存档只在你自己手里</p>
     </div>
     <figure class="hero-art" data-reveal style="--delay:120ms">
       <img src="assets/illustrations/hero.svg" alt="一个人坐在桌前，整理长期任务的进度清单" width="960" height="719" loading="eager">
@@ -489,7 +489,7 @@
 
   <section class="section shell" id="scenarios" aria-labelledby="scenarios-title">
     <div class="section-head" data-reveal>
-      <p class="eyebrow">27 个长期任务</p>
+      <p class="eyebrow">36 个长期任务</p>
       <h2 id="scenarios-title">选一个你想推进的事</h2>
       <p>每个模板都会根据你的真实情况调整功能。找不到合适的，用自定义生成器。</p>
     </div>
@@ -617,6 +617,15 @@ document.documentElement.classList.add('js');
 
 const SCENARIOS = [
   { file: "project.json",           name: "项目推进",   desc: "论文、作品、副业、搬家……把一个大目标拆成每周能推进的事", cat: "效率", min: 10, diff: "进阶", featured: true, note: "新增" },
+  { file: "running.json",          name: "跑步",       desc: "从零开始跑步，想坚持又怕受伤",                        cat: "健康", min: 15, diff: "入门" },
+  { file: "posture.json",          name: "久坐体态",   desc: "肩颈腰背僵硬、圆肩驼背，想每天舒展一下",              cat: "健康", min: 10, diff: "入门" },
+  { file: "social-anxiety.json",   name: "社交焦虑",   desc: "社交前紧张、社交后反复回想",                          cat: "情绪", min: 10, diff: "进阶" },
+  { file: "self-compassion.json",  name: "自我关怀",   desc: "容易自责、完美主义，对自己太苛刻",                    cat: "情绪", min: 5,  diff: "进阶" },
+  { file: "driving.json",          name: "学车考驾照", desc: "科目二紧张、练车间隔长、易错点反复错",                cat: "学习", min: 10, diff: "入门" },
+  { file: "thesis.json",           name: "论文毕设",   desc: "论文拖延、不知道从哪段开始写",                        cat: "学习", min: 20, diff: "进阶" },
+  { file: "workplace-comm.json",   name: "职场沟通",   desc: "和领导说话紧张、不会拒绝、汇报没重点",                cat: "职业", min: 10, diff: "进阶" },
+  { file: "side-hustle.json",      name: "副业启动",   desc: "想做副业但不知道从哪开始",                            cat: "职业", min: 15, diff: "进阶" },
+  { file: "focus.json",            name: "专注力",     desc: "一坐下就刷手机、注意力碎片化",                        cat: "效率", min: 10, diff: "入门" },
   { file: "study-exam.json",        name: "备考",       desc: "中高考、考研、考证，容易拖延焦虑",                    cat: "学习", min: 5,  diff: "入门" },
   { file: "fitness.json",           name: "健身",       desc: "想增肌减脂塑形，但总坚持不下来",                      cat: "健康", min: 5,  diff: "入门" },
   { file: "job-search.json",        name: "求职",       desc: "投简历没回音、面试紧张、求职焦虑",                    cat: "职业", min: 10, diff: "进阶" },
