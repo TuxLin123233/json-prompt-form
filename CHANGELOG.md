@@ -2,6 +2,20 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。存档结构变化会提升 `schema_version`。
 
+## v2.1.0 — 2026-11-21
+
+### 新增
+- 第 27 个场景「项目推进」：`examples/project.json`（含英文与已填示例）。
+- `updates.json`：版本迁移清单，记录每个版本的字段增删、改名与默认值。
+- 模板内嵌 `compatibility.updates`：续接旧存档时 AI 自动迁移，并用一行说明升级结果。
+- `scripts/migrate.py` 改为读取 `updates.json`，与 AI 共用同一份迁移规则。
+- `scripts/validate.py` 校验迁移清单、模板漂移和示例版本一致性。
+
+### 变更
+- `schema_version` 提升到 2.1.0。
+- README、FAQ、llms.txt 增加旧存档续接说明。
+- 首页、生成器、检查器改为极简灰白插画风；插画来自 unDraw 并统一改为灰白配色，页脚补致谢与版权（LinSifan）。
+
 ## v2.0.0 — 2026-11-15
 
 ### 新增

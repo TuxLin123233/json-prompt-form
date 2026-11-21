@@ -5,15 +5,14 @@
 [![Stars](https://img.shields.io/github/stars/TuxLin123233/json-prompt-form?style=social)](https://github.com/TuxLin123233/json-prompt-form/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/TuxLin123233/json-prompt-form)](https://github.com/TuxLin123233/json-prompt-form/commits/main)
 
-[中文](./README.md) · [English](./README.en.md)
 
-<img src="./assets/social-preview.png" alt="json-prompt-form：让 AI 长期记住你" width="100%">
+<img src="./assets/social-preview.png" alt="让 AI 陪你做完一件长期的事" width="100%">
 
 > 一个能「记住你」的 AI 助手模板。会复制粘贴，就能用。✨
 
 ## ✨ 这是什么？
 
-把它想成一张**给 AI 的长期陪伴说明书**，外加一份**可以反复续上的存档**。
+把它想成一张**给 AI 的长期任务说明书**，外加一份**可以反复续上的存档**。
 
 普通提示词聊完就忘；这个模板能让 AI 每次读你的存档，接着上次继续聊、继续帮你。
 
@@ -48,6 +47,8 @@ AI 会给你一段 JSON，整段保存下来。下次开场贴「今天日期 + 
 <把上次保存的 JSON 整段粘贴在这里>
 ```
 
+> 🔄 如果存档是旧模板生成的：把当前 `form.json` 和旧存档一起贴入，AI 会按 `compatibility.updates` 自动升级，并用一行说明。迁移只补齐/改名，不覆盖你的内容。
+
 **结束时：**
 > 对 AI 说「存档」或「保存」，然后把回答里 ```` ```json ```` 代码块中的内容整段复制保存。
 
@@ -80,11 +81,12 @@ flowchart TD
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
 | 🔍 [`checker.html`](./checker.html) | 存档检查器：校验 / 格式化 / 查截断 |
-| 🧩 [`examples/en/`](./examples/en) | 26 个英文场景模板 |
+| 🧩 [`examples/en/`](./examples/en) | 27 个英文场景模板 |
 | 💾 [`examples/filled/`](./examples/filled) | 填好日期和记忆的示例存档 |
 | 🌐 [`form.en.json`](./form.en.json) | 英文版通用模板 |
 | 🔍 [`schema.json`](./schema.json) | 可选：给懂技术的人检查存档格式 |
-| 🔁 [`scripts/migrate.py`](./scripts/migrate.py) | 旧存档迁移工具 |
+| 🔄 [`updates.json`](./updates.json) | 版本迁移清单：旧存档如何升级到当前模板 |
+| 🔁 [`scripts/migrate.py`](./scripts/migrate.py) | 旧存档迁移工具（读取 `updates.json`） |
 | 🤖 [`llms.txt`](./llms.txt) | 给 AI 搜索工具的项目说明 |
 | 📜 [`CHANGELOG.md`](./CHANGELOG.md) | 版本更新记录 |
 | 💬 [`docs/example-dialogue.md`](./docs/example-dialogue.md) | 一段完整示例对话 |
@@ -206,6 +208,8 @@ python3 scripts/validate.py              # 校验全部 JSON
 python3 scripts/migrate.py 旧存档.json -o 新存档.json  # 迁移旧存档
 ```
 
+修改存档结构时，请同时提升 `schema_version`、在 [`updates.json`](./updates.json) 增加一条迁移，并同步 `form.json` / `form.en.json` 的 `compatibility.updates`；`scripts/validate.py` 会检查清单与模板是否漂移。
+
 新增场景的步骤见 [CONTRIBUTING.md](./CONTRIBUTING.md)。把 [`docs/ci/validate.yml`](./docs/ci/validate.yml) 放到 `.github/workflows/` 后，CI 会在每次 push 时自动校验。
 
 ### 可选校验
@@ -215,6 +219,13 @@ npx ajv-cli validate -s schema.json -d 存档.json
 ```
 
 </details>
+
+## 🙏 致谢与版权
+
+- 首页插画来自 [unDraw](https://undraw.co/illustrations)，已统一改为灰白配色，遵循其开源许可；插画版权归 unDraw 原作者所有。
+- 感谢所有提出场景建议和反馈的人。
+
+© 2026 LinSifan。代码以 [MIT](./LICENSE) 许可发布。
 
 ## 📄 License
 

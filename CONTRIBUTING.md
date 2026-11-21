@@ -26,12 +26,20 @@
 
 ## 修改通用规则
 
-通用流程、安全基线、存档格式在 `form.json` 里改。改完记得重新生成所有示例：
+通用流程、安全基线、存档格式在 `form.json` 里改。如果改动了存档结构：
+
+1. 提升 `form.json` / `form.en.json` 的 `schema_version`。
+2. 在 `updates.json` 的 `updates` 里加一条迁移，写清 `added_fields`、`renamed_fields`、`removed_fields`、`defaults`。
+3. 同步两个模板里的 `compatibility.updates`（`current` 和 `migrations` 必须与 `updates.json` 一致）。
+4. 重新生成并校验：
 
 ```bash
 python3 scripts/generate_examples.py
+python3 scripts/generate_en_examples.py
 python3 scripts/validate.py
 ```
+
+`scripts/validate.py` 会检查迁移清单与模板是否漂移、示例版本是否一致。
 
 不要直接手改 `examples/*.json`、`examples/filled/*.json`、`examples/en/*.json`，它们由脚本生成，CI 会检查是否一致（启用方式见 [`docs/ci/README.md`](./docs/ci/README.md)）。
 

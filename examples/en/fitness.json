@@ -1,10 +1,10 @@
 {
-    "schema_version": "2.0.0",
+    "schema_version": "2.1.0",
     "usage": {
         "role": "This file is a prompt/spec for web LLMs (such as DeepSeek or ChatGPT). It is not a config file executed by software. The AI cannot read files, browse the web, or set timers.",
         "how_to_send": "The user sends the whole file as the opening message or system prompt.",
         "first_time": "The user gives today's date + scenario/identity/pain points → the AI follows protocol.first_time.",
-        "resume": "The user pastes today's date + the last saved archive JSON (a compact archive also needs the original template) → the AI follows protocol.on_resume.",
+        "resume": "The user pastes today's date + the last saved archive JSON (a compact archive also needs the original template) → the AI follows protocol.on_resume. If the archive came from an older template, the user may also paste the current template; in that case the current template is the rules and the old archive is the data. The AI upgrades the archive per compatibility.updates and states the result in one line.",
         "save": "When the user says save / end / stop here / talk next time → the AI follows protocol.on_end and outputs the archive JSON. If the user says compact archive, use archive_modes.compact.",
         "archive_definition": "An archive is a complete copy of this file (or a compact copy per archive_modes.compact) with the user-specific fields filled in. To resume, paste the archive + today's date; for a compact archive, also paste the original template.",
         "archive_owner": "The user copies and stores the archive manually. The AI never assumes it can persist anything."
@@ -21,7 +21,84 @@
     "compatibility": {
         "on_missing_field": "Fill in the default and continue; do not error or refuse",
         "on_unknown_field": "Keep it as-is; do not delete",
-        "on_old_schema": "If schema_version is lower than the current version, fill missing structure; keep functions as they are"
+        "on_old_schema": "If schema_version is lower than compatibility.updates.current, apply the migrations in compatibility.updates from oldest to newest automatically; do not error or refuse",
+        "updates": {
+            "current": "2.1.0",
+            "on_resume": "If the archive's schema_version is lower than current, apply migrations from oldest to newest; only fill missing fields, map renamed fields, and write defaults. Never overwrite existing user data; keep unknown fields as-is. After migrating, state the result in one line and continue with protocol.on_resume.",
+            "announce": "Upgraded the archive from v{from} to v{to}. Continuing.",
+            "never_overwrite_user_data": true,
+            "keep_unknown_fields": true,
+            "fill_missing_from_template": true,
+            "function_defaults": {
+                "name": "Unnamed function",
+                "what": "",
+                "why": "",
+                "how": "",
+                "trigger": "on demand",
+                "frequency": "on demand",
+                "linked_with": [],
+                "status": "active",
+                "source": "initial",
+                "last_triggered_at": null,
+                "created_at": null,
+                "updated_at": null
+            },
+            "memory_defaults": {
+                "memory.state.global": {
+                    "mood_trend": [],
+                    "preferences": {},
+                    "notes": ""
+                },
+                "memory.state.per_function": {},
+                "memory.state.pending_signals": {},
+                "memory.state.modified_suggestions": [],
+                "memory.state.recent_sessions": []
+            },
+            "function_id_rule": "If id is missing, generate f_ + a short English slug; map function names in linked_with to their ids",
+            "date_rule": "Change any non-YYYY-MM-DD date to null",
+            "migrations": [
+                {
+                    "version": "1.1.0",
+                    "added_fields": [
+                        "function_rules",
+                        "evolution",
+                        "rejected_suggestions",
+                        "rejected_suggestion_format",
+                        "memory.state.pending_signals",
+                        "memory.state.modified_suggestions"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                },
+                {
+                    "version": "1.2.0",
+                    "added_fields": [],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                },
+                {
+                    "version": "2.0.0",
+                    "added_fields": [
+                        "archive_modes",
+                        "meta"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                },
+                {
+                    "version": "2.1.0",
+                    "added_fields": [
+                        "compatibility.updates"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                }
+            ]
+        }
     },
     "archive_modes": {
         "default": "full",
@@ -70,7 +147,7 @@
             "6. Output the complete archive JSON"
         ],
         "on_resume": [
-            "1. Read the archive; fill missing fields per compatibility; do not error",
+            "1. Read the archive; if schema_version is lower than compatibility.updates.current, apply compatibility.updates automatically (fill/rename/default without overwriting existing data) and state the result in one line; then fill missing fields per compatibility; do not error",
             "2. Confirm today's date with the user",
             "3. Check last_triggered_at of all active functions and give a stale reminder for those past the threshold (one at a time)",
             "4. Check rejected_suggestions to avoid repeating rejected ideas",
@@ -316,7 +393,7 @@
         "resume_open": {
             "desc": "The user's opening message when resuming",
             "user": "Today is 2026-11-20. Here is my archive, please resume: <paste archive JSON>. I finished 2/3 of yesterday's plan; I did not touch math and feel annoyed.",
-            "ai_should": "Read the archive and fill missing fields → run the stale check (one at a time) → if there is a check-in function, ask how many items were completed yesterday → acknowledge the annoyance → move on to today's plan"
+            "ai_should": "Read the archive; if it is an older version, apply compatibility.updates and state the result in one line → fill missing fields → run the stale check (one at a time) → if there is a check-in function, ask how many items were completed yesterday → acknowledge the annoyance → move on to today's plan"
         },
         "stale_check": {
             "desc": "Reminder when a function has not been triggered for 30+ days",

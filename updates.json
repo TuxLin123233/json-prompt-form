@@ -1,0 +1,91 @@
+{
+    "current": "2.1.0",
+    "policy": {
+        "on_resume": "若存档的 schema_version 低于 current，按 updates 从旧到新依次应用迁移；只补齐缺失字段、映射改名、写入默认值，绝不覆盖用户已有数据；未知字段原样保留；迁移完成后用一行说明升级结果，再继续 protocol.on_resume。",
+        "announce": "已把存档从 v{from} 升级到 v{to}，继续。",
+        "never_overwrite_user_data": true,
+        "keep_unknown_fields": true,
+        "fill_missing_from_template": true,
+        "function_defaults": {
+            "name": "未命名功能",
+            "what": "",
+            "why": "",
+            "how": "",
+            "trigger": "按需",
+            "frequency": "按需",
+            "linked_with": [],
+            "status": "active",
+            "source": "initial",
+            "last_triggered_at": null,
+            "created_at": null,
+            "updated_at": null
+        },
+        "memory_defaults": {
+            "memory.state.global": {
+                "mood_trend": [],
+                "preferences": {},
+                "notes": ""
+            },
+            "memory.state.per_function": {},
+            "memory.state.pending_signals": {},
+            "memory.state.modified_suggestions": [],
+            "memory.state.recent_sessions": []
+        },
+        "function_id_rule": "缺少 id 时生成 f_ + 英文短名；linked_with 中的功能名映射为对应 id",
+        "date_rule": "非 YYYY-MM-DD 的日期改为 null"
+    },
+    "updates": [
+        {
+            "version": "1.1.0",
+            "released": "2026-11-14",
+            "summary": "新增功能演化、拒绝记录、过期提醒与分段存档",
+            "added_fields": [
+                "function_rules",
+                "evolution",
+                "rejected_suggestions",
+                "rejected_suggestion_format",
+                "memory.state.pending_signals",
+                "memory.state.modified_suggestions"
+            ],
+            "renamed_fields": [],
+            "removed_fields": [],
+            "defaults": {},
+            "notes": "缺失的规则字段从当前模板补齐；functions 保留原样，仅补默认字段。"
+        },
+        {
+            "version": "1.2.0",
+            "released": "2026-11-14",
+            "summary": "场景模板扩充到 26 个；存档结构无破坏性变化",
+            "added_fields": [],
+            "renamed_fields": [],
+            "removed_fields": [],
+            "defaults": {},
+            "notes": "仅新增场景与文档，旧存档可直接续接。"
+        },
+        {
+            "version": "2.0.0",
+            "released": "2026-11-15",
+            "summary": "新增完整/精简存档模式与场景元信息",
+            "added_fields": [
+                "archive_modes",
+                "meta"
+            ],
+            "renamed_fields": [],
+            "removed_fields": [],
+            "defaults": {},
+            "notes": "meta 仅在场景模板中存在；缺失时保留为空即可，不影响续接。"
+        },
+        {
+            "version": "2.1.0",
+            "released": "2026-11-21",
+            "summary": "新增版本迁移清单：旧存档续接时自动升级",
+            "added_fields": [
+                "compatibility.updates"
+            ],
+            "renamed_fields": [],
+            "removed_fields": [],
+            "defaults": {},
+            "notes": "迁移清单由本文件维护，并内嵌到 form.json / form.en.json 的 compatibility.updates；两者必须一致。"
+        }
+    ]
+}

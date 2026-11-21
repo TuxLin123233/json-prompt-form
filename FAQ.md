@@ -43,7 +43,7 @@
 
 ## 10. 有英文模板吗？
 
-有。26 个英文场景在 [`examples/en/`](./examples/en)，英文通用模板是 [`form.en.json`](./form.en.json)。
+有。27 个英文场景在 [`examples/en/`](./examples/en)，英文通用模板是 [`form.en.json`](./form.en.json)。
 
 ## 11. 能离线用吗？
 
@@ -56,3 +56,7 @@
 ## 13. 遇到情绪危机怎么办？
 
 请立刻联系当地急救或心理危机热线，或告诉身边可信任的人。AI 只能陪伴，不能代替现实中的紧急救助。
+
+## 14. 模板更新了，旧存档还能用吗？
+
+能。把当前 `form.json` 和旧存档一起贴给 AI，它会按 `compatibility.updates` 自动升级，并用一行说明升级结果；也可以本地运行 `python3 scripts/migrate.py 旧存档.json -o 新存档.json`。迁移只补齐缺失字段、映射改名和写默认值，不覆盖你已有的内容。

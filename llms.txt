@@ -1,6 +1,6 @@
 # json-prompt-form
 
-> 让网页版 AI 长期记住你：一份 JSON 提示词规范 + 26 个场景模板。聊完说「存档」，保存 AI 输出的 JSON；下次把存档贴回来，就能接着聊。
+> 让网页版 AI 长期记住你：一份 JSON 提示词规范 + 27 个场景模板。聊完说「存档」，保存 AI 输出的 JSON；下次把存档贴回来，就能接着聊。
 
 ## 这是什么
 
@@ -14,10 +14,11 @@
 ## 关键文件
 
 - [form.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/form.json)：核心规范，包含流程、功能规则、记忆、安全边界、输出规则。
-- [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：26 个场景模板，直接复制给 AI。
+- [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：27 个场景模板，直接复制给 AI。
 - [examples/filled/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/filled)：填好日期和记忆的示例存档。
 - [examples/en/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/en)：英文场景模板。
 - [schema.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/schema.json)：存档 JSON Schema。
+- [updates.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/updates.json)：版本迁移清单，旧存档如何升级到当前模板。
 - [builder.html](https://tuxlin123233.github.io/json-prompt-form/builder.html)：回答几个问题，现场生成模板。
 - [checker.html](https://tuxlin123233.github.io/json-prompt-form/checker.html)：粘贴存档，检查格式、统计字段、发现截断。
 - [index.html](https://tuxlin123233.github.io/json-prompt-form/)：一键复制页。
@@ -49,6 +50,10 @@
 ## 精简存档
 
 对 AI 说「精简存档」，它只输出携带状态的字段（`archive_modes.compact.must_keep`）。续接时把原始模板和精简存档一起贴入。
+
+## 旧存档续接
+
+若存档来自旧模板，把当前模板和旧存档一起贴入。AI 按 `compatibility.updates` 从旧到新自动迁移，只补齐/改名/加默认值，不覆盖已有数据，并用一行说明升级结果。
 
 ## 链接
 

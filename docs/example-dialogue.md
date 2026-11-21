@@ -44,7 +44,7 @@
 
 ```json
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "goal": "……",
   "session_context": { "today": "2026-11-14", "save_file": null, "rule": "……" },
   "assistant_identity": {
@@ -134,7 +134,7 @@
 
 ```json
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "session_context": { "today": "2026-11-20" },
   "functions": [
     { "id": "f_daily_plan", "name": "每日任务规划", "frequency": "每日", "status": "active", "last_triggered_at": "2026-11-20" },

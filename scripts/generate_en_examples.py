@@ -79,6 +79,7 @@ META = {
     "coding": {"category": "Study", "audience": "Self-taught programmers who get stuck or lost", "daily_minutes": 20, "difficulty": "Intermediate"},
     "cooking": {"category": "Life", "audience": "People who cannot cook or want to start meal prepping", "daily_minutes": 20, "difficulty": "Beginner"},
     "plant-care": {"category": "Hobby", "audience": "Plant lovers who keep losing houseplants", "daily_minutes": 5, "difficulty": "Beginner"},
+    "project": {"category": "Productivity", "audience": "People pushing papers, side projects, moves, or events", "daily_minutes": 10, "difficulty": "Intermediate"},
 }
 
 
@@ -550,6 +551,26 @@ SCENARIOS = {
         "Photos and location may reveal personal information; check before sharing",
         "Do not guarantee the plant will survive",
         "Today is 2026-11-15. I want a plant care companion. I love houseplants but I have killed several by forgetting to water or overwatering. Please design the functions.",
+    ),
+    "project": sc(
+        "Project progress companion",
+        "Long projects stall without a weekly rhythm",
+        "Calm and practical; one key action per week; no hype",
+        "Papers, side projects, moves, events, and other multi-week projects",
+        "Too many moving parts, unclear priorities, and stalling after a blocker",
+        "Project map, weekly focus, next-step breakdown, blocker log, weekly review, energy check",
+        [
+            fn("f_project_map", "Project map", "Sketch the goal, milestones, and current stage", "Seeing the whole picture prevents busywork", "Write three lines: destination, current stage, next milestone", "First use or when the stage changes", "As needed", ["f_weekly_focus"]),
+            fn("f_weekly_focus", "Weekly focus", "Choose one key action for the week", "Too many priorities means no priority", "Every Monday, pick one action that can finish this week", "Every Monday or when the user feels lost", "Weekly", ["f_project_map", "f_review"]),
+            fn("f_next_step", "Next-step breakdown", "Turn a stuck task into a 15-minute first step", "Starting is hard when the next step is too big", "Break it down to opening a file, writing one line, or sending one message", "When the user is stuck or procrastinating", "As needed", ["f_weekly_focus"]),
+            fn("f_blocker_log", "Blocker log", "Record recurring blockers, dependencies, and feelings", "Repeated blockers mean the process needs a change", "Log the blocker, frequency, likely cause, and one small adjustment", "When progress stalls", "As needed", ["f_review"]),
+            fn("f_review", "Weekly review", "Review progress, blockers, and next week's focus", "Without review, projects quietly stop", "Every Sunday, compare plan and reality; keep one focus for next week", "Every Sunday", "Weekly", ["f_weekly_focus", "f_blocker_log"]),
+            fn("f_energy_check", "Energy check", "Tell apart fatigue, fear, and wrong direction", "Low motivation is a signal, not laziness", "Ask three questions to distinguish fatigue, fear, and direction; suggest one small move", "When the user feels unmotivated or wants to quit", "As needed", ["f_review"]),
+        ],
+        "Project progress companion, not a career, legal, or financial advisor; contracts, investments, and compliance need a professional",
+        "Project files may contain business information or other people's privacy; the user decides what to share",
+        "Do not promise a specific outcome or deadline",
+        "Today is 2026-11-21. I want a project progress companion. I am working on a three-month personal project: ... My problem is that everything gets messy, I stall after a blocker, and I avoid looking at progress on weekends. Please design the functions.",
     ),
 }
 

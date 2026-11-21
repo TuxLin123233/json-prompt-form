@@ -48,6 +48,8 @@ Today is 2026-11-20. Here is my archive, please continue:
 <paste the JSON archive you saved last time>
 ```
 
+> 🔄 If the archive came from an older template: paste the current `form.json` together with the old archive. The AI upgrades it per `compatibility.updates` and states the result in one line. Migration only fills/renames fields and never overwrites your data.
+
 **When finishing:**
 > Say "save" or "存档". Copy the whole content of the ```` ```json ```` code block and keep it.
 
@@ -76,15 +78,16 @@ flowchart TD
 | File | What it is |
 | --- | --- |
 | 📄 [`form.json`](./form.json) | Generic template for custom scenarios |
-| 🎯 [`examples/`](./examples) | 26 ready-to-use scenarios |
+| 🎯 [`examples/`](./examples) | 27 ready-to-use scenarios |
 | 🖥️ [`index.html`](./index.html) | One-click copy + scenario picker |
 | 🛠️ [`builder.html`](./builder.html) | Custom builder: answer questions, get a template |
 | 🔍 [`checker.html`](./checker.html) | Archive checker: validate / format / detect truncation |
-| 🧩 [`examples/en/`](./examples/en) | 26 English scenario templates |
+| 🧩 [`examples/en/`](./examples/en) | 27 English scenario templates |
 | 💾 [`examples/filled/`](./examples/filled) | Filled sample archives with dates and memory |
 | 🌐 [`form.en.json`](./form.en.json) | English generic template |
 | 🔍 [`schema.json`](./schema.json) | Optional archive validator |
-| 🔁 [`scripts/migrate.py`](./scripts/migrate.py) | Migrate older archives |
+| 🔄 [`updates.json`](./updates.json) | Version migration manifest: how old archives upgrade |
+| 🔁 [`scripts/migrate.py`](./scripts/migrate.py) | Migrate older archives (reads `updates.json`) |
 | 🤖 [`llms.txt`](./llms.txt) | Project summary for AI search tools |
 | 📜 [`CHANGELOG.md`](./CHANGELOG.md) | Version history |
 | 💬 [`docs/example-dialogue.md`](./docs/example-dialogue.md) | A full example conversation |
@@ -195,7 +198,16 @@ python3 scripts/validate.py              # validate all JSON
 python3 scripts/migrate.py old.json -o new.json  # migrate an old archive
 ```
 
+When changing the archive structure, bump `schema_version`, add an entry to [`updates.json`](./updates.json), and sync `compatibility.updates` in `form.json` / `form.en.json`. `scripts/validate.py` checks for drift.
+
 </details>
+
+## 🙏 Credits & Copyright
+
+- Homepage illustrations are from [unDraw](https://undraw.co/illustrations), recolored to grayscale under its open license; illustration copyright belongs to the original unDraw authors.
+- Thanks to everyone who suggested scenarios and gave feedback.
+
+© 2026 LinSifan. Code released under the [MIT](./LICENSE) license.
 
 ## 📄 License
 

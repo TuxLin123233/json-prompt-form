@@ -1,10 +1,10 @@
 {
-    "schema_version": "2.0.0",
+    "schema_version": "2.1.0",
     "usage": {
         "role": "本文件是给网页大模型（如 DeepSeek）阅读的提示词/规范，不是被程序执行的配置文件。AI 不读写文件、不联网、不设定时任务。",
         "how_to_send": "用户把本文件整份作为开场消息或系统提示发给 AI。",
         "first_time": "用户给出今天日期 + 场景/身份/痛点 → AI 按 protocol.first_time 执行。",
-        "resume": "用户贴入今天日期 + 上次保存的存档 JSON（精简存档还需附原始模板）→ AI 按 protocol.on_resume 执行。",
+        "resume": "用户贴入今天日期 + 上次保存的存档 JSON（精简存档还需附原始模板）→ AI 按 protocol.on_resume 执行。若存档来自旧模板，可同时贴入当前模板；此时当前模板是规则，旧存档是数据，AI 按 compatibility.updates 自动升级旧存档，并用一行说明升级结果。",
         "save": "用户说『存档』『结束』『保存』『先到这』『下次聊』时 → AI 按 protocol.on_end 输出完整存档 JSON；用户说『精简存档』时按 archive_modes.compact 输出更小版本。",
         "archive_definition": "存档 = 本文件的完整副本（或按 archive_modes.compact 输出的精简副本），其中用户相关字段已填入实际值；续接时贴入存档 + 今天日期；精简存档需同时贴原始模板。",
         "archive_owner": "存档由用户手动复制保存；AI 不假设自己能持久化任何内容。"
@@ -21,7 +21,84 @@
     "compatibility": {
         "on_missing_field": "使用字段默认值补齐后继续，不要报错或拒绝",
         "on_unknown_field": "原样保留，不要删除",
-        "on_old_schema": "若 schema_version 低于当前版本，尽量按当前结构补齐；缺失的功能保留原样"
+        "on_old_schema": "若 schema_version 低于 compatibility.updates.current，按 compatibility.updates 的 migrations 从旧到新自动迁移，不要报错或拒绝",
+        "updates": {
+            "current": "2.1.0",
+            "on_resume": "若存档的 schema_version 低于 current，按 migrations 从旧到新依次应用；只补齐缺失字段、映射改名、写入默认值，绝不覆盖用户已有数据；未知字段原样保留；迁移完成后用一行说明升级结果，再继续 protocol.on_resume。",
+            "announce": "已把存档从 v{from} 升级到 v{to}，继续。",
+            "never_overwrite_user_data": true,
+            "keep_unknown_fields": true,
+            "fill_missing_from_template": true,
+            "function_defaults": {
+                "name": "未命名功能",
+                "what": "",
+                "why": "",
+                "how": "",
+                "trigger": "按需",
+                "frequency": "按需",
+                "linked_with": [],
+                "status": "active",
+                "source": "initial",
+                "last_triggered_at": null,
+                "created_at": null,
+                "updated_at": null
+            },
+            "memory_defaults": {
+                "memory.state.global": {
+                    "mood_trend": [],
+                    "preferences": {},
+                    "notes": ""
+                },
+                "memory.state.per_function": {},
+                "memory.state.pending_signals": {},
+                "memory.state.modified_suggestions": [],
+                "memory.state.recent_sessions": []
+            },
+            "function_id_rule": "缺少 id 时生成 f_ + 英文短名；linked_with 中的功能名映射为对应 id",
+            "date_rule": "非 YYYY-MM-DD 的日期改为 null",
+            "migrations": [
+                {
+                    "version": "1.1.0",
+                    "added_fields": [
+                        "function_rules",
+                        "evolution",
+                        "rejected_suggestions",
+                        "rejected_suggestion_format",
+                        "memory.state.pending_signals",
+                        "memory.state.modified_suggestions"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                },
+                {
+                    "version": "1.2.0",
+                    "added_fields": [],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                },
+                {
+                    "version": "2.0.0",
+                    "added_fields": [
+                        "archive_modes",
+                        "meta"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                },
+                {
+                    "version": "2.1.0",
+                    "added_fields": [
+                        "compatibility.updates"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {}
+                }
+            ]
+        }
     },
     "archive_modes": {
         "default": "full",
@@ -70,7 +147,7 @@
             "6. 输出完整存档 JSON"
         ],
         "on_resume": [
-            "1. 读取用户贴入的存档；缺字段时按 compatibility 补齐，不报错",
+            "1. 读取用户贴入的存档；若 schema_version 低于 compatibility.updates.current，先按 compatibility.updates 自动迁移（补齐/改名/加默认值，不覆盖已有数据），用一行说明升级结果；缺字段时按 compatibility 补齐，不报错",
             "2. 与用户确认今天日期",
             "3. 检查所有 active 功能的 last_triggered_at，对超过阈值者发出 stale 提醒（一次只提一项）",
             "4. 检查 rejected_suggestions，避免重复提同类建议",
@@ -362,7 +439,7 @@
         "resume_open": {
             "desc": "用户后续续接时的开场",
             "user": "今天是 2026-11-20。这是我的存档，请续接：<粘贴存档 JSON>。昨天计划完成 2/3，有点烦。",
-            "ai_should": "读取存档并补齐缺失字段 → 做 stale 检查（一次一项）→ 若有签到/开场功能问一句昨天的完成情况 → 接住情绪 → 再进入当日计划"
+            "ai_should": "读取存档；若版本较旧，先按 compatibility.updates 自动迁移并用一行说明 → 补齐缺失字段 → 做 stale 检查（一次一项）→ 若有签到/开场功能问一句昨天的完成情况 → 接住情绪 → 再进入当日计划"
         },
         "stale_check": {
             "desc": "某功能超过阈值未触发时的提醒",

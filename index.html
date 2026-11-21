@@ -2,332 +2,669 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#4f46e5">
+<meta name="theme-color" content="#f4f4f4">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>json-prompt-form · 一键复制 AI 长期陪伴模板</title>
-<meta name="description" content="选一个场景，一键复制给 AI，让网页版 AI 长期记住你、陪着你。">
+<title>长期任务 · AI 提示词模板 | json-prompt-form</title>
+<meta name="description" content="把长期任务交给 AI 陪你推进。选一个模板复制给 AI，聊完存档，下次接着来。手机可用，无需安装。">
+<meta property="og:title" content="长期任务 · AI 提示词模板">
+<meta property="og:description" content="把长期任务拆小，和 AI 一起推进。27 个场景，复制即用，手机优先。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
 <style>
   :root {
-    --bg: #f7f8fb;
-    --card: #ffffff;
-    --text: #1f2330;
-    --muted: #6b7280;
-    --brand: #4f46e5;
-    --brand-soft: #eef2ff;
-    --line: #e5e7eb;
-    --ok: #059669;
+    --paper: #f4f4f4;
+    --paper-deep: #ebebeb;
+    --ink: #111111;
+    --ink-soft: #2c2c2c;
+    --muted: #6e6e6e;
+    --line: #dedede;
+    --line-strong: #bdbdbd;
+    --white: #ffffff;
+    --black: #0a0a0a;
+    --max: 1120px;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-display: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+    --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  a { color: var(--brand); }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 18px 64px; }
-  header.hero {
-    background: linear-gradient(135deg, #eef2ff 0%, #fdf2f8 100%);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 36px 28px;
-    text-align: center;
+  ::selection { background: var(--ink); color: var(--paper); }
+  a { color: inherit; text-underline-offset: 3px; }
+  button, input { font: inherit; }
+  button { color: inherit; }
+  img { max-width: 100%; }
+  .shell { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+  .skip {
+    position: absolute; left: 12px; top: -60px; z-index: 100;
+    background: var(--ink); color: var(--paper); padding: 10px 14px; text-decoration: none;
   }
-  .hero h1 { margin: 0 0 10px; font-size: 30px; }
-  .hero p { margin: 0 auto 20px; color: var(--muted); max-width: 620px; }
-  .hero-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .skip:focus { top: 12px; }
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .7s var(--ease), transform .7s var(--ease);
+    transition-delay: var(--delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+  .site-head {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(244, 244, 244, .92);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .site-head.is-scrolled { box-shadow: 0 1px 0 rgba(0, 0, 0, .05); }
+  .head-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-mark {
+    width: 34px; height: 34px; display: grid; place-items: center;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-mono); font-size: 14px; letter-spacing: -1px;
+  }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; font-weight: 700; }
+  .brand-text small {
+    margin-top: 3px; font-size: 9px; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .head-nav { display: flex; align-items: center; gap: 18px; font-size: 12px; letter-spacing: .04em; }
+  .head-nav a { color: var(--muted); text-decoration: none; padding: 8px 0; }
+  .head-nav a:hover { color: var(--ink); }
+  .head-nav .head-gh { padding-left: 18px; border-left: 1px solid var(--line); }
+
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(28px, 6vw, 72px); align-items: center;
+    padding: clamp(48px, 8vw, 96px) 0 clamp(40px, 6vw, 72px);
+  }
+  .eyebrow {
+    margin: 0 0 14px; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  .hero h1 {
+    margin: 0 0 22px; font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(2.4rem, 5.6vw, 4.2rem); line-height: 1.1; letter-spacing: -.02em;
+    text-wrap: balance;
+  }
+  .hero-lead {
+    max-width: 34em; margin: 0 0 28px; font-size: clamp(15px, 1.5vw, 18px);
+    color: var(--ink-soft);
+  }
+  .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-note {
+    margin: 18px 0 0; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: .02em; color: var(--muted);
+  }
+  .hero-art {
+    margin: 0; border: 1px solid var(--line); background: var(--white);
+    padding: clamp(14px, 2.5vw, 28px);
+  }
+  .hero-art img { display: block; width: 100%; height: auto; }
+  .hero-art figcaption {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--muted);
+  }
+
   .btn {
-    appearance: none; border: 1px solid var(--line); background: #fff;
-    color: var(--text); border-radius: 12px; padding: 10px 18px;
-    font-size: 15px; cursor: pointer; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 46px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 2px;
+    background: transparent; color: var(--ink); text-decoration: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
   }
-  .btn:hover { border-color: #c7d2fe; }
-  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .btn.primary:hover { background: #4338ca; }
-  .btn.small { padding: 7px 12px; font-size: 13px; border-radius: 10px; }
-  h2 { margin: 40px 0 14px; font-size: 21px; }
-  .lead { color: var(--muted); margin-top: -6px; }
-  .quiz {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 18px; padding: 22px;
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn-solid { background: var(--ink); color: var(--paper); }
+  .btn-solid:hover { background: #000; }
+  .btn-line { background: transparent; }
+  .btn-small { min-height: 36px; padding: 0 12px; font-size: 12px; }
+  .btn:disabled { opacity: .45; cursor: wait; }
+
+  .section { padding: clamp(48px, 7vw, 84px) 0; border-top: 1px solid var(--line); }
+  .section-head { max-width: 680px; margin-bottom: clamp(24px, 4vw, 40px); }
+  .section-head h2 {
+    margin: 0 0 12px; font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    line-height: 1.2; letter-spacing: -.01em;
   }
-  .quiz .q { margin-bottom: 16px; }
-  .quiz .q strong { display: block; margin-bottom: 8px; }
-  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
-  .choice {
-    border: 1px solid var(--line); background: #fff; border-radius: 999px;
-    padding: 7px 14px; cursor: pointer; font-size: 14px;
+  .section-head p { margin: 0; color: var(--muted); }
+
+  .how-grid {
+    list-style: none; margin: 0; padding: 0; display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
   }
-  .choice.active { background: var(--brand-soft); border-color: #a5b4fc; color: #3730a3; font-weight: 600; }
-  .result {
-    margin-top: 16px; padding: 16px; border-radius: 14px;
-    background: var(--brand-soft); border: 1px solid #c7d2fe; display: none;
+  .how-step { display: flex; flex-direction: column; background: var(--paper); padding: clamp(18px, 3vw, 28px); }
+  .step-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+  .how-step img { width: 100%; max-height: 150px; object-fit: contain; object-position: left center; margin: 14px 0 18px; }
+  .how-step h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.3; }
+  .how-step p { margin: 0; color: var(--muted); font-size: 14px; }
+  .how-example { margin-top: 28px; border: 1px solid var(--line); background: var(--white); }
+  .example-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
   }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .how-example pre {
+    margin: 0; padding: 18px 16px; overflow: auto;
+    font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--ink-soft);
+  }
+
+  .scenario-tools { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
   .search {
-    width: 100%; border: 1px solid var(--line); background: #fff; color: var(--text);
-    border-radius: 12px; padding: 12px 16px; font-size: 15px; margin-bottom: 14px;
+    width: 100%; border: 0; border-bottom: 1px solid var(--line-strong);
+    border-radius: 0; background: transparent; color: var(--ink);
+    padding: 12px 0; font-size: 16px;
   }
-  .search:focus { outline: 2px solid #c7d2fe; border-color: #a5b4fc; }
-  .recent {
-    display: none; background: var(--card); border: 1px solid var(--line);
-    border-radius: 14px; padding: 14px 16px 4px; margin-bottom: 18px;
-  }
-  .recent-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .search:focus { outline: none; border-bottom-color: var(--ink); }
+  .search::placeholder { color: #9a9a9a; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
   .chip {
-    border: 1px solid var(--line); background: #fff; border-radius: 999px;
-    padding: 6px 14px; cursor: pointer; font-size: 14px;
+    flex: 0 0 auto; border: 1px solid var(--line-strong); border-radius: 2px;
+    background: transparent; color: var(--ink); padding: 8px 12px;
+    font-size: 12px; white-space: nowrap; cursor: pointer;
   }
-  .chip.active { background: var(--text); color: #fff; border-color: var(--text); }
+  .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .recent {
+    display: none; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 20px; padding: 12px 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .recent-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .recent-clear { border: 0; background: transparent; color: var(--muted); font-size: 11px; cursor: pointer; text-decoration: underline; }
+
   .grid {
-    display: grid; gap: 14px;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
   }
   .card {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 18px; display: flex; flex-direction: column;
+    display: flex; flex-direction: column; min-height: 238px;
+    padding: clamp(18px, 2.4vw, 26px); background: var(--paper);
+    transition: background .25s var(--ease);
   }
-  .card .emoji { font-size: 26px; }
-  .card h3 { margin: 6px 0 4px; font-size: 17px; }
-  .card .desc { color: var(--muted); font-size: 13px; min-height: 38px; }
-  .meta { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 14px; }
-  .tag { font-size: 12px; background: #f3f4f6; color: #4b5563; border-radius: 999px; padding: 2px 9px; }
-  .card-actions { margin-top: auto; display: flex; gap: 8px; }
+  .card:hover { background: var(--white); }
+  .card-top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .card h3 { margin: 18px 0 8px; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.25; letter-spacing: -.01em; }
+  .card-desc { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .card-meta {
+    display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 18px;
+    font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: .04em;
+  }
+  .card-actions { display: flex; gap: 8px; margin-top: auto; }
   .card-actions .btn { flex: 1; }
+  .card-featured {
+    grid-column: span 2; display: grid; grid-template-columns: 1.15fr .85fr;
+    gap: 20px; align-items: end; background: var(--ink); color: var(--paper);
+  }
+  .card-featured:hover { background: #000; }
+  .card-featured .card-top, .card-featured .card-desc, .card-featured .card-meta { color: #bdbdbd; }
+  .card-featured .btn { border-color: var(--paper); color: var(--paper); }
+  .card-featured .btn:hover { background: var(--paper); color: var(--ink); }
+  .card-featured .btn-solid { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+  .card-featured .btn-solid:hover { background: var(--white); }
+  .feature-art { width: 100%; max-height: 210px; object-fit: contain; object-position: right bottom; align-self: end; }
+  .card-cta {
+    grid-column: span 2; display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start; min-height: 238px;
+    padding: clamp(18px, 2.4vw, 26px); background: var(--paper-deep);
+    border: 1px solid var(--line); color: var(--ink); text-decoration: none;
+    transition: background .25s var(--ease);
+  }
+  .card-cta:hover { background: var(--white); }
+  .card-cta p { margin: 0; max-width: 34em; color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .cta-arrow {
+    margin-top: 16px; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink);
+  }
+  .card-empty {
+    grid-column: 1 / -1; min-height: 260px; align-items: center; justify-content: center;
+    text-align: center; background: var(--paper);
+  }
+  .card-empty img { max-width: 170px; margin-bottom: 12px; }
+  .card-empty h3 { margin-top: 0; }
+
+  .quiz-panel {
+    display: grid; gap: 24px; padding: clamp(18px, 3vw, 28px);
+    border: 1px solid var(--line); background: var(--white);
+  }
+  .quiz-q strong { display: block; margin-bottom: 10px; font-size: 14px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice {
+    border: 1px solid var(--line-strong); border-radius: 2px; background: transparent;
+    color: var(--ink); padding: 9px 12px; font-size: 13px; cursor: pointer;
+  }
+  .choice.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .result { display: none; padding-top: 18px; border-top: 1px solid var(--line); }
+  .result.show { display: block; }
+  .result strong { font-size: 17px; }
+  .result-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+  .faq-list { border-top: 1px solid var(--line); }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 0; cursor: pointer; list-style: none; font-size: 15px; font-weight: 600;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: "+"; font-family: var(--font-mono); font-weight: 400; color: var(--muted); }
+  .faq-item[open] summary::after { content: "−"; }
+  .faq-item p { max-width: 70ch; margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+  .safety {
+    margin-top: 28px; padding: 2px 0 2px 16px; border-left: 2px solid var(--ink);
+    color: var(--muted); font-size: 13px;
+  }
+
+  .site-foot { padding: clamp(40px, 6vw, 64px) 0 calc(28px + env(safe-area-inset-bottom)); background: var(--black); color: #d8d8d8; }
+  .foot-grid {
+    display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px;
+    padding-bottom: 32px; border-bottom: 1px solid #2a2a2a;
+  }
+  .foot-brand .brand-mark { background: var(--paper); color: var(--ink); }
+  .foot-brand .brand-text { color: var(--paper); }
+  .foot-brand .brand-text small { color: #8c8c8c; }
+  .foot-brand p { max-width: 32em; margin: 16px 0 0; color: #9a9a9a; font-size: 13px; }
+  .foot-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; font-size: 13px; align-content: start; }
+  .foot-links a { color: #bdbdbd; text-decoration: none; }
+  .foot-links a:hover { color: var(--paper); }
+  .foot-bottom {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding-top: 20px; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: .03em; color: #8c8c8c;
+  }
+  .foot-bottom a { color: #bdbdbd; }
+
   .toast {
-    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
-    background: #111827; color: #fff; padding: 11px 18px; border-radius: 999px;
-    font-size: 14px; opacity: 0; pointer-events: none; transition: .25s;
-    z-index: 50;
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 50;
+    transform: translate(-50%, 16px); max-width: 92vw;
+    padding: 11px 16px; border: 1px solid #333; border-radius: 2px;
+    background: var(--ink); color: var(--paper); font-size: 13px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
   }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .toast.error { background: #b91c1c; }
-  .steps { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .step { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
-  .step .n { display: inline-flex; width: 26px; height: 26px; align-items: center; justify-content: center; border-radius: 50%; background: var(--brand-soft); color: #3730a3; font-weight: 700; font-size: 13px; margin-bottom: 6px; }
-  pre.code {
-    background: #0f172a; color: #e2e8f0; border-radius: 14px; padding: 16px;
-    overflow: auto; font-size: 13px; line-height: 1.5;
-  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.error { background: #1a1a1a; border-color: #5a5a5a; }
+
   dialog {
-    width: min(820px, 92vw); max-height: 82vh; border: none; border-radius: 16px; padding: 0;
+    width: min(860px, 94vw); max-height: 84vh; padding: 0; border: 1px solid var(--ink);
+    border-radius: 2px; background: var(--paper); color: var(--ink);
   }
-  dialog::backdrop { background: rgba(15, 23, 42, .5); }
-  .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-  .modal-body { padding: 16px 18px; overflow: auto; max-height: 60vh; }
-  .modal-body pre { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow: auto; font-size: 12px; }
-  footer { margin-top: 48px; text-align: center; color: var(--muted); font-size: 13px; }
-  .safe { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 14px; padding: 14px 18px; font-size: 14px; }
-
-  @media (max-width: 640px) {
-    .wrap { padding: 16px 12px 48px; }
-    header.hero { padding: 26px 18px; border-radius: 16px; }
-    .hero h1 { font-size: 23px; line-height: 1.35; margin-bottom: 8px; }
-    .hero p { font-size: 14px; margin-bottom: 16px; }
-    .hero-actions { gap: 8px; }
-    .hero-actions .btn { flex: 1 1 140px; min-height: 44px; }
-    .btn { min-height: 44px; padding: 10px 16px; }
-    .btn.small { min-height: 40px; padding: 8px 12px; }
-    .choice, .chip { min-height: 40px; display: inline-flex; align-items: center; }
-    h2 { margin-top: 30px; font-size: 19px; }
-    .quiz { padding: 16px; border-radius: 14px; }
-    .grid { grid-template-columns: 1fr; gap: 12px; }
-    .card { padding: 16px; }
-    .card .desc { min-height: 0; }
-    .steps { grid-template-columns: 1fr; }
-    pre.code { font-size: 12px; padding: 12px; }
-    dialog { width: 96vw; border-radius: 14px; }
-    .modal-head { padding: 10px 12px; gap: 8px; }
-    .modal-head strong { font-size: 13px; word-break: break-all; }
-    .modal-body { padding: 12px; max-height: 64vh; }
-    .modal-body pre { font-size: 11px; padding: 10px; }
-    .toast { bottom: 16px; max-width: 92vw; text-align: center; }
-    .safe { padding: 12px 14px; font-size: 13px; }
+  dialog::backdrop { background: rgba(16, 16, 16, .62); }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--white);
+  }
+  .modal-head strong { font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; word-break: break-all; }
+  .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .modal-body { max-height: 64vh; overflow: auto; padding: 16px; }
+  .modal-body pre {
+    margin: 0; padding: 14px; border: 1px solid var(--line); background: var(--white);
+    overflow: auto; font-family: var(--font-mono); font-size: 12px; line-height: 1.6;
   }
 
-  @media (max-width: 380px) {
-    .hero h1 { font-size: 20px; }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-art { order: 2; }
+    .how-grid { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card-featured { grid-column: span 2; }
+    .foot-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .shell { width: calc(100% - 28px); }
+    .head-inner { min-height: 58px; }
+    .head-nav { gap: 12px; font-size: 11px; }
+    .head-nav .head-gh { display: none; }
+    .brand-text small { display: none; }
+    .hero { padding-top: 36px; }
+    .hero h1 { font-size: clamp(2.25rem, 11vw, 3.2rem); }
+    .hero-actions .btn { flex: 1 1 140px; }
+    .grid { grid-template-columns: 1fr; }
+    .card-featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .feature-art { max-height: 150px; }
+    .card { min-height: 0; }
+    .card-cta { grid-column: span 1; min-height: 0; }
+    .how-step img { max-height: 120px; }
+    .foot-links { grid-template-columns: 1fr 1fr; }
+    .foot-bottom { flex-direction: column; gap: 6px; }
+    .modal-body { max-height: 68vh; }
+    .modal-head { align-items: flex-start; }
+    .modal-actions { width: 100%; }
+    .modal-actions .btn { flex: 1; }
+  }
+  @media (max-width: 420px) {
+    .head-nav a[href="#faq"] { display: none; }
     .hero-actions .btn { flex-basis: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+    * { scroll-behavior: auto !important; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<a class="skip" href="#main">跳到主要内容</a>
 
-  <header class="hero">
-    <h1>🤖 选一个场景，让 AI 长期记住你</h1>
-    <p>不用安装、不用写代码。选模板 → 一键复制 → 粘贴给网页版 AI（如 DeepSeek）。聊完说「存档」，把 JSON 存起来，下次接着来。</p>
-    <div class="hero-actions">
-      <button class="btn primary" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">🎯 帮我选一个</button>
-      <button class="btn" onclick="document.getElementById('scenarios').scrollIntoView({behavior:'smooth'})">📋 直接浏览</button>
-      <a class="btn" href="builder.html">🛠️ 自定义生成</a>
-      <a class="btn" href="checker.html">🔍 存档检查</a>
-      <a class="btn" href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">⭐ GitHub</a>
-    </div>
-  </header>
+<header class="site-head" id="top">
+  <div class="shell head-inner">
+    <a class="brand" href="./" aria-label="json-prompt-form 首页">
+      <span class="brand-mark" aria-hidden="true">{}</span>
+      <span class="brand-text">长期任务<small>json-prompt-form</small></span>
+    </a>
+    <nav class="head-nav" aria-label="主导航">
+      <a href="#how">怎么用</a>
+      <a href="#scenarios">场景</a>
+      <a href="#faq">FAQ</a>
+      <a class="head-gh" href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
 
-  <h2>🧭 不知道选哪个？回答两个问题</h2>
-  <p class="lead">下面会推荐一个最接近的模板，也可以随时自己挑。</p>
-  <div class="quiz" id="quiz">
-    <div class="q">
-      <strong>1. 你现在最想改变的是？</strong>
-      <div class="choices" id="q1">
-        <button class="choice" data-cat="学习">📚 学习 / 考试</button>
-        <button class="choice" data-cat="健康">💪 身体 / 睡眠 / 戒断</button>
-        <button class="choice" data-cat="情绪">🌤️ 情绪 / 压力</button>
-        <button class="choice" data-cat="职业">💼 工作 / 求职</button>
-        <button class="choice" data-cat="生活">🧺 生活 / 钱 / 宠物</button>
-        <button class="choice" data-cat="关系">👨‍👩‍👧 家人 / 关系</button>
-        <button class="choice" data-cat="创作">✍️ 写作 / 创作</button>
-        <button class="choice" data-cat="效率">⏰ 时间 / 效率</button>
-        <button class="choice" data-cat="兴趣">🎸 兴趣 / 爱好</button>
+<main id="main">
+  <section class="hero shell" aria-labelledby="hero-title">
+    <div data-reveal>
+      <p class="eyebrow">AI 长期任务模板</p>
+      <h1 id="hero-title">让 AI 陪你<br>做完一件长期的事</h1>
+      <p class="hero-lead">不用安装，不用写代码。选一个模板复制给 AI，聊完说「存档」，下次把 JSON 贴回来，就能接着上次继续。</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#how">看怎么用</a>
+        <a class="btn btn-line" href="#scenarios">选一个场景</a>
       </div>
+      <p class="hero-note">27 个场景 · 手机优先 · 存档只在你自己手里</p>
     </div>
-    <div class="q">
-      <strong>2. 你每天大概能投入多少时间？</strong>
-      <div class="choices" id="q2">
-        <button class="choice" data-min="5">⏱️ 5 分钟</button>
-        <button class="choice" data-min="10">⏳ 10 分钟</button>
+    <figure class="hero-art" data-reveal style="--delay:120ms">
+      <img src="assets/illustrations/hero.svg" alt="一个人坐在桌前，整理长期任务的进度清单" width="960" height="719" loading="eager">
+      <figcaption>把大目标拆成每周能推进的一步。</figcaption>
+    </figure>
+  </section>
+
+  <section class="section shell" id="how" aria-labelledby="how-title">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">60 秒上手</p>
+      <h2 id="how-title">第一次用，只需要三步</h2>
+      <p>打开你常用的网页版 AI 就行。DeepSeek、豆包、ChatGPT 都可以。</p>
+    </div>
+    <ol class="how-grid">
+      <li class="how-step" data-reveal>
+        <span class="step-num">01</span>
+        <img src="assets/illustrations/step-copy.svg" alt="" width="960" height="775" loading="lazy">
+        <h3>复制模板</h3>
+        <p>在下面选一个场景，点「复制模板」，把整份 JSON 发给 AI。</p>
+      </li>
+      <li class="how-step" data-reveal style="--delay:80ms">
+        <span class="step-num">02</span>
+        <img src="assets/illustrations/step-save.svg" alt="" width="793" height="800" loading="lazy">
+        <h3>说「存档」</h3>
+        <p>聊完对 AI 说「存档」，它会输出一段 JSON。整段复制，保存到笔记里。</p>
+      </li>
+      <li class="how-step" data-reveal style="--delay:160ms">
+        <span class="step-num">03</span>
+        <img src="assets/illustrations/step-resume.svg" alt="" width="744" height="800" loading="lazy">
+        <h3>下次贴回来</h3>
+        <p>开场告诉 AI 今天几号，再贴上次的存档，就能接着来。</p>
+      </li>
+    </ol>
+    <div class="how-example" data-reveal>
+      <div class="example-head">
+        <span>第一次开场可以这样发</span>
+        <button class="btn btn-line btn-small" id="copy-example" type="button">复制这段</button>
       </div>
+      <pre><code>&lt;把复制的模板整份粘贴在这里&gt;
+
+今天是 2026-11-21。我的情况是：……</code></pre>
     </div>
-    <div class="result" id="result"></div>
-  </div>
+  </section>
 
-  <h2 id="scenarios">🎯 全部场景</h2>
-  <p class="lead">点「复制模板」，再粘贴给 AI。每个模板都会根据你的真实情况调整功能。</p>
-  <input class="search" id="search" type="search" placeholder="搜索场景，例如：焦虑、跑步、存钱、英语…" autocomplete="off">
-  <div class="chips" id="chips"></div>
-  <div class="recent" id="recent-wrap">
-    <div class="recent-head">
-      <strong>🕘 最近使用</strong>
-      <button class="btn small" id="recent-clear">清除</button>
+  <section class="section shell" id="scenarios" aria-labelledby="scenarios-title">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">27 个长期任务</p>
+      <h2 id="scenarios-title">选一个你想推进的事</h2>
+      <p>每个模板都会根据你的真实情况调整功能。找不到合适的，用自定义生成器。</p>
     </div>
-    <div class="chips" id="recent"></div>
+    <div class="scenario-tools" data-reveal>
+      <input class="search" id="search" type="search" placeholder="搜索：焦虑、存钱、论文、健身…" autocomplete="off" aria-label="搜索场景">
+      <div class="chips" id="chips" role="group" aria-label="按类别筛选"></div>
+    </div>
+    <div class="recent" id="recent-wrap">
+      <span class="recent-label">最近使用</span>
+      <div class="chips" id="recent"></div>
+      <button class="recent-clear" id="recent-clear" type="button">清除</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="section shell" id="quiz" aria-labelledby="quiz-title">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">不确定选哪个</p>
+      <h2 id="quiz-title">回答两个问题，给你一个建议</h2>
+      <p>只是建议。你也可以直接浏览上面的全部场景。</p>
+    </div>
+    <div class="quiz-panel" data-reveal>
+      <div class="quiz-q">
+        <strong>1. 你现在最想推进的是？</strong>
+        <div class="choices" id="q1">
+          <button class="choice" type="button" data-cat="学习">学习 / 考试</button>
+          <button class="choice" type="button" data-cat="健康">身体 / 睡眠</button>
+          <button class="choice" type="button" data-cat="情绪">情绪 / 压力</button>
+          <button class="choice" type="button" data-cat="职业">工作 / 求职</button>
+          <button class="choice" type="button" data-cat="生活">生活 / 钱 / 宠物</button>
+          <button class="choice" type="button" data-cat="关系">家人 / 关系</button>
+          <button class="choice" type="button" data-cat="创作">写作 / 创作</button>
+          <button class="choice" type="button" data-cat="效率">时间 / 项目</button>
+          <button class="choice" type="button" data-cat="兴趣">兴趣 / 爱好</button>
+        </div>
+      </div>
+      <div class="quiz-q">
+        <strong>2. 你每天大概能投入多少时间？</strong>
+        <div class="choices" id="q2">
+          <button class="choice" type="button" data-min="5">5 分钟</button>
+          <button class="choice" type="button" data-min="10">10 分钟</button>
+          <button class="choice" type="button" data-min="20">20 分钟</button>
+        </div>
+      </div>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="section shell" id="faq" aria-labelledby="faq-title">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">使用说明</p>
+      <h2 id="faq-title">几个常见问题</h2>
+      <p>还有问题，可以看完整的 FAQ 或项目说明。</p>
+    </div>
+    <div class="faq-list" data-reveal>
+      <details class="faq-item">
+        <summary>AI 只输出了一半怎么办？</summary>
+        <p>回复「继续」，让它分段发完；或者直接说「请输出完整存档 JSON」。</p>
+      </details>
+      <details class="faq-item">
+        <summary>换一个 AI 还能用吗？</summary>
+        <p>能。存档是纯文本 JSON，任何能读长文本的模型都能续接。不同模型表现会有差异。</p>
+      </details>
+      <details class="faq-item">
+        <summary>为什么每次都要贴存档？</summary>
+        <p>网页版 AI 在不同会话之间不共享记忆，也读不到你的本地文件。存档由你保管，也保护隐私。</p>
+      </details>
+      <details class="faq-item">
+        <summary>模板更新了，旧存档还能用吗？</summary>
+        <p>能。把当前模板和旧存档一起贴给 AI，它会按 compatibility.updates 自动升级，只补齐或改名，不覆盖你已有的内容。</p>
+      </details>
+      <details class="faq-item">
+        <summary>存档安全吗？</summary>
+        <p>存档只在你手里，不上传、不联网、不依赖账号。可能包含隐私，请自己妥善保管。</p>
+      </details>
+    </div>
+    <div class="safety" data-reveal>
+      这是陪伴和自我管理工具，不做医疗、心理、法律、投资等专业诊断。遇到严重情绪危机，请立刻联系当地急救或心理危机热线，或告诉身边可信任的人。
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="shell foot-grid">
+    <div class="foot-brand">
+      <a class="brand" href="#top" aria-label="回到顶部">
+        <span class="brand-mark" aria-hidden="true">{}</span>
+        <span class="brand-text">长期任务<small>json-prompt-form</small></span>
+      </a>
+      <p>把长期任务拆小，和 AI 一起推进。模板复制走，存档自己留着。</p>
+    </div>
+    <nav class="foot-links" aria-label="页脚导航">
+      <a href="#how">怎么用</a>
+      <a href="#scenarios">全部场景</a>
+      <a href="builder.html">自定义生成器</a>
+      <a href="checker.html">存档检查器</a>
+      <a href="FAQ.md">完整 FAQ</a>
+      <a href="README.md">项目说明</a>
+      <a href="https://github.com/TuxLin123233/json-prompt-form" target="_blank" rel="noopener">GitHub</a>
+      <a href="LICENSE">MIT License</a>
+    </nav>
   </div>
-  <div class="grid" id="grid"></div>
-
-  <h2>🚀 复制之后怎么用</h2>
-  <div class="steps">
-    <div class="step"><span class="n">1</span><h3>粘贴模板</h3><p>把复制的整份 JSON 发给 AI，再补一句：今天是几号、你的情况是什么。</p></div>
-    <div class="step"><span class="n">2</span><h3>聊完说「存档」</h3><p>AI 会输出一段 JSON。整段复制，保存到笔记或私有仓库。</p></div>
-    <div class="step"><span class="n">3</span><h3>下次贴回来</h3><p>开场说「今天是几号，这是我的存档」，再粘贴上次的 JSON 就能续上。</p></div>
+  <div class="shell foot-bottom">
+    <span>© 2026 LinSifan. All rights reserved.</span>
+    <span>插画来自 <a href="https://undraw.co/illustrations" target="_blank" rel="noopener">unDraw</a>，已改为灰白配色 · 手机可添加到主屏幕</span>
   </div>
+</footer>
 
-  <h2>📋 照着复制</h2>
-  <pre class="code">第一次：
-&lt;把复制的模板整份粘贴在这里&gt;
-
-今天是 2026-11-15。我的情况是：……
-
-以后每次：
-今天是 2026-11-20。这是我的存档，请继续：
-&lt;把上次保存的 JSON 整段粘贴在这里&gt;
-
-结束时：
-对 AI 说「存档」或「保存」，把回答里 ```json 代码块的内容整段复制保存。</pre>
-
-  <h2>🛟 安全提醒</h2>
-  <div class="safe">
-    这是陪伴和自我管理工具，<strong>不做医疗、心理、法律、投资等专业诊断</strong>。遇到严重情绪危机，请立刻联系当地急救或心理危机热线，或告诉身边可信任的人。存档可能含隐私，请自己妥善保管。
-  </div>
-
-  <h2>❓ 常见问题</h2>
-  <div class="quiz">
-    <p><strong>AI 只输出了一半怎么办？</strong><br>回复「继续」，让它分段发完；或说「请输出完整存档 JSON」。</p>
-    <p><strong>换一个 AI 还能用吗？</strong><br>能。存档是纯文本 JSON，任何能读长文本的模型都能续接。</p>
-    <p><strong>为什么每次都要贴存档？</strong><br>网页版 AI 跨会话不共享记忆，也读不到你的本地文件。存档由你保管，也保护隐私。</p>
-    <p><strong>更多问题</strong>：<a href="FAQ.md">查看完整 FAQ</a> · <a href="README.md">阅读项目说明</a></p>
-  </div>
-
-  <footer>
-    MIT License · <a href="https://github.com/TuxLin123233/json-prompt-form">TuxLin123233/json-prompt-form</a><br>
-    可添加到手机主屏幕，离线也能打开。
-  </footer>
-</div>
-
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <dialog id="modal">
   <div class="modal-head">
     <strong id="modal-title">预览</strong>
-    <div>
-      <a class="btn small" id="modal-filled" target="_blank" rel="noopener">已填示例</a>
-      <button class="btn small primary" id="modal-copy">复制全部</button>
-      <button class="btn small" onclick="document.getElementById('modal').close()">关闭</button>
+    <div class="modal-actions">
+      <a class="btn btn-line btn-small" id="modal-filled" target="_blank" rel="noopener">已填示例</a>
+      <button class="btn btn-solid btn-small" id="modal-copy" type="button">复制全部</button>
+      <button class="btn btn-line btn-small" id="modal-close" type="button">关闭</button>
     </div>
   </div>
   <div class="modal-body"><pre id="modal-body"></pre></div>
 </dialog>
 
 <script>
+document.documentElement.classList.add('js');
+
 const SCENARIOS = [
-  { file: "study-exam.json",        emoji: "📚", name: "备考",        desc: "中高考、考研、考证，容易拖延焦虑",                    cat: "学习", min: 5,  diff: "入门" },
-  { file: "fitness.json",           emoji: "💪", name: "健身",        desc: "想增肌减脂塑形，但总坚持不下来",                      cat: "健康", min: 5,  diff: "入门" },
-  { file: "job-search.json",        emoji: "💼", name: "求职",        desc: "投简历没回音、面试紧张、求职焦虑",                    cat: "职业", min: 10, diff: "进阶" },
-  { file: "emotion-support.json",   emoji: "🌤️", name: "情绪支持",    desc: "焦虑、低落、压力大，想有个出口",                      cat: "情绪", min: 5,  diff: "入门" },
-  { file: "finance.json",           emoji: "💰", name: "财务",        desc: "月光、超支、想存钱或还债",                            cat: "生活", min: 5,  diff: "入门" },
-  { file: "writing.json",           emoji: "✍️", name: "写作",        desc: "小说、公众号、日更，总卡文拖延",                      cat: "创作", min: 10, diff: "进阶" },
-  { file: "sleep.json",             emoji: "🌙", name: "睡眠",        desc: "入睡难、熬夜、睡眠质量差",                            cat: "健康", min: 5,  diff: "入门" },
-  { file: "quit-habits.json",       emoji: "🚭", name: "戒烟戒糖",    desc: "想戒烟、戒糖、戒手机等习惯",                          cat: "健康", min: 5,  diff: "进阶" },
-  { file: "language-learning.json", emoji: "🗣️", name: "语言学习",    desc: "练口语、背单词、备考语言考试",                        cat: "学习", min: 10, diff: "入门" },
-  { file: "parenting.json",         emoji: "👨‍👩‍👧", name: "亲子沟通", desc: "想改善亲子沟通、减少吼叫",                            cat: "关系", min: 10, diff: "进阶" },
-  { file: "caregiver.json",         emoji: "🤝", name: "照护者支持",  desc: "照顾老人病人、容易疲惫的人",                          cat: "关系", min: 5,  diff: "进阶" },
-  { file: "adhd.json",              emoji: "🧠", name: "ADHD 支持",   desc: "注意力涣散、拖延、容易忘事",                          cat: "学习", min: 5,  diff: "进阶" },
-  { file: "reading.json",           emoji: "📖", name: "读书",        desc: "买书不读、想建立阅读习惯",                            cat: "学习", min: 10, diff: "入门" },
-  { file: "pet.json",               emoji: "🐾", name: "宠物",        desc: "养猫狗，想科学陪伴和记录",                            cat: "生活", min: 5,  diff: "入门" },
-  { file: "time-management.json",   emoji: "⏰", name: "时间管理",    desc: "事多拖延、忙但没产出",                                cat: "效率", min: 5,  diff: "入门" },
-  { file: "morning-routine.json",   emoji: "🌅", name: "早起晨间",    desc: "起不来、早晨手忙脚乱",                                cat: "生活", min: 5,  diff: "入门" },
-  { file: "meditation.json",        emoji: "🧘", name: "正念练习",    desc: "紧绷焦虑、睡前脑子停不下来",                          cat: "情绪", min: 5,  diff: "入门" },
-  { file: "healthy-diet.json",      emoji: "🥗", name: "健康饮食",    desc: "外卖多、饮食不规律、想吃得健康",                      cat: "健康", min: 5,  diff: "入门" },
-  { file: "journaling.json",        emoji: "📓", name: "日记觉察",    desc: "想写日记但坚持不了、想梳理情绪",                      cat: "情绪", min: 5,  diff: "入门" },
-  { file: "public-speaking.json",   emoji: "🎤", name: "演讲表达",    desc: "当众发言紧张、汇报没结构",                            cat: "职业", min: 10, diff: "进阶" },
-  { file: "relationship.json",      emoji: "💞", name: "恋爱沟通",    desc: "恋爱或伴侣沟通中容易争吵",                            cat: "关系", min: 5,  diff: "进阶" },
-  { file: "declutter.json",         emoji: "🧹", name: "整理收纳",    desc: "房间乱、东西多、舍不得扔",                            cat: "生活", min: 15, diff: "入门" },
-  { file: "instrument.json",        emoji: "🎸", name: "乐器练习",    desc: "学乐器、练琴容易中断",                                cat: "兴趣", min: 15, diff: "进阶" },
-  { file: "coding.json",            emoji: "💻", name: "编程学习",    desc: "自学编程、容易卡住或迷路",                            cat: "学习", min: 20, diff: "进阶" },
-  { file: "cooking.json",           emoji: "🍳", name: "学做饭",      desc: "不会做饭、想开始带饭",                                cat: "生活", min: 20, diff: "入门" },
-  { file: "plant-care.json",        emoji: "🪴", name: "植物养护",    desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门" },
+  { file: "project.json",           name: "项目推进",   desc: "论文、作品、副业、搬家……把一个大目标拆成每周能推进的事", cat: "效率", min: 10, diff: "进阶", featured: true, note: "新增" },
+  { file: "study-exam.json",        name: "备考",       desc: "中高考、考研、考证，容易拖延焦虑",                    cat: "学习", min: 5,  diff: "入门" },
+  { file: "fitness.json",           name: "健身",       desc: "想增肌减脂塑形，但总坚持不下来",                      cat: "健康", min: 5,  diff: "入门" },
+  { file: "job-search.json",        name: "求职",       desc: "投简历没回音、面试紧张、求职焦虑",                    cat: "职业", min: 10, diff: "进阶" },
+  { file: "emotion-support.json",   name: "情绪支持",   desc: "焦虑、低落、压力大，想有个出口",                      cat: "情绪", min: 5,  diff: "入门" },
+  { file: "finance.json",           name: "财务",       desc: "月光、超支、想存钱或还债",                            cat: "生活", min: 5,  diff: "入门" },
+  { file: "writing.json",           name: "写作",       desc: "小说、公众号、日更，总卡文拖延",                      cat: "创作", min: 10, diff: "进阶" },
+  { file: "sleep.json",             name: "睡眠",       desc: "入睡难、熬夜、睡眠质量差",                            cat: "健康", min: 5,  diff: "入门" },
+  { file: "quit-habits.json",       name: "戒烟戒糖",   desc: "想戒烟、戒糖、戒手机等习惯",                          cat: "健康", min: 5,  diff: "进阶" },
+  { file: "language-learning.json", name: "语言学习",   desc: "练口语、背单词、备考语言考试",                        cat: "学习", min: 10, diff: "入门" },
+  { file: "parenting.json",         name: "亲子沟通",   desc: "想改善亲子沟通、减少吼叫",                            cat: "关系", min: 10, diff: "进阶" },
+  { file: "caregiver.json",         name: "照护者支持", desc: "照顾老人病人、容易疲惫的人",                          cat: "关系", min: 5,  diff: "进阶" },
+  { file: "adhd.json",              name: "ADHD 支持",  desc: "注意力涣散、拖延、容易忘事",                          cat: "学习", min: 5,  diff: "进阶" },
+  { file: "reading.json",           name: "读书",       desc: "买书不读、想建立阅读习惯",                            cat: "学习", min: 10, diff: "入门" },
+  { file: "pet.json",               name: "宠物",       desc: "养猫狗，想科学陪伴和记录",                            cat: "生活", min: 5,  diff: "入门" },
+  { file: "time-management.json",   name: "时间管理",   desc: "事多拖延、忙但没产出",                                cat: "效率", min: 5,  diff: "入门" },
+  { file: "morning-routine.json",   name: "早起晨间",   desc: "起不来、早晨手忙脚乱",                                cat: "生活", min: 5,  diff: "入门" },
+  { file: "meditation.json",        name: "正念练习",   desc: "紧绷焦虑、睡前脑子停不下来",                          cat: "情绪", min: 5,  diff: "入门" },
+  { file: "healthy-diet.json",      name: "健康饮食",   desc: "外卖多、饮食不规律、想吃得健康",                      cat: "健康", min: 5,  diff: "入门" },
+  { file: "journaling.json",        name: "日记觉察",   desc: "想写日记但坚持不了、想梳理情绪",                      cat: "情绪", min: 5,  diff: "入门" },
+  { file: "public-speaking.json",   name: "演讲表达",   desc: "当众发言紧张、汇报没结构",                            cat: "职业", min: 10, diff: "进阶" },
+  { file: "relationship.json",      name: "恋爱沟通",   desc: "恋爱或伴侣沟通中容易争吵",                            cat: "关系", min: 5,  diff: "进阶" },
+  { file: "declutter.json",         name: "整理收纳",   desc: "房间乱、东西多、舍不得扔",                            cat: "生活", min: 15, diff: "入门" },
+  { file: "instrument.json",        name: "乐器练习",   desc: "学乐器、练琴容易中断",                                cat: "兴趣", min: 15, diff: "进阶" },
+  { file: "coding.json",            name: "编程学习",   desc: "自学编程、容易卡住或迷路",                            cat: "学习", min: 20, diff: "进阶" },
+  { file: "cooking.json",           name: "学做饭",     desc: "不会做饭、想开始带饭",                                cat: "生活", min: 20, diff: "入门" },
+  { file: "plant-care.json",        name: "植物养护",   desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门" },
 ];
 
 const CATS = ["全部", "学习", "健康", "生活", "情绪", "职业", "创作", "关系", "效率", "兴趣"];
+const RECENT_KEY = "jpf.recent";
 let activeCat = "全部";
 let quizCat = null;
 let quizMin = null;
 let query = "";
 
-const grid = document.getElementById('grid');
-const chips = document.getElementById('chips');
-const toast = document.getElementById('toast');
-const search = document.getElementById('search');
-const recentWrap = document.getElementById('recent-wrap');
-const recent = document.getElementById('recent');
-const RECENT_KEY = 'jpf.recent';
+const grid = document.getElementById("grid");
+const chips = document.getElementById("chips");
+const toast = document.getElementById("toast");
+const search = document.getElementById("search");
+const recentWrap = document.getElementById("recent-wrap");
+const recent = document.getElementById("recent");
+const resultBox = document.getElementById("result");
+
+const exampleText = "<把复制的模板整份粘贴在这里>\n\n今天是 2026-11-21。我的情况是：……";
 
 function showToast(msg, isError) {
   toast.textContent = msg;
-  toast.classList.toggle('error', !!isError);
-  toast.classList.add('show');
+  toast.classList.toggle("error", !!isError);
+  toast.classList.add("show");
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => toast.classList.remove('show'), 2600);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
-function cardHTML(s) {
-  return `<div class="card">
-    <div class="emoji">${s.emoji}</div>
+function cardHTML(s, i) {
+  const index = String(i + 1).padStart(2, "0");
+  const delay = Math.min(i, 6) * 45;
+  const meta = `<span>每天约 ${s.min} 分钟</span><span>${s.diff}</span>`;
+  if (s.featured) {
+    return `<article class="card card-featured" data-reveal style="--delay:${delay}ms">
+      <div class="feature-copy">
+        <div class="card-top"><span>${index}</span><span>${s.note || "新增"} · ${s.cat}</span></div>
+        <h3>${s.name}</h3>
+        <p class="card-desc">${s.desc}</p>
+        <div class="card-meta">${meta}</div>
+        <div class="card-actions">
+          <button class="btn btn-solid btn-small" type="button" data-copy="${s.file}">复制模板</button>
+          <button class="btn btn-line btn-small" type="button" data-view="${s.file}">预览</button>
+        </div>
+      </div>
+      <img class="feature-art" src="assets/illustrations/feature.svg" alt="" loading="lazy">
+    </article>`;
+  }
+  return `<article class="card" data-reveal style="--delay:${delay}ms">
+    <div class="card-top"><span>${index}</span><span>${s.cat}</span></div>
     <h3>${s.name}</h3>
-    <div class="desc">${s.desc}</div>
-    <div class="meta">
-      <span class="tag">${s.cat}</span>
-      <span class="tag">每天约 ${s.min} 分钟</span>
-      <span class="tag">${s.diff}</span>
-    </div>
+    <p class="card-desc">${s.desc}</p>
+    <div class="card-meta">${meta}</div>
     <div class="card-actions">
-      <button class="btn primary small" data-copy="${s.file}">复制模板</button>
-      <button class="btn small" data-view="${s.file}">预览</button>
+      <button class="btn btn-solid btn-small" type="button" data-copy="${s.file}">复制模板</button>
+      <button class="btn btn-line btn-small" type="button" data-view="${s.file}">预览</button>
     </div>
+  </article>`;
+}
+
+function ctaHTML() {
+  return `<a class="card card-cta" href="builder.html">
+    <div class="card-top"><span>+</span><span>自定义</span></div>
+    <h3>没有合适的？</h3>
+    <p>用自定义生成器回答几个问题，现场生成一份属于你的模板。</p>
+    <span class="cta-arrow">打开生成器 →</span>
+  </a>`;
+}
+
+function emptyHTML() {
+  return `<div class="card card-empty">
+    <img src="assets/illustrations/empty.svg" alt="" loading="lazy">
+    <h3>没有找到这个场景</h3>
+    <p class="card-desc">换个关键词，或者用自定义生成器做一个。</p>
+    <div class="card-actions"><a class="btn btn-line btn-small" href="builder.html">自定义生成器</a></div>
   </div>`;
 }
 
@@ -338,14 +675,16 @@ function render() {
     const hay = (s.name + " " + s.desc + " " + s.cat + " " + s.file).toLowerCase();
     return inCat && (!q || hay.includes(q));
   });
+  const fullList = activeCat === "全部" && !q;
   grid.innerHTML = list.length
-    ? list.map(cardHTML).join('')
-    : '<div class="safe">没有找到这个场景。试试别的关键词，或到 <a href="builder.html">自定义生成</a> 做一个。</div>';
+    ? list.map(cardHTML).join("") + (fullList ? ctaHTML() : "")
+    : emptyHTML();
+  observeReveals(grid);
 }
 
 function readRecent() {
   try {
-    const list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    const list = JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
     return Array.isArray(list) ? list.filter(f => SCENARIOS.some(s => s.file === f)) : [];
   } catch (err) {
     return [];
@@ -354,11 +693,11 @@ function readRecent() {
 
 function renderRecent() {
   const list = readRecent();
-  recentWrap.style.display = list.length ? 'block' : 'none';
+  recentWrap.style.display = list.length ? "flex" : "none";
   recent.innerHTML = list.map(file => {
     const s = SCENARIOS.find(x => x.file === file);
-    return `<button class="chip" data-copy="${file}">${s.emoji} ${s.name}</button>`;
-  }).join('');
+    return `<button class="chip" type="button" data-copy="${file}">${s.name}</button>`;
+  }).join("");
 }
 
 function pushRecent(file) {
@@ -371,46 +710,48 @@ function pushRecent(file) {
 }
 
 function renderChips() {
-  chips.innerHTML = CATS.map(c => `<button class="chip ${c === activeCat ? 'active' : ''}" data-cat="${c}">${c}</button>`).join('');
+  chips.innerHTML = CATS.map(c => `<button class="chip ${c === activeCat ? "active" : ""}" type="button" data-cat="${c}">${c}</button>`).join("");
 }
 
-chips.addEventListener('click', e => {
-  const btn = e.target.closest('.chip');
+chips.addEventListener("click", e => {
+  const btn = e.target.closest(".chip");
   if (!btn) return;
   activeCat = btn.dataset.cat;
   renderChips();
   render();
 });
 
-search.addEventListener('input', () => {
+search.addEventListener("input", () => {
   query = search.value;
   render();
 });
 
-document.getElementById('recent-clear').addEventListener('click', () => {
+document.getElementById("recent-clear").addEventListener("click", () => {
   try { localStorage.removeItem(RECENT_KEY); } catch (err) {}
   renderRecent();
 });
 
-document.getElementById('q1').addEventListener('click', e => {
-  const btn = e.target.closest('.choice');
+document.getElementById("q1").addEventListener("click", e => {
+  const btn = e.target.closest(".choice");
   if (!btn) return;
   quizCat = btn.dataset.cat;
-  document.querySelectorAll('#q1 .choice').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll("#q1 .choice").forEach(b => b.classList.toggle("active", b === btn));
   recommend();
 });
 
-document.getElementById('q2').addEventListener('click', e => {
-  const btn = e.target.closest('.choice');
+document.getElementById("q2").addEventListener("click", e => {
+  const btn = e.target.closest(".choice");
   if (!btn) return;
   quizMin = Number(btn.dataset.min);
-  document.querySelectorAll('#q2 .choice').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll("#q2 .choice").forEach(b => b.classList.toggle("active", b === btn));
   recommend();
 });
 
 function recommend() {
-  const box = document.getElementById('result');
-  if (!quizCat) { box.style.display = 'none'; return; }
+  if (!quizCat) {
+    resultBox.classList.remove("show");
+    return;
+  }
   let pool = SCENARIOS.filter(s => s.cat === quizCat);
   if (!pool.length) pool = SCENARIOS;
   pool.sort((a, b) => {
@@ -419,15 +760,27 @@ function recommend() {
     return da - db;
   });
   const s = pool[0];
-  box.style.display = 'block';
-  box.innerHTML = `推荐你试试 <strong>${s.emoji} ${s.name}</strong> —— ${s.desc}<br>
-    <button class="btn primary small" style="margin-top:10px" data-copy="${s.file}">复制这个模板</button>
-    <button class="btn small" style="margin-top:10px" data-view="${s.file}">先预览</button>`;
+  resultBox.classList.add("show");
+  resultBox.innerHTML = `推荐你试试 <strong>${s.name}</strong> —— ${s.desc}
+    <div class="result-actions">
+      <button class="btn btn-solid btn-small" type="button" data-copy="${s.file}">复制这个模板</button>
+      <button class="btn btn-line btn-small" type="button" data-view="${s.file}">先预览</button>
+    </div>`;
+  observeReveals(resultBox);
 }
 
-document.addEventListener('click', async e => {
-  const copyBtn = e.target.closest('[data-copy]');
-  const viewBtn = e.target.closest('[data-view]');
+document.getElementById("copy-example").addEventListener("click", async () => {
+  try {
+    await copyText(exampleText);
+    showToast("已复制开场示例");
+  } catch (err) {
+    showToast("复制失败，请手动选择文本", true);
+  }
+});
+
+document.addEventListener("click", async e => {
+  const copyBtn = e.target.closest("[data-copy]");
+  const viewBtn = e.target.closest("[data-view]");
   if (copyBtn) {
     const file = copyBtn.dataset.copy;
     copyBtn.disabled = true;
@@ -435,9 +788,9 @@ document.addEventListener('click', async e => {
       const text = await fetchText(file);
       await copyText(text);
       pushRecent(file);
-      showToast('已复制 ✓ 去粘贴给 AI 吧');
+      showToast("已复制。去粘贴给 AI 吧。");
     } catch (err) {
-      showToast('复制失败：请通过 GitHub Pages 打开，或到 examples/ 手动复制', true);
+      showToast("复制失败：请通过 GitHub Pages 打开，或到 examples/ 手动复制", true);
     } finally {
       copyBtn.disabled = false;
     }
@@ -446,20 +799,24 @@ document.addEventListener('click', async e => {
     const file = viewBtn.dataset.view;
     try {
       const text = await fetchText(file);
-      document.getElementById('modal-title').textContent = file;
-      document.getElementById('modal-body').textContent = text;
-      document.getElementById('modal-copy').dataset.copy = file;
-      document.getElementById('modal-filled').href = 'examples/filled/' + file;
-      document.getElementById('modal').showModal();
+      document.getElementById("modal-title").textContent = file;
+      document.getElementById("modal-body").textContent = text;
+      document.getElementById("modal-copy").dataset.copy = file;
+      document.getElementById("modal-filled").href = "examples/filled/" + file;
+      document.getElementById("modal").showModal();
     } catch (err) {
-      showToast('无法读取文件：请通过 GitHub Pages 打开', true);
+      showToast("无法读取文件：请通过 GitHub Pages 打开", true);
     }
   }
 });
 
+document.getElementById("modal-close").addEventListener("click", () => {
+  document.getElementById("modal").close();
+});
+
 async function fetchText(file) {
-  const res = await fetch('examples/' + file, { cache: 'no-cache' });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const res = await fetch("examples/" + file, { cache: "no-cache" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
   return await res.text();
 }
 
@@ -468,24 +825,48 @@ async function copyText(text) {
     await navigator.clipboard.writeText(text);
     return;
   }
-  const ta = document.createElement('textarea');
+  const ta = document.createElement("textarea");
   ta.value = text;
-  ta.style.position = 'fixed';
-  ta.style.opacity = '0';
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
   document.body.appendChild(ta);
   ta.select();
-  const ok = document.execCommand('copy');
+  const ok = document.execCommand("copy");
   document.body.removeChild(ta);
-  if (!ok) throw new Error('copy failed');
+  if (!ok) throw new Error("copy failed");
 }
+
+const revealObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" })
+  : null;
+
+function observeReveals(root) {
+  const nodes = root.querySelectorAll("[data-reveal]:not(.is-visible)");
+  if (!revealObserver) {
+    nodes.forEach(node => node.classList.add("is-visible"));
+    return;
+  }
+  nodes.forEach(node => revealObserver.observe(node));
+}
+
+window.addEventListener("scroll", () => {
+  document.querySelector(".site-head").classList.toggle("is-scrolled", window.scrollY > 8);
+}, { passive: true });
 
 renderChips();
 render();
 renderRecent();
+observeReveals(document);
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
   });
 }
 </script>

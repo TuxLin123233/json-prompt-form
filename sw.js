@@ -1,4 +1,4 @@
-const CACHE = "jpf-v3";
+const CACHE = "jpf-v5";
 const CORE = [
   "./",
   "index.html",
@@ -8,8 +8,15 @@ const CORE = [
   "assets/icon-192.png",
   "assets/icon-512.png",
   "assets/banner.svg",
+  "assets/illustrations/hero.svg",
+  "assets/illustrations/step-copy.svg",
+  "assets/illustrations/step-save.svg",
+  "assets/illustrations/step-resume.svg",
+  "assets/illustrations/feature.svg",
+  "assets/illustrations/empty.svg",
   "form.json",
   "schema.json",
+  "updates.json",
   "examples/study-exam.json",
   "examples/fitness.json",
   "examples/job-search.json",
@@ -35,7 +42,8 @@ const CORE = [
   "examples/instrument.json",
   "examples/coding.json",
   "examples/cooking.json",
-  "examples/plant-care.json"
+  "examples/plant-care.json",
+  "examples/project.json"
 ];
 
 self.addEventListener("install", event => {
