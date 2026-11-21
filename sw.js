@@ -1,4 +1,4 @@
-const CACHE = "jpf-v19";
+const CACHE = "jpf-v20";
 const CORE = [
   "./",
   "index.html",

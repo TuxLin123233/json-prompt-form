@@ -171,9 +171,9 @@
   .ball-field { position: relative; height: clamp(190px, 17vw, 250px); }
   .bubble {
     position: absolute; top: var(--top); left: var(--left);
-    width: var(--size); height: var(--size);
+    width: var(--size); height: calc(var(--size) * var(--ratio, 1));
     display: flex; align-items: center; justify-content: center;
-    border-radius: 50%; border: 1px solid var(--border, var(--line-strong));
+    border-radius: var(--radius, 50%); border: 1px solid var(--border, var(--line-strong));
     background: var(--bg, var(--paper));
     color: var(--fg, var(--ink)); cursor: pointer;
     font-family: var(--font-mono); font-size: var(--fs);
@@ -1168,6 +1168,11 @@ const CAT_TONE = {
   "兴趣": { bg: "#2c2c2c", fg: "#f4f4f4", border: "#2c2c2c" }
 };
 
+function ballRadius() {
+  const r = () => (30 + Math.round(Math.random() * 40)) + "%";
+  return `${r()} ${r()} ${r()} ${r()} / ${r()} ${r()} ${r()} ${r()}`;
+}
+
 function ballLabel(name) {
   if (BALL_SHORT[name]) return BALL_SHORT[name];
   return name.length > 3 ? name.slice(0, 2) : name;
@@ -1218,10 +1223,12 @@ function renderBalls() {
     const dur = (12 + Math.random() * 8).toFixed(1) + "s";
     const delay = (Math.random() * 6).toFixed(1) + "s";
     const drift = "drift-" + Math.floor(Math.random() * 6);
+    const radius = ballRadius();
+    const ratio = (0.86 + Math.random() * 0.26).toFixed(2);
     const fs = Math.max(9, Math.round(size * 0.14));
     const tone = CAT_TONE[scenario.cat || scenario.category] || CAT_TONE["生活"];
     return `<button class="bubble" type="button" data-file="${scenario.file}"
-      style="--size:${size}px;--left:${left.toFixed(1)}%;--top:${top.toFixed(1)}%;--dur:${dur};--delay:${delay};--drift:${drift};--fs:${fs}px;--bg:${tone.bg};--fg:${tone.fg};--border:${tone.border}"
+      style="--size:${size}px;--left:${left.toFixed(1)}%;--top:${top.toFixed(1)}%;--dur:${dur};--delay:${delay};--drift:${drift};--radius:${radius};--ratio:${ratio};--fs:${fs}px;--bg:${tone.bg};--fg:${tone.fg};--border:${tone.border}"
       aria-label="开始练：${scenario.name}" title="${scenario.name}">${ballLabel(scenario.name)}</button>`;
   }).join("");
 }
