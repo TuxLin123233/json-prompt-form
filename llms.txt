@@ -14,6 +14,7 @@
 ## 关键文件
 
 - [form.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/form.json)：核心规范，包含流程、功能规则、记忆、安全边界、输出规则。
+- [scenarios.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/scenarios.json)：36 个场景的机器可读索引（名称、分类、时长、难度、关键词），适合 AI 推荐和工具检索。
 - [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：36 个场景模板，直接复制给 AI。
 - [examples/filled/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/filled)：填好日期和记忆的示例存档。
 - [examples/en/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/en)：英文场景模板。

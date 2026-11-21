@@ -654,6 +654,16 @@ const SCENARIOS = [
   { file: "plant-care.json",        name: "植物养护",   desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门" },
 ];
 
+// 搜索同义词来自 scenarios.json；加载失败时退回名称/描述搜索
+fetch("scenarios.json")
+  .then(res => (res.ok ? res.json() : Promise.reject()))
+  .then(data => {
+    const map = new Map((data.scenarios || []).map(item => [item.file, item.keywords || []]));
+    SCENARIOS.forEach(item => { item.kw = map.get(item.file) || []; });
+    if (query.trim()) render();
+  })
+  .catch(() => {});
+
 const CATS = ["全部", "学习", "健康", "生活", "情绪", "职业", "创作", "关系", "效率", "兴趣"];
 const RECENT_KEY = "jpf.recent";
 let activeCat = "全部";
@@ -732,7 +742,7 @@ function render() {
   const q = query.trim().toLowerCase();
   const list = SCENARIOS.filter(s => {
     const inCat = activeCat === "全部" || s.cat === activeCat;
-    const hay = (s.name + " " + s.desc + " " + s.cat + " " + s.file).toLowerCase();
+    const hay = (s.name + " " + s.desc + " " + s.cat + " " + s.file + " " + (s.kw || []).join(" ")).toLowerCase();
     return inCat && (!q || hay.includes(q));
   });
   const fullList = activeCat === "全部" && !q;

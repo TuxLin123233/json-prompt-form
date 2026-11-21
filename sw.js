@@ -1,4 +1,4 @@
-const CACHE = "jpf-v8";
+const CACHE = "jpf-v9";
 const CORE = [
   "./",
   "index.html",
@@ -17,6 +17,7 @@ const CORE = [
   "form.json",
   "schema.json",
   "updates.json",
+  "scenarios.json",
   "examples/study-exam.json",
   "examples/fitness.json",
   "examples/job-search.json",

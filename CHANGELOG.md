@@ -2,6 +2,17 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。存档结构变化会提升 `schema_version`。
 
+## v2.2.1 — 2026-11-21
+
+### 新增
+- `scenarios.json`：36 个场景的机器可读索引（名称、描述、分类、时长、难度、受众、关键词）。
+- `scripts/validate.py` 增加场景索引一致性校验：`scenarios.json` ↔ `examples/` ↔ `index.html` ↔ `README.md`。
+- 首页搜索接入 `scenarios.json` 的关键词，支持同义词（如「失眠」命中睡眠、「社恐」命中社交焦虑）。
+- `scripts/generate_examples.py` 的场景元信息改为读取 `scenarios.json`。
+
+### 修复
+- 自定义生成器功能选项高度不一致（`label` 样式误伤 `.check`）。
+
 ## v2.2.0 — 2026-11-21
 
 ### 新增

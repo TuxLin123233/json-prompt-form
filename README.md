@@ -77,6 +77,7 @@ flowchart TD
 | 文件 | 是什么 |
 | --- | --- |
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
+| 🧭 [`scenarios.json`](./scenarios.json) | 场景索引：名称/分类/时长/关键词（机器可读，校验基准） |
 | 🎯 [`examples/`](./examples) | 三十六个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |

@@ -1,0 +1,649 @@
+{
+    "schema_version": 1,
+    "description": "json-prompt-form 场景索引：首页、生成脚本与校验共用的机器可读清单。",
+    "scenarios": [
+        {
+            "file": "project.json",
+            "name": "项目推进",
+            "desc": "论文、作品、副业、搬家……把一个大目标拆成每周能推进的事",
+            "category": "效率",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "论文、作品、副业、搬家等长期项目的推进者",
+            "featured": true,
+            "note": "新增",
+            "keywords": [
+                "长期项目",
+                "论文",
+                "副业",
+                "搬家",
+                "里程碑"
+            ]
+        },
+        {
+            "file": "running.json",
+            "name": "跑步",
+            "desc": "从零开始跑步，想坚持又怕受伤",
+            "category": "健康",
+            "daily_minutes": 15,
+            "difficulty": "入门",
+            "audience": "想从零开始跑步、养成跑步习惯的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "跑步",
+                "跑量",
+                "5公里",
+                "跑鞋",
+                "晨跑"
+            ]
+        },
+        {
+            "file": "posture.json",
+            "name": "久坐体态",
+            "desc": "肩颈腰背僵硬、圆肩驼背，想每天舒展一下",
+            "category": "健康",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "久坐、肩颈腰背僵硬、想改善体态的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "体态",
+                "久坐",
+                "肩颈",
+                "腰背",
+                "拉伸",
+                "驼背"
+            ]
+        },
+        {
+            "file": "social-anxiety.json",
+            "name": "社交焦虑",
+            "desc": "社交前紧张、社交后反复回想",
+            "category": "情绪",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "社交前紧张、社交后反复回想的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "社恐",
+                "社交",
+                "紧张",
+                "聚会",
+                "社死"
+            ]
+        },
+        {
+            "file": "self-compassion.json",
+            "name": "自我关怀",
+            "desc": "容易自责、完美主义，对自己太苛刻",
+            "category": "情绪",
+            "daily_minutes": 5,
+            "difficulty": "进阶",
+            "audience": "容易自我否定、完美主义、对自己很苛刻的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "自责",
+                "完美主义",
+                "自我批评",
+                "内耗",
+                "不够好"
+            ]
+        },
+        {
+            "file": "driving.json",
+            "name": "学车考驾照",
+            "desc": "科目二紧张、练车间隔长、易错点反复错",
+            "category": "学习",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "正在学车、准备驾照考试的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "学车",
+                "驾照",
+                "科目二",
+                "科目三",
+                "倒车入库"
+            ]
+        },
+        {
+            "file": "thesis.json",
+            "name": "论文毕设",
+            "desc": "论文拖延、不知道从哪段开始写",
+            "category": "学习",
+            "daily_minutes": 20,
+            "difficulty": "进阶",
+            "audience": "写毕业论文、毕业设计、期刊论文的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "论文",
+                "毕设",
+                "毕业论文",
+                "导师",
+                "文献"
+            ]
+        },
+        {
+            "file": "workplace-comm.json",
+            "name": "职场沟通",
+            "desc": "和领导说话紧张、不会拒绝、汇报没重点",
+            "category": "职业",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "和领导沟通紧张、不会拒绝、汇报没重点的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "职场",
+                "领导",
+                "拒绝",
+                "汇报",
+                "同事"
+            ]
+        },
+        {
+            "file": "side-hustle.json",
+            "name": "副业启动",
+            "desc": "想做副业但不知道从哪开始",
+            "category": "职业",
+            "daily_minutes": 15,
+            "difficulty": "进阶",
+            "audience": "想做副业但不知道从哪开始的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "副业",
+                "变现",
+                "接单",
+                "兼职",
+                "第二收入"
+            ]
+        },
+        {
+            "file": "focus.json",
+            "name": "专注力",
+            "desc": "一坐下就刷手机、注意力碎片化",
+            "category": "效率",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "一坐下就分心、被手机打断、需要深度工作的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "专注",
+                "分心",
+                "刷手机",
+                "深度工作",
+                "番茄钟"
+            ]
+        },
+        {
+            "file": "study-exam.json",
+            "name": "备考",
+            "desc": "中高考、考研、考证，容易拖延焦虑",
+            "category": "学习",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "中高考、考研、考证的备考者",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "备考",
+                "考试",
+                "考研",
+                "高考",
+                "考证"
+            ]
+        },
+        {
+            "file": "fitness.json",
+            "name": "健身",
+            "desc": "想增肌减脂塑形，但总坚持不下来",
+            "category": "健康",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "想增肌减脂塑形、需要坚持的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "健身",
+                "减脂",
+                "增肌",
+                "塑形",
+                "减肥"
+            ]
+        },
+        {
+            "file": "job-search.json",
+            "name": "求职",
+            "desc": "投简历没回音、面试紧张、求职焦虑",
+            "category": "职业",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "社招、校招、转行求职者",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "求职",
+                "面试",
+                "简历",
+                "找工作",
+                "跳槽"
+            ]
+        },
+        {
+            "file": "emotion-support.json",
+            "name": "情绪支持",
+            "desc": "焦虑、低落、压力大，想有个出口",
+            "category": "情绪",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "焦虑、低落、压力大，需要长期出口的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "焦虑",
+                "低落",
+                "压力",
+                "情绪",
+                "难过"
+            ]
+        },
+        {
+            "file": "finance.json",
+            "name": "财务",
+            "desc": "月光、超支、想存钱或还债",
+            "category": "生活",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "月光、超支、想存钱或还债的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "存钱",
+                "记账",
+                "月光",
+                "还债",
+                "理财"
+            ]
+        },
+        {
+            "file": "writing.json",
+            "name": "写作",
+            "desc": "小说、公众号、日更，总卡文拖延",
+            "category": "创作",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "写小说、公众号、日更的作者",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "写作",
+                "小说",
+                "公众号",
+                "日更",
+                "卡文"
+            ]
+        },
+        {
+            "file": "sleep.json",
+            "name": "睡眠",
+            "desc": "入睡难、熬夜、睡眠质量差",
+            "category": "健康",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "入睡难、熬夜、睡眠质量差的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "失眠",
+                "熬夜",
+                "入睡",
+                "睡眠",
+                "早睡"
+            ]
+        },
+        {
+            "file": "quit-habits.json",
+            "name": "戒烟戒糖",
+            "desc": "想戒烟、戒糖、戒手机等习惯",
+            "category": "健康",
+            "daily_minutes": 5,
+            "difficulty": "进阶",
+            "audience": "想戒烟、戒糖、戒手机等习惯的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "戒烟",
+                "戒糖",
+                "戒手机",
+                "习惯",
+                "上瘾"
+            ]
+        },
+        {
+            "file": "language-learning.json",
+            "name": "语言学习",
+            "desc": "练口语、背单词、备考语言考试",
+            "category": "学习",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "想练英语口语、背单词、备考语言考试的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "英语",
+                "口语",
+                "单词",
+                "语言",
+                "考试"
+            ]
+        },
+        {
+            "file": "parenting.json",
+            "name": "亲子沟通",
+            "desc": "想改善亲子沟通、减少吼叫",
+            "category": "关系",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "想改善亲子沟通、减少吼叫的家长",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "亲子",
+                "孩子",
+                "吼叫",
+                "家长",
+                "沟通"
+            ]
+        },
+        {
+            "file": "caregiver.json",
+            "name": "照护者支持",
+            "desc": "照顾老人病人、容易疲惫的人",
+            "category": "关系",
+            "daily_minutes": 5,
+            "difficulty": "进阶",
+            "audience": "照顾老人、病人或家人、容易疲惫的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "照护",
+                "老人",
+                "病人",
+                "疲惫",
+                "家属"
+            ]
+        },
+        {
+            "file": "adhd.json",
+            "name": "ADHD 支持",
+            "desc": "注意力涣散、拖延、容易忘事",
+            "category": "学习",
+            "daily_minutes": 5,
+            "difficulty": "进阶",
+            "audience": "注意力涣散、拖延、容易忘事的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "注意力",
+                "拖延",
+                "忘事",
+                "多动",
+                "专注"
+            ]
+        },
+        {
+            "file": "reading.json",
+            "name": "读书",
+            "desc": "买书不读、想建立阅读习惯",
+            "category": "学习",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "买书不读、想建立阅读习惯的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "读书",
+                "阅读",
+                "买书",
+                "书单"
+            ]
+        },
+        {
+            "file": "pet.json",
+            "name": "宠物",
+            "desc": "养猫狗，想科学陪伴和记录",
+            "category": "生活",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "养猫狗等宠物、想科学陪伴的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "宠物",
+                "猫",
+                "狗",
+                "养宠",
+                "铲屎"
+            ]
+        },
+        {
+            "file": "time-management.json",
+            "name": "时间管理",
+            "desc": "事多拖延、忙但没产出",
+            "category": "效率",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "事多、拖延、忙但没产出的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "时间管理",
+                "待办",
+                "拖延",
+                "效率",
+                "优先级"
+            ]
+        },
+        {
+            "file": "morning-routine.json",
+            "name": "早起晨间",
+            "desc": "起不来、早晨手忙脚乱",
+            "category": "生活",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "起不来、早晨手忙脚乱的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "早起",
+                "晨间",
+                "赖床",
+                "作息"
+            ]
+        },
+        {
+            "file": "meditation.json",
+            "name": "正念练习",
+            "desc": "紧绷焦虑、睡前脑子停不下来",
+            "category": "情绪",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "紧绷焦虑、想练习正念的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "正念",
+                "冥想",
+                "呼吸",
+                "放松"
+            ]
+        },
+        {
+            "file": "healthy-diet.json",
+            "name": "健康饮食",
+            "desc": "外卖多、饮食不规律、想吃得健康",
+            "category": "健康",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "外卖多、饮食不规律、想吃得健康的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "饮食",
+                "外卖",
+                "健康",
+                "减脂餐",
+                "营养"
+            ]
+        },
+        {
+            "file": "journaling.json",
+            "name": "日记觉察",
+            "desc": "想写日记但坚持不了、想梳理情绪",
+            "category": "情绪",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "想写日记但坚持不了、想梳理情绪的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "日记",
+                "觉察",
+                "情绪记录",
+                "复盘"
+            ]
+        },
+        {
+            "file": "public-speaking.json",
+            "name": "演讲表达",
+            "desc": "当众发言紧张、汇报没结构",
+            "category": "职业",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "当众发言紧张、汇报没结构的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "演讲",
+                "汇报",
+                "当众发言",
+                "表达",
+                "紧张"
+            ]
+        },
+        {
+            "file": "relationship.json",
+            "name": "恋爱沟通",
+            "desc": "恋爱或伴侣沟通中容易争吵",
+            "category": "关系",
+            "daily_minutes": 5,
+            "difficulty": "进阶",
+            "audience": "恋爱或伴侣沟通中容易争吵的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "恋爱",
+                "伴侣",
+                "争吵",
+                "沟通",
+                "亲密关系"
+            ]
+        },
+        {
+            "file": "declutter.json",
+            "name": "整理收纳",
+            "desc": "房间乱、东西多、舍不得扔",
+            "category": "生活",
+            "daily_minutes": 15,
+            "difficulty": "入门",
+            "audience": "房间乱、东西多、舍不得扔的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "整理",
+                "收纳",
+                "断舍离",
+                "房间乱",
+                "极简"
+            ]
+        },
+        {
+            "file": "instrument.json",
+            "name": "乐器练习",
+            "desc": "学乐器、练琴容易中断",
+            "category": "兴趣",
+            "daily_minutes": 15,
+            "difficulty": "进阶",
+            "audience": "学乐器、练琴容易中断的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "乐器",
+                "练琴",
+                "吉他",
+                "钢琴",
+                "练习"
+            ]
+        },
+        {
+            "file": "coding.json",
+            "name": "编程学习",
+            "desc": "自学编程、容易卡住或迷路",
+            "category": "学习",
+            "daily_minutes": 20,
+            "difficulty": "进阶",
+            "audience": "自学编程、容易卡住或迷路的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "编程",
+                "代码",
+                "自学",
+                "调试",
+                "项目"
+            ]
+        },
+        {
+            "file": "cooking.json",
+            "name": "学做饭",
+            "desc": "不会做饭、想开始带饭",
+            "category": "生活",
+            "daily_minutes": 20,
+            "difficulty": "入门",
+            "audience": "不会做饭、想开始带饭的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "做饭",
+                "带饭",
+                "菜谱",
+                "厨房"
+            ]
+        },
+        {
+            "file": "plant-care.json",
+            "name": "植物养护",
+            "desc": "喜欢绿植但总养死",
+            "category": "兴趣",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "喜欢绿植但总养死的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "植物",
+                "养花",
+                "绿植",
+                "浇水"
+            ]
+        }
+    ]
+}

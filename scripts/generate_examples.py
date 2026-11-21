@@ -75,44 +75,19 @@ PROCESS_EXAMPLES = {
 }
 
 
+with open(os.path.join(BASE_DIR, "scenarios.json"), encoding="utf-8") as f:
+    SCENARIO_INDEX = json.load(f)["scenarios"]
+
 META = {
-    "study-exam": {"category": "学习", "audience": "中高考、考研、考证的备考者", "daily_minutes": 5, "difficulty": "入门"},
-    "fitness": {"category": "健康", "audience": "想增肌减脂塑形、需要坚持的人", "daily_minutes": 5, "difficulty": "入门"},
-    "job-search": {"category": "职业", "audience": "社招、校招、转行求职者", "daily_minutes": 10, "difficulty": "进阶"},
-    "emotion-support": {"category": "情绪", "audience": "焦虑、低落、压力大，需要长期出口的人", "daily_minutes": 5, "difficulty": "入门"},
-    "finance": {"category": "生活", "audience": "月光、超支、想存钱或还债的人", "daily_minutes": 5, "difficulty": "入门"},
-    "writing": {"category": "创作", "audience": "写小说、公众号、日更的作者", "daily_minutes": 10, "difficulty": "进阶"},
-    "sleep": {"category": "健康", "audience": "入睡难、熬夜、睡眠质量差的人", "daily_minutes": 5, "difficulty": "入门"},
-    "quit-habits": {"category": "健康", "audience": "想戒烟、戒糖、戒手机等习惯的人", "daily_minutes": 5, "difficulty": "进阶"},
-    "language-learning": {"category": "学习", "audience": "想练英语口语、背单词、备考语言考试的人", "daily_minutes": 10, "difficulty": "入门"},
-    "parenting": {"category": "关系", "audience": "想改善亲子沟通、减少吼叫的家长", "daily_minutes": 10, "difficulty": "进阶"},
-    "caregiver": {"category": "关系", "audience": "照顾老人、病人或家人、容易疲惫的人", "daily_minutes": 5, "difficulty": "进阶"},
-    "adhd": {"category": "学习", "audience": "注意力涣散、拖延、容易忘事的人", "daily_minutes": 5, "difficulty": "进阶"},
-    "reading": {"category": "学习", "audience": "买书不读、想建立阅读习惯的人", "daily_minutes": 10, "difficulty": "入门"},
-    "pet": {"category": "生活", "audience": "养猫狗等宠物、想科学陪伴的人", "daily_minutes": 5, "difficulty": "入门"},
-    "time-management": {"category": "效率", "audience": "事多、拖延、忙但没产出的人", "daily_minutes": 5, "difficulty": "入门"},
-    "morning-routine": {"category": "生活", "audience": "起不来、早晨手忙脚乱的人", "daily_minutes": 5, "difficulty": "入门"},
-    "meditation": {"category": "情绪", "audience": "紧绷焦虑、想练习正念的人", "daily_minutes": 5, "difficulty": "入门"},
-    "healthy-diet": {"category": "健康", "audience": "外卖多、饮食不规律、想吃得健康的人", "daily_minutes": 5, "difficulty": "入门"},
-    "journaling": {"category": "情绪", "audience": "想写日记但坚持不了、想梳理情绪的人", "daily_minutes": 5, "difficulty": "入门"},
-    "public-speaking": {"category": "职业", "audience": "当众发言紧张、汇报没结构的人", "daily_minutes": 10, "difficulty": "进阶"},
-    "relationship": {"category": "关系", "audience": "恋爱或伴侣沟通中容易争吵的人", "daily_minutes": 5, "difficulty": "进阶"},
-    "declutter": {"category": "生活", "audience": "房间乱、东西多、舍不得扔的人", "daily_minutes": 15, "difficulty": "入门"},
-    "instrument": {"category": "兴趣", "audience": "学乐器、练琴容易中断的人", "daily_minutes": 15, "difficulty": "进阶"},
-    "coding": {"category": "学习", "audience": "自学编程、容易卡住或迷路的人", "daily_minutes": 20, "difficulty": "进阶"},
-    "cooking": {"category": "生活", "audience": "不会做饭、想开始带饭的人", "daily_minutes": 20, "difficulty": "入门"},
-    "plant-care": {"category": "兴趣", "audience": "喜欢绿植但总养死的人", "daily_minutes": 5, "difficulty": "入门"},
-    "project": {"category": "效率", "audience": "论文、作品、副业、搬家等长期项目的推进者", "daily_minutes": 10, "difficulty": "进阶"},
-    "running": {"category": "健康", "audience": "想从零开始跑步、养成跑步习惯的人", "daily_minutes": 15, "difficulty": "入门"},
-    "posture": {"category": "健康", "audience": "久坐、肩颈腰背僵硬、想改善体态的人", "daily_minutes": 10, "difficulty": "入门"},
-    "social-anxiety": {"category": "情绪", "audience": "社交前紧张、社交后反复回想的人", "daily_minutes": 10, "difficulty": "进阶"},
-    "self-compassion": {"category": "情绪", "audience": "容易自我否定、完美主义、对自己很苛刻的人", "daily_minutes": 5, "difficulty": "进阶"},
-    "driving": {"category": "学习", "audience": "正在学车、准备驾照考试的人", "daily_minutes": 10, "difficulty": "入门"},
-    "thesis": {"category": "学习", "audience": "写毕业论文、毕业设计、期刊论文的人", "daily_minutes": 20, "difficulty": "进阶"},
-    "workplace-comm": {"category": "职业", "audience": "和领导沟通紧张、不会拒绝、汇报没重点的人", "daily_minutes": 10, "difficulty": "进阶"},
-    "side-hustle": {"category": "职业", "audience": "想做副业但不知道从哪开始的人", "daily_minutes": 15, "difficulty": "进阶"},
-    "focus": {"category": "效率", "audience": "一坐下就分心、被手机打断、需要深度工作的人", "daily_minutes": 10, "difficulty": "入门"},
+    entry["file"][:-5]: {
+        "category": entry["category"],
+        "audience": entry["audience"],
+        "daily_minutes": entry["daily_minutes"],
+        "difficulty": entry["difficulty"],
+    }
+    for entry in SCENARIO_INDEX
 }
+
 
 
 def build(name, scenario):
@@ -1730,6 +1705,9 @@ SCENARIOS["focus"] = {
 
 
 def main():
+    missing = sorted(set(SCENARIOS) - set(META))
+    if missing:
+        raise SystemExit("scenarios.json 缺少场景：" + ", ".join(missing))
     os.makedirs(OUT_DIR, exist_ok=True)
     os.makedirs(FILLED_DIR, exist_ok=True)
     for name, scenario in SCENARIOS.items():
