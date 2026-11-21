@@ -23,6 +23,7 @@
 - 💬 打开网页版 AI（如 DeepSeek）就能用
 - 🚀 **一键复制网页**：[tuxlin123233.github.io/json-prompt-form](https://tuxlin123233.github.io/json-prompt-form/)
 - 🎯 **每个练点都有训练计划**：练什么能力、建议节奏、什么算过关
+- ✅ **打卡可写回存档**：本周练习卡本地记录打卡，合并进 `progress` 字段，不上传
 
 ## 🚀 三步开始
 

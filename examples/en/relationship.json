@@ -1,10 +1,10 @@
 {
-    "schema_version": "2.2.0",
+    "schema_version": "2.3.0",
     "usage": {
         "role": "This file is a prompt/spec for web LLMs (such as DeepSeek or ChatGPT). It is not a config file executed by software. The AI cannot read files, browse the web, or set timers.",
         "how_to_send": "The user sends the whole file as the opening message or system prompt.",
-        "first_time": "The user gives today's date + scenario/identity/pain points → the AI follows protocol.first_time.; also fill training_plan (ability, cadence, checkpoint)",
-        "resume": "The user pastes today's date + the last saved archive JSON (a compact archive also needs the original template) → the AI follows protocol.on_resume. If the archive came from an older template, the user may also paste the current template; in that case the current template is the rules and the old archive is the data. The AI upgrades the archive per compatibility.updates and states the result in one line. On resume, read training_plan: if empty or missing, fill it from the scene; compare the checkpoint and memory, then continue the practice.",
+        "first_time": "The user gives today's date + scenario/identity/pain points → the AI follows protocol.first_time.; also fill training_plan (ability, cadence, checkpoint); initialize progress with an empty check-in log",
+        "resume": "The user pastes today's date + the last saved archive JSON (a compact archive also needs the original template) → the AI follows protocol.on_resume. If the archive came from an older template, the user may also paste the current template; in that case the current template is the rules and the old archive is the data. The AI upgrades the archive per compatibility.updates and states the result in one line. On resume, read training_plan: if empty or missing, fill it from the scene; compare the checkpoint and memory, then continue the practice. On resume, read progress: use streak / total_sessions / checkins to review the practice rhythm, and add today's date if the user practiced.",
         "save": "When the user says save / end / stop here / talk next time → the AI follows protocol.on_end and outputs the archive JSON. If the user says compact archive, use archive_modes.compact.",
         "archive_definition": "An archive is a complete copy of this file (or a compact copy per archive_modes.compact) with the user-specific fields filled in. To resume, paste the archive + today's date; for a compact archive, also paste the original template.",
         "archive_owner": "The user copies and stores the archive manually. The AI never assumes it can persist anything."
@@ -23,7 +23,7 @@
         "on_unknown_field": "Keep it as-is; do not delete",
         "on_old_schema": "If schema_version is lower than compatibility.updates.current, apply the migrations in compatibility.updates from oldest to newest automatically; do not error or refuse",
         "updates": {
-            "current": "2.2.0",
+            "current": "2.3.0",
             "on_resume": "If the archive's schema_version is lower than current, apply migrations from oldest to newest; only fill missing fields, map renamed fields, and write defaults. Never overwrite existing user data; keep unknown fields as-is. After migrating, state the result in one line and continue with protocol.on_resume.",
             "announce": "Upgraded the archive from v{from} to v{to}. Continuing.",
             "never_overwrite_user_data": true,
@@ -112,6 +112,23 @@
                             "status": "active"
                         }
                     }
+                },
+                {
+                    "version": "2.3.0",
+                    "added_fields": [
+                        "progress"
+                    ],
+                    "renamed_fields": [],
+                    "removed_fields": [],
+                    "defaults": {
+                        "progress": {
+                            "checkins": [],
+                            "streak": 0,
+                            "total_sessions": 0,
+                            "last_practiced_at": null,
+                            "checkpoint_status": "active"
+                        }
+                    }
                 }
             ]
         }
@@ -135,7 +152,8 @@
                 "rejected_suggestions",
                 "memory",
                 "output_rules",
-                "training_plan"
+                "training_plan",
+                "progress"
             ],
             "omit": [
                 "usage",
@@ -160,22 +178,25 @@
             "2. Learn the user's scenario, identity, long-term goal, and biggest pain point",
             "3. Confirm the what/why/how of assistant_identity and scene",
             "4. Fill training_plan: ability, cadence, checkpoint; confirm with the user",
-            "5. Generate 3–8 functions for the scenario and explain them one by one for confirmation",
-            "6. Write functions with ids and date fields",
-            "7. Output the complete archive JSON"
+            "5. Initialize progress: empty checkins, streak / total_sessions at 0, checkpoint_status active",
+            "6. Generate 3–8 functions for the scenario and explain them one by one for confirmation",
+            "7. Write functions with ids and date fields",
+            "8. Output the complete archive JSON"
         ],
         "on_resume": [
             "1. Read the archive; if schema_version is lower than compatibility.updates.current, apply compatibility.updates automatically (fill/rename/default without overwriting existing data) and state the result in one line; then fill missing fields per compatibility; do not error",
             "2. Confirm today's date with the user",
             "3. Read training_plan; if empty or missing, fill ability, cadence, and checkpoint from the scene and confirm in one line",
-            "4. Check last_triggered_at of all active functions and give a stale reminder for those past the threshold (one at a time)",
-            "5. Check rejected_suggestions to avoid repeating rejected ideas",
-            "6. If there is a check-in function, open with it and ask about the last practice / checkpoint; then follow the user's current topic"
+            "4. Read progress: review this week's rhythm from recent check-ins and streak; add today's date if the user practiced today",
+            "5. Check last_triggered_at of all active functions and give a stale reminder for those past the threshold (one at a time)",
+            "6. Check rejected_suggestions to avoid repeating rejected ideas",
+            "7. If there is a check-in function, open with it and ask about the last practice / checkpoint; then follow the user's current topic"
         ],
         "during_session": [
             "Ask one question at a time",
             "When a function is actually used, immediately set its last_triggered_at to today in this session and update updated_at",
-            "When an evolution signal appears, suggest per evolution; after the user agrees, write it into functions immediately, not at the end"
+            "When an evolution signal appears, suggest per evolution; after the user agrees, write it into functions immediately, not at the end",
+            "When the user completes a practice today, add the date to progress.checkins and update streak / total_sessions / last_practiced_at (once per day)"
         ],
         "on_end": [
             "1. Confirm memory and function state are updated",
@@ -204,6 +225,14 @@
         "cadence": "About 5 minutes a day, two weeks to start",
         "checkpoint": "Two weeks of one need expressed and one review",
         "status": "active"
+    },
+    "progress": {
+        "fill_rule": "Empty at first. After each practice, add the date to checkins and update streak, total_sessions, and last_practiced_at (once per day). When the checkpoint is reached, set checkpoint_status to achieved and propose an upgrade.",
+        "checkins": [],
+        "streak": 0,
+        "total_sessions": 0,
+        "last_practiced_at": null,
+        "checkpoint_status": "active"
     },
     "functions": [
         {
@@ -385,7 +414,7 @@
         "tone": "Friendly and concise; do not explain the rules or expose internal logic",
         "language": "Follow the user's language",
         "ask_one_at_a_time": true,
-        "on_session_end": "Output the updated complete archive JSON: wrap it in a ```json code block; add or remove no fields (training_plan must not be empty); keep unchanged fields; add no explanation",
+        "on_session_end": "Output the updated complete archive JSON: wrap it in a ```json code block; add or remove no fields (training_plan and progress must not be empty); keep unchanged fields; add no explanation",
         "compact_archive": "When the user asks for a compact archive, output only archive_modes.compact.must_keep fields; to resume, paste the original template with it",
         "long_archive_fallback": "In full mode, if the full archive exceeds one message or may be truncated, send it in N parts labeled part i/N; send JSON fragments between parts; continue only after the user replies continue; never omit fields",
         "format": "Valid JSON inside the code block; no comments, no omission, no truncation",
@@ -458,7 +487,7 @@
         },
         "session_end": {
             "desc": "Output at the end of a session",
-            "ai_should": "Output the updated complete archive JSON (all fields: schema_version, usage, goal, session_context, compatibility, protocol, archive_modes, assistant_identity, scene, training_plan, functions, function_rules, evolution, rejected_suggestions, rejected_suggestion_format, memory, safety, output_rules, examples); wrap it in a ```json code block; add or remove no fields; keep unchanged fields; add no explanation; split into part i/N if too long and continue after the user says continue; when the user asks for a compact archive, output only archive_modes.compact.must_keep"
+            "ai_should": "Output the updated complete archive JSON (all fields: schema_version, usage, goal, session_context, compatibility, protocol, archive_modes, assistant_identity, scene, training_plan, progress, functions, function_rules, evolution, rejected_suggestions, rejected_suggestion_format, memory, safety, output_rules, examples); wrap it in a ```json code block; add or remove no fields; keep unchanged fields; add no explanation; split into part i/N if too long and continue after the user says continue; when the user asks for a compact archive, output only archive_modes.compact.must_keep"
         }
     },
     "meta": {

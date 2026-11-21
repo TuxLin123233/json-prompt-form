@@ -1,5 +1,5 @@
 {
-    "current": "2.2.0",
+    "current": "2.3.0",
     "policy": {
         "on_resume": "若存档的 schema_version 低于 current，按 updates 从旧到新依次应用迁移；只补齐缺失字段、映射改名、写入默认值，绝不覆盖用户已有数据；未知字段原样保留；迁移完成后用一行说明升级结果，再继续 protocol.on_resume。",
         "announce": "已把存档从 v{from} 升级到 v{to}，继续。",
@@ -105,6 +105,26 @@
                 }
             },
             "notes": "旧存档缺少 training_plan 时补空值；续接时由 AI 按场景补齐能力点、节奏与过关标准。"
+        },
+        {
+            "version": "2.3.0",
+            "released": "2026-11-21",
+            "summary": "新增练习进度 progress：打卡、连续天数、累计次数与过关状态",
+            "added_fields": [
+                "progress"
+            ],
+            "renamed_fields": [],
+            "removed_fields": [],
+            "defaults": {
+                "progress": {
+                    "checkins": [],
+                    "streak": 0,
+                    "total_sessions": 0,
+                    "last_practiced_at": null,
+                    "checkpoint_status": "active"
+                }
+            },
+            "notes": "旧存档补空进度；每周练习卡可把打卡写回 progress，续接时 AI 用它回顾练习节奏。"
         }
     ]
 }

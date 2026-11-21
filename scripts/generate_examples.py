@@ -2,6 +2,7 @@
 import copy
 import json
 import os
+from datetime import date, timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(BASE_DIR, "examples")
@@ -70,7 +71,7 @@ PROCESS_EXAMPLES = {
     },
     "session_end": {
         "desc": "会话结束时的输出",
-        "ai_should": "输出更新后的完整存档 JSON，包含全部字段（schema_version、usage、goal、session_context、compatibility、protocol、archive_modes、assistant_identity、scene、training_plan、functions、function_rules、evolution、rejected_suggestions、rejected_suggestion_format、memory、safety、output_rules、examples）；用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字；若过长则分段输出并标注第 i/N 段，用户回复『继续』后续发",
+        "ai_should": "输出更新后的完整存档 JSON，包含全部字段（schema_version、usage、goal、session_context、compatibility、protocol、archive_modes、assistant_identity、scene、training_plan、progress、functions、function_rules、evolution、rejected_suggestions、rejected_suggestion_format、memory、safety、output_rules、examples）；用 ```json 代码块包裹；不增删字段；未变化字段保留原值；不加任何解释文字；若过长则分段输出并标注第 i/N 段，用户回复『继续』后续发",
     },
 }
 
@@ -135,6 +136,16 @@ def fill_sample(data, today="2026-11-15"):
         d["memory"]["state"]["per_function"] = {
             d["functions"][0]["id"]: {"last_note": "已完成一次，状态正常。"}
         }
+    base_day = date.fromisoformat(today)
+    checkins = [(base_day - timedelta(days=offset)).isoformat() for offset in (2, 1, 0)]
+    d["progress"] = {
+        "fill_rule": d["progress"]["fill_rule"],
+        "checkins": checkins,
+        "streak": 3,
+        "total_sessions": 3,
+        "last_practiced_at": checkins[-1],
+        "checkpoint_status": "in_progress",
+    }
     return d
 
 

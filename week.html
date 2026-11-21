@@ -105,7 +105,50 @@
   .day-date { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; padding-top: 3px; }
   .day-body strong { display: block; font-size: 15px; margin-bottom: 4px; }
   .day-body p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-  .day-mins { font-family: var(--font-mono); font-size: 10px; color: var(--muted); padding-top: 4px; white-space: nowrap; }
+  .day-mins { font-family: var(--font-mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .day-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .day-check {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+    border: 1px solid var(--line-strong); border-radius: 2px; background: transparent;
+    color: var(--muted); padding: 4px 8px; cursor: pointer; white-space: nowrap;
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .day-check:hover { border-color: var(--ink); color: var(--ink); }
+  .day-check.done { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .checkin-bar {
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+    padding: 14px 18px; margin-bottom: 16px;
+    border: 1px solid var(--line); background: var(--paper-deep);
+  }
+  .check-stat { display: flex; flex-direction: column; gap: 2px; }
+  .check-stat span { font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .check-stat strong { font-size: 16px; font-weight: 600; }
+  .checkin-bar .btn { margin-left: auto; }
+  .writeback {
+    margin-top: 24px; border: 1px solid var(--line); background: var(--card);
+  }
+  .writeback summary {
+    padding: 14px 18px; cursor: pointer; font-size: 14px; font-weight: 600;
+    list-style: none; display: flex; align-items: center; justify-content: space-between;
+  }
+  .writeback summary::-webkit-details-marker { display: none; }
+  .writeback summary::after { content: "+"; font-family: var(--font-mono); color: var(--muted); }
+  .writeback[open] summary::after { content: "−"; }
+  .wb-body { padding: 0 18px 18px; display: grid; gap: 12px; }
+  .wb-body textarea {
+    width: 100%; min-height: 140px; border: 1px solid var(--line-strong); border-radius: 2px;
+    padding: 12px; font-family: var(--font-mono); font-size: 12px; line-height: 1.55;
+    background: var(--card); color: var(--ink); resize: vertical;
+  }
+  .wb-body textarea:focus { outline: none; border-color: var(--ink); }
+  .wb-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .file-btn {
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+    border: 1px dashed var(--line-strong); border-radius: 2px; padding: 8px 10px; cursor: pointer;
+  }
+  .file-btn input { display: none; }
+  .cb { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+  .wb-hint { margin: 0; font-size: 12px; color: var(--muted); }
   .day.is-review { background: var(--paper); margin: 0 -12px; padding: 16px 12px; }
   .week-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 18px; font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
   .note { margin: 18px 0 0; color: var(--muted); font-size: 12px; }
@@ -135,7 +178,7 @@
   @media (max-width: 860px) {
     .controls { grid-template-columns: 1fr; }
     .day { grid-template-columns: 92px minmax(0, 1fr); }
-    .day-mins { grid-column: 2; padding-top: 0; }
+    .day-side { grid-column: 2; flex-direction: row; align-items: center; justify-content: space-between; }
     .foot-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
@@ -145,14 +188,16 @@
     .brand-text small { display: none; }
     .week-plan { text-align: left; }
     .day { grid-template-columns: 1fr; gap: 6px; }
-    .day-mins { grid-column: 1; }
+    .day-side { grid-column: 1; flex-direction: row; align-items: center; justify-content: space-between; }
+    .checkin-bar .btn { margin-left: 0; width: 100%; }
     .actions .btn { flex: 1 1 140px; }
     .foot-links { grid-template-columns: 1fr 1fr; }
     .foot-bottom { flex-direction: column; gap: 6px; }
   }
   @media print {
     body { background: #fff; color: #000; }
-    .site-head, .controls, .actions, .hero, .site-foot, .note, .toast { display: none !important; }
+    .site-head, .controls, .actions, .checkin-bar, .writeback, .hero, .site-foot, .note, .toast { display: none !important; }
+    .day-check { display: none; }
     .shell { width: 100%; }
     .week-card { border-color: #000; padding: 0; }
     .day { break-inside: avoid; }
@@ -199,6 +244,13 @@
     <button class="btn btn-solid" id="generate" type="button">生成练习卡</button>
   </section>
 
+  <div class="checkin-bar" aria-live="polite">
+    <div class="check-stat"><span>本周打卡</span><strong id="stat-week">0 / 7</strong></div>
+    <div class="check-stat"><span>连续</span><strong id="stat-streak">0 天</strong></div>
+    <div class="check-stat"><span>累计</span><strong id="stat-total">0 次</strong></div>
+    <button class="btn btn-solid" id="check-today" type="button">今天打卡</button>
+  </div>
+
   <div class="actions">
     <button class="btn btn-solid" id="copy-card" type="button">复制练习卡</button>
     <button class="btn" id="copy-ai" type="button">复制给 AI 的版本</button>
@@ -224,7 +276,22 @@
       <span>一事一练 · 一次只练一件事</span>
     </div>
   </article>
-  <p class="note">练习卡只是安排，不替代模板和存档。第一次用请先复制模板发给 AI；每次结束说「存档」，本周的进度也会跟着存档走。</p>
+  <p class="note">练习卡只是安排，不替代模板和存档。点每天右侧「打卡」记录练习，展开下方「把本周打卡写回存档」可以把进度并进你的存档。</p>
+
+  <details class="writeback" id="writeback">
+    <summary>把本周打卡写回存档</summary>
+    <div class="wb-body">
+      <p class="wb-hint">粘贴你的存档 JSON（或选择文件）。会把打卡记录写进 <code>progress</code>，版本升到 2.3.0，然后下载更新后的存档。</p>
+      <textarea id="archive-input" spellcheck="false" placeholder="把存档 JSON 整段粘贴到这里…"></textarea>
+      <div class="wb-row">
+        <label class="file-btn">选择文件<input id="archive-file" type="file" accept=".json,application/json"></label>
+        <label class="cb"><input id="checkpoint-done" type="checkbox"> 本周过关标准已达成</label>
+        <button class="btn btn-solid" id="merge" type="button">写入打卡并下载</button>
+        <button class="btn" id="copy-progress" type="button">复制进度片段给 AI</button>
+      </div>
+      <p class="wb-hint" id="wb-hint"></p>
+    </div>
+  </details>
 </main>
 
 <footer class="site-foot">
@@ -257,7 +324,8 @@
 
 <script>
 const WEEKDAYS = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-const state = { scenarios: [], current: null, plan: null, archive: null };
+const state = { scenarios: [], current: null, plan: null, archive: null, local: { checkins: [], checkpoint: false } };
+const PROGRESS_FILL = "首次为空；每次练习后把日期加入 checkins 并更新 streak、total_sessions、last_practiced_at；同一天只记一次；checkpoint 达成时把 checkpoint_status 改为 achieved 并提议升级。";
 
 const scenarioSelect = document.getElementById("scenario");
 const startInput = document.getElementById("start");
@@ -293,6 +361,44 @@ function addDays(date, days) {
 function fmtDate(date) {
   const pad = n => String(n).padStart(2, "0");
   return pad(date.getMonth() + 1) + "-" + pad(date.getDate());
+}
+
+function isoDate(date) {
+  const pad = n => String(n).padStart(2, "0");
+  return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
+}
+
+function calcStats(checkins) {
+  const unique = [...new Set((checkins || []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort();
+  const last = unique.length ? unique[unique.length - 1] : null;
+  let streak = 0;
+  if (last) {
+    const set = new Set(unique);
+    let cursor = parseISO(last);
+    while (set.has(isoDate(cursor))) {
+      streak += 1;
+      cursor = addDays(cursor, -1);
+    }
+  }
+  return { checkins: unique, streak, total: unique.length, last };
+}
+
+function storageKey() { return "jpf.week." + (scenarioSelect.value || "default"); }
+
+function loadLocal() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(storageKey()) || "{}");
+    return {
+      checkins: Array.isArray(raw.checkins) ? raw.checkins.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [],
+      checkpoint: !!raw.checkpoint
+    };
+  } catch (err) {
+    return { checkins: [], checkpoint: false };
+  }
+}
+
+function saveLocal() {
+  try { localStorage.setItem(storageKey(), JSON.stringify(state.local)); } catch (err) {}
 }
 
 function pickPlanFunctions(functions) {
@@ -343,6 +449,7 @@ function buildPlan(scenario, archive) {
     days.push({
       weekday: WEEKDAYS[i],
       date: fmtDate(date),
+      iso: isoDate(date),
       tag: tpl.tag,
       review: !!tpl.review,
       title: focus ? focus.name : "补一次没练够的",
@@ -372,12 +479,25 @@ function planText(plan) {
     ""
   ];
   const body = [];
+  const done = state.local.checkins || [];
   plan.days.forEach(d => {
-    body.push(d.weekday + " " + d.date + " · " + d.tag + "：" + d.title);
+    body.push((done.includes(d.iso) ? "[✓] " : "") + d.weekday + " " + d.date + " · " + d.tag + "：" + d.title);
     d.lines.forEach(line => body.push("  " + line));
     body.push("");
   });
   return head.concat(body).join("\n").trim() + "\n";
+}
+
+function updateStats(plan) {
+  const stats = calcStats(state.local.checkins);
+  const weekDates = new Set(plan.days.map(d => d.iso));
+  const weekCount = stats.checkins.filter(d => weekDates.has(d)).length;
+  document.getElementById("stat-week").textContent = weekCount + " / 7";
+  document.getElementById("stat-streak").textContent = stats.streak + " 天";
+  document.getElementById("stat-total").textContent = stats.total + " 次";
+  const todayBtn = document.getElementById("check-today");
+  todayBtn.textContent = state.local.checkins.includes(todayISO()) ? "取消今天打卡" : "今天打卡";
+  document.getElementById("checkpoint-done").checked = state.local.checkpoint;
 }
 
 function renderCard(plan) {
@@ -385,15 +505,32 @@ function renderCard(plan) {
   document.getElementById("card-meta").textContent = (plan.ability ? "练 · " + plan.ability + " · " : "") + plan.cadence + " · " + plan.range;
   document.getElementById("card-checkpoint").textContent = plan.checkpoint;
   document.getElementById("card-range").textContent = "本周 " + plan.range;
-  document.getElementById("days").innerHTML = plan.days.map(d => `
+  document.getElementById("days").innerHTML = plan.days.map(d => {
+    const done = state.local.checkins.includes(d.iso);
+    return `
     <li class="day${d.review ? " is-review" : ""}">
       <span class="day-date">${d.weekday}<br>${d.date}</span>
       <div class="day-body">
         <strong>${d.tag} · ${d.title}</strong>
         ${d.lines.map(line => `<p>${line}</p>`).join("")}
       </div>
-      <span class="day-mins">${d.minutes} 分钟</span>
-    </li>`).join("");
+      <div class="day-side">
+        <span class="day-mins">${d.minutes} 分钟</span>
+        <button class="day-check${done ? " done" : ""}" type="button" data-date="${d.iso}" aria-pressed="${done}">${done ? "已打卡 ✓" : "打卡"}</button>
+      </div>
+    </li>`;
+  }).join("");
+  updateStats(plan);
+}
+
+function toggleCheckin(date) {
+  const set = new Set(state.local.checkins);
+  if (set.has(date)) set.delete(date);
+  else set.add(date);
+  state.local.checkins = [...set].sort();
+  saveLocal();
+  if (state.plan) renderCard(state.plan);
+  showToast(set.has(date) ? "已记录今天的练习" : "已取消打卡");
 }
 
 async function loadScenario(file) {
@@ -410,6 +547,7 @@ async function generate() {
   try {
     const archive = await loadScenario(file);
     state.archive = archive;
+    state.local = loadLocal();
     state.plan = buildPlan(scenario, archive);
     renderCard(state.plan);
   } catch (err) {
@@ -499,6 +637,102 @@ document.getElementById("download").addEventListener("click", () => {
 });
 
 document.getElementById("print").addEventListener("click", () => window.print());
+
+document.getElementById("days").addEventListener("click", e => {
+  const btn = e.target.closest(".day-check");
+  if (btn) toggleCheckin(btn.dataset.date);
+});
+
+document.getElementById("check-today").addEventListener("click", () => toggleCheckin(todayISO()));
+
+document.getElementById("checkpoint-done").addEventListener("change", e => {
+  state.local.checkpoint = e.target.checked;
+  saveLocal();
+  showToast(e.target.checked ? "已标记本周过关标准达成" : "已取消达成标记");
+});
+
+function progressPayload() {
+  const stats = calcStats(state.local.checkins);
+  return {
+    fill_rule: PROGRESS_FILL,
+    checkins: stats.checkins,
+    streak: stats.streak,
+    total_sessions: stats.total,
+    last_practiced_at: stats.last,
+    checkpoint_status: state.local.checkpoint ? "achieved" : (stats.total ? "in_progress" : "active")
+  };
+}
+
+function mergeArchive(text) {
+  let data;
+  try { data = JSON.parse(text); } catch (err) { throw new Error("不是合法的 JSON，请检查是否粘贴完整"); }
+  if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("存档顶层必须是 JSON 对象");
+  const existing = data.progress && typeof data.progress === "object" ? data.progress : {};
+  const oldCheckins = Array.isArray(existing.checkins) ? existing.checkins : [];
+  const merged = calcStats([...oldCheckins, ...state.local.checkins]);
+  const local = progressPayload();
+  data.progress = {
+    fill_rule: existing.fill_rule || PROGRESS_FILL,
+    checkins: merged.checkins,
+    streak: merged.streak,
+    total_sessions: merged.total,
+    last_practiced_at: merged.last,
+    checkpoint_status: state.local.checkpoint || existing.checkpoint_status === "achieved"
+      ? "achieved"
+      : (merged.total ? "in_progress" : "active")
+  };
+  const version = String(data.schema_version || "0.0.0").split(".").map(Number);
+  const older = version.length < 3 || version[0] < 2 || (version[0] === 2 && version[1] < 3);
+  if (older) data.schema_version = "2.3.0";
+  return { data, added: local.checkins.length, merged };
+}
+
+document.getElementById("archive-file").addEventListener("change", async e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    document.getElementById("archive-input").value = await file.text();
+    showToast("已读入 " + file.name);
+  } catch (err) {
+    showToast("读取文件失败", true);
+  }
+});
+
+document.getElementById("merge").addEventListener("click", () => {
+  const hint = document.getElementById("wb-hint");
+  const text = document.getElementById("archive-input").value.trim();
+  if (!text) { showToast("先把存档 JSON 粘进来", true); return; }
+  try {
+    const { data, added } = mergeArchive(text);
+    const blob = new Blob([JSON.stringify(data, null, 4) + "\n"], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (state.plan ? state.plan.title : "练点") + "-进度更新.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    hint.textContent = "已写入 " + added + " 条本地打卡，版本 " + data.schema_version + "，已下载更新后的存档。";
+    showToast("已写入打卡并下载存档");
+  } catch (err) {
+    hint.textContent = "写入失败：" + err.message;
+    showToast("写入失败：" + err.message, true);
+  }
+});
+
+document.getElementById("copy-progress").addEventListener("click", async () => {
+  const payload = progressPayload();
+  const text = "本周练习进度（练点：" + (state.plan ? state.plan.title : "") + "）\n"
+    + "打卡日期：" + (payload.checkins.join("、") || "暂无") + "\n"
+    + "连续：" + payload.streak + " 天；累计：" + payload.total_sessions + " 次；最近：" + (payload.last_practiced_at || "暂无") + "\n"
+    + "过关状态：" + payload.checkpoint_status + "\n\n"
+    + "请把下面这段 JSON 合并进我的存档的 progress 字段，然后输出完整存档 JSON：\n```json\n"
+    + JSON.stringify({ progress: payload }, null, 2)
+    + "\n```";
+  try { await copyText(text); showToast("已复制进度片段，粘给 AI 即可写回存档"); }
+  catch (err) { showToast("复制失败，请手动选择文本", true); }
+});
 generateBtn.addEventListener("click", generate);
 scenarioSelect.addEventListener("change", generate);
 startInput.addEventListener("change", generate);
