@@ -153,6 +153,46 @@
   }
   .section-head p { margin: 0; color: var(--muted); }
 
+  .ball-band { position: relative; padding: clamp(10px, 2vw, 22px) 0 clamp(16px, 2.6vw, 28px); }
+  .ball-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding-bottom: 8px;
+  }
+  .ball-title {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .ball-shuffle {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    font-family: var(--font-mono); font-size: 11px; text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ball-shuffle:hover { color: var(--ink); }
+  .ball-field { position: relative; height: clamp(190px, 17vw, 250px); }
+  .bubble {
+    position: absolute; top: var(--top); left: var(--left);
+    width: var(--size); height: var(--size);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; border: 1px solid var(--border, var(--line-strong));
+    background: var(--bg, var(--paper));
+    color: var(--fg, var(--ink)); cursor: pointer;
+    font-family: var(--font-mono); font-size: var(--fs);
+    letter-spacing: .02em; white-space: nowrap; padding: 0; overflow: hidden;
+    animation: bubble-float var(--dur) var(--delay) ease-in-out infinite alternate,
+               bubble-roll calc(var(--dur) * 1.4) var(--delay) linear infinite alternate;
+    transition: filter .25s var(--ease);
+  }
+  .bubble:hover { filter: invert(1); }
+  .bubble:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+  @keyframes bubble-float {
+    from { transform: translate3d(0, 7px, 0); }
+    to { transform: translate3d(0, -11px, 0); }
+  }
+  @keyframes bubble-roll {
+    from { margin-left: -7px; }
+    to { margin-left: 11px; }
+  }
+  .card.is-flash { background: var(--white); box-shadow: inset 0 0 0 2px var(--ink); }
   .how-grid {
     list-style: none; margin: 0; padding: 0; display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -478,6 +518,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
+    .bubble { animation: none !important; }
     .js [data-reveal] { opacity: 1; transform: none; transition: none; }
     *, *::before, *::after {
       animation-duration: .001ms !important;
@@ -523,6 +564,14 @@
       <img src="assets/illustrations/hero.svg" alt="一个人坐在桌前，整理一件事的练习进度" width="960" height="719" loading="eager">
       <figcaption>把一件事，拆成每天能练的一步。</figcaption>
     </figure>
+  </section>
+
+  <section class="ball-band shell" aria-label="练点球云">
+    <div class="ball-head">
+      <span class="ball-title">60 个练点 · 点一个开始</span>
+      <button class="ball-shuffle" id="ball-shuffle" type="button">换一批</button>
+    </div>
+    <div class="ball-field" id="ball-field"></div>
   </section>
 
   <section class="section shell" id="how" aria-labelledby="how-title">
@@ -814,7 +863,7 @@ function cardHTML(s, i) {
   const delay = (i % 3) * 60;
   const meta = `<span>每天约 ${s.min} 分钟</span><span>${s.diff}</span>${s.ability ? `<span>练 · ${s.ability}</span>` : ""}`;
   if (s.featured) {
-    return `<article class="card card-featured" data-reveal style="--delay:${delay}ms">
+    return `<article class="card card-featured" data-file="${s.file}" data-reveal style="--delay:${delay}ms">
       <div class="feature-copy">
         <div class="card-top"><span>${index}</span><span>${s.note || "新增"} · ${s.cat}</span></div>
         <h3>${s.name}</h3>
@@ -829,7 +878,7 @@ function cardHTML(s, i) {
     </article>`;
   }
   const slug = s.file.replace(/\.json$/, "");
-  return `<article class="card" data-reveal style="--delay:${delay}ms">
+  return `<article class="card" data-file="${s.file}" data-reveal style="--delay:${delay}ms">
     <div class="card-top"><span>${index}</span><span>${s.cat}</span></div>
     <span class="card-icon" style="--icon:url(assets/icons/${slug}.svg)" aria-hidden="true"></span>
     <h3>${s.name}</h3>
@@ -1058,6 +1107,122 @@ function observeReveals(root) {
 
 window.addEventListener("scroll", () => {
   document.querySelector(".site-head").classList.toggle("is-scrolled", window.scrollY > 8);
+}, { passive: true });
+
+const ballField = document.getElementById("ball-field");
+const ballShuffle = document.getElementById("ball-shuffle");
+const BALL_SHORT = {
+  "ADHD 支持": "ADHD",
+  "论文毕设": "论文", "项目推进": "项目", "学车考驾照": "学车",
+  "亲子沟通": "亲子", "情绪化进食": "进食", "情绪支持": "情绪",
+  "自我关怀": "关怀", "社交焦虑": "社交", "失恋恢复": "失恋",
+  "陪写作业": "陪写", "职场沟通": "职场", "职场新人": "新人",
+  "恋爱沟通": "恋爱", "家庭分工": "家务", "友情维护": "友情",
+  "升职述职": "升职", "团队管理": "团队", "自由职业": "自由",
+  "绘画练习": "绘画", "唱歌练习": "唱歌", "练字书法": "练字",
+  "旅行规划": "旅行", "独居生活": "独居", "植物养护": "植物",
+  "健康饮食": "饮食", "早起晨间": "早起", "整理收纳": "整理",
+  "乐器练习": "乐器", "编程学习": "编程", "学做饭": "做饭",
+  "正念练习": "正念", "日记觉察": "日记", "照护者支持": "照护",
+  "戒烟戒糖": "戒烟", "徒步户外": "徒步", "护眼用眼": "护眼",
+  "时间管理": "时间", "语言学习": "语言", "留学申请": "留学"
+};
+
+const CAT_TONE = {
+  "学习": { bg: "#ffffff", fg: "#111111", border: "#c9c9c9" },
+  "健康": { bg: "#ececec", fg: "#111111", border: "#bcbcbc" },
+  "生活": { bg: "#dedede", fg: "#111111", border: "#b0b0b0" },
+  "情绪": { bg: "#cfcfcf", fg: "#111111", border: "#a3a3a3" },
+  "职业": { bg: "#bcbcbc", fg: "#111111", border: "#969696" },
+  "创作": { bg: "#a8a8a8", fg: "#111111", border: "#868686" },
+  "关系": { bg: "#919191", fg: "#111111", border: "#747474" },
+  "效率": { bg: "#6e6e6e", fg: "#f4f4f4", border: "#575757" },
+  "兴趣": { bg: "#2c2c2c", fg: "#f4f4f4", border: "#2c2c2c" }
+};
+
+function ballLabel(name) {
+  if (BALL_SHORT[name]) return BALL_SHORT[name];
+  return name.length > 3 ? name.slice(0, 2) : name;
+}
+
+function renderBalls() {
+  if (!ballField) return;
+  const mobile = window.matchMedia("(max-width: 700px)").matches;
+  const count = mobile ? 8 : (window.innerWidth < 1100 ? 14 : 18);
+  const cols = mobile ? 4 : (count === 14 ? 7 : 9);
+  const rows = Math.ceil(count / cols);
+  const groups = new Map();
+  SCENARIOS.forEach(item => {
+    if (!groups.has(item.cat)) groups.set(item.cat, []);
+    groups.get(item.cat).push(item);
+  });
+  const cats = [...groups.keys()];
+  for (let i = cats.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cats[i], cats[j]] = [cats[j], cats[i]];
+  }
+  const picks = [];
+  let round = 0;
+  while (picks.length < count) {
+    let added = false;
+    for (const cat of cats) {
+      const list = groups.get(cat);
+      const item = list[round % list.length];
+      if (item && !picks.includes(item)) {
+        picks.push(item);
+        added = true;
+        if (picks.length >= count) break;
+      }
+    }
+    round += 1;
+    if (!added) break;
+  }
+  for (let i = picks.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [picks[i], picks[j]] = [picks[j], picks[i]];
+  }
+  ballField.innerHTML = picks.map((scenario, i) => {
+    const size = 44 + Math.round(Math.random() * 32);
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const left = 3 + col * (94 / cols) + (Math.random() * 3 - 1.5);
+    const top = 6 + row * (78 / rows) + (Math.random() * 6 - 3);
+    const dur = (6.5 + Math.random() * 3).toFixed(1) + "s";
+    const delay = (Math.random() * 2.8).toFixed(1) + "s";
+    const fs = Math.max(9, Math.round(size * 0.14));
+    const tone = CAT_TONE[scenario.cat || scenario.category] || CAT_TONE["生活"];
+    return `<button class="bubble" type="button" data-file="${scenario.file}"
+      style="--size:${size}px;--left:${left.toFixed(1)}%;--top:${top.toFixed(1)}%;--dur:${dur};--delay:${delay};--fs:${fs}px;--bg:${tone.bg};--fg:${tone.fg};--border:${tone.border}"
+      aria-label="开始练：${scenario.name}" title="${scenario.name}">${ballLabel(scenario.name)}</button>`;
+  }).join("");
+}
+
+if (ballShuffle) ballShuffle.addEventListener("click", renderBalls);
+
+if (ballField) {
+  ballField.addEventListener("click", e => {
+    const btn = e.target.closest(".bubble");
+    if (!btn) return;
+    const file = btn.dataset.file;
+    activeCat = "全部";
+    query = "";
+    if (search.value) search.value = "";
+    renderChips();
+    render();
+    requestAnimationFrame(() => {
+      const card = document.querySelector('#grid [data-file="' + file + '"]');
+      if (!card) return;
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+      card.classList.add("is-flash");
+      setTimeout(() => card.classList.remove("is-flash"), 1800);
+    });
+  });
+}
+
+renderBalls();
+window.addEventListener("resize", () => {
+  clearTimeout(renderBalls._t);
+  renderBalls._t = setTimeout(renderBalls, 300);
 }, { passive: true });
 
 renderChips();
