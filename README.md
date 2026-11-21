@@ -79,7 +79,7 @@ flowchart TD
 | 📄 [`form.json`](./form.json) | 通用模板，适合自定义场景 |
 | 🧭 [`scenarios.json`](./scenarios.json) | 场景索引：名称/分类/时长/关键词（机器可读，校验基准） |
 | 🎛️ [`assets/icons/`](./assets/icons) | 场景图标（来自 Lucide，ISC 许可） |
-| 🎯 [`examples/`](./examples) | 三十六个现成场景，复制即用 |
+| 🎯 [`examples/`](./examples) | 六十个现成场景，复制即用 |
 | 🖥️ [`index.html`](./index.html) | 一键复制 + 场景选择网页 |
 | 🛠️ [`builder.html`](./builder.html) | 自定义生成器：回答问题生成模板 |
 | 🔍 [`checker.html`](./checker.html) | 存档检查器：校验 / 格式化 / 查截断 |
@@ -135,6 +135,30 @@ flowchart TD
 | 💬 职场沟通 | [`workplace-comm.json`](./examples/workplace-comm.json) | 和领导沟通紧张、不会拒绝 | 10 分钟 |
 | 💡 副业启动 | [`side-hustle.json`](./examples/side-hustle.json) | 想做副业但不知道从哪开始 | 15 分钟 |
 | 🎯 专注力 | [`focus.json`](./examples/focus.json) | 一坐下就刷手机、注意力碎片化 | 10 分钟 |
+| 瑜伽 | [`yoga.json`](./examples/yoga.json) | 想在家练瑜伽，但不知道怎么开始 | 10 分钟 |
+| 骑行 | [`cycling.json`](./examples/cycling.json) | 想靠骑车锻炼，但坚持不下来 | 20 分钟 |
+| 游泳 | [`swimming.json`](./examples/swimming.json) | 想学游泳或坚持游泳，但怕水、没节奏 | 20 分钟 |
+| 徒步户外 | [`hiking.json`](./examples/hiking.json) | 想开始徒步，但不知道准备什么 | 20 分钟 |
+| 护眼用眼 | [`eye-care.json`](./examples/eye-care.json) | 长时间看屏幕，眼睛干涩疲劳 | 5 分钟 |
+| 情绪化进食 | [`emotional-eating.json`](./examples/emotional-eating.json) | 压力一大就想吃东西 | 10 分钟 |
+| 失恋恢复 | [`breakup.json`](./examples/breakup.json) | 分手后走不出来，反复回想 | 10 分钟 |
+| 愤怒管理 | [`anger.json`](./examples/anger.json) | 容易发火，事后又后悔 | 5 分钟 |
+| 自信表达 | [`confidence.json`](./examples/confidence.json) | 想表达自己，却总是不敢开口 | 10 分钟 |
+| 与父母沟通 | [`parents.json`](./examples/parents.json) | 和父母说不到两句就吵起来 | 10 分钟 |
+| 家庭分工 | [`chores.json`](./examples/chores.json) | 家务总是自己干，心里不平衡 | 10 分钟 |
+| 友情维护 | [`friendship.json`](./examples/friendship.json) | 朋友越来越少，不知道该怎么联系 | 5 分钟 |
+| 陪写作业 | [`study-parenting.json`](./examples/study-parenting.json) | 陪孩子写作业，天天鸡飞狗跳 | 15 分钟 |
+| 留学申请 | [`study-abroad.json`](./examples/study-abroad.json) | 想申请留学，但流程复杂没头绪 | 20 分钟 |
+| 职场新人 | [`new-job.json`](./examples/new-job.json) | 刚入职，不知道怎么融入 | 10 分钟 |
+| 升职述职 | [`promotion.json`](./examples/promotion.json) | 想争取升职，但不知道怎么准备 | 10 分钟 |
+| 团队管理 | [`team-management.json`](./examples/team-management.json) | 第一次带团队，不知道怎么管 | 15 分钟 |
+| 自由职业接单 | [`freelance.json`](./examples/freelance.json) | 想做自由职业，但接单不稳定 | 15 分钟 |
+| 绘画练习 | [`painting.json`](./examples/painting.json) | 想学画画，但总是画两笔就停 | 15 分钟 |
+| 摄影 | [`photography.json`](./examples/photography.json) | 想学摄影，但拍来拍去没进步 | 15 分钟 |
+| 唱歌练习 | [`singing.json`](./examples/singing.json) | 想学唱歌，但总跑调、没气息 | 15 分钟 |
+| 练字书法 | [`calligraphy.json`](./examples/calligraphy.json) | 想练字，但总坚持不下来 | 10 分钟 |
+| 旅行规划 | [`travel.json`](./examples/travel.json) | 想出去玩，但做攻略太累 | 10 分钟 |
+| 独居生活 | [`solo-living.json`](./examples/solo-living.json) | 一个人住，生活容易乱套 | 10 分钟 |
 
 每个模板都会根据你的实际情况调整功能，也会在聊天中主动提议加新功能。
 

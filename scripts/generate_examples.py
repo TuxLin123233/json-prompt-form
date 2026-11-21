@@ -1704,6 +1704,55 @@ SCENARIOS["focus"] = {
 
 
 
+try:
+    from scenarios_extra import EXTRA as EXTRA_SCENARIOS
+except ImportError:
+    import sys as _sys
+    _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from scenarios_extra import EXTRA as EXTRA_SCENARIOS
+
+
+def _extra_goal(name):
+    return (
+        "根据用户的具体情况，设计并长期陪同一个%s助手。"
+        "开场读取存档续接；会话中可提议新增/调整/停用功能；"
+        "结束时输出更新后的完整存档 JSON 供用户保存。" % name
+    )
+
+
+def _extra_scenario(spec):
+    return {
+        "goal": _extra_goal(spec["name"]),
+        "identity": {
+            "fill_rule": "首次会话由 AI 根据用户输入填入具体内容；续接时沿用存档中的值，除非用户要求调整。",
+            "what": spec["identity"][0],
+            "why": spec["identity"][1],
+            "how": spec["identity"][2],
+        },
+        "scene": {
+            "fill_rule": "同 assistant_identity.fill_rule。",
+            "what": spec["scene"][0],
+            "why": spec["scene"][1],
+            "how": spec["scene"][2],
+        },
+        "functions": [fn(*item) for item in spec["functions"]],
+        "safety": safety(*spec["safety"]),
+        "first_open": {
+            "desc": spec["first_open"][0],
+            "user": spec["first_open"][1],
+            "ai_should": spec["first_open"][2],
+        },
+        "first_generated_function": {
+            "desc": spec["name"] + "场景的单个功能写法示例",
+            "sample": fn(*spec["sample"]),
+        },
+    }
+
+
+for _spec in EXTRA_SCENARIOS:
+    SCENARIOS[_spec["slug"]] = _extra_scenario(_spec)
+
+
 def main():
     missing = sorted(set(SCENARIOS) - set(META))
     if missing:

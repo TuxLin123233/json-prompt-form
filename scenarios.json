@@ -680,6 +680,462 @@
                 "浇水"
             ],
             "icon": "sprout"
+        },
+        {
+            "file": "yoga.json",
+            "name": "瑜伽",
+            "desc": "想在家练瑜伽，但不知道怎么开始",
+            "category": "健康",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "久坐、身体僵硬、想在家练瑜伽的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "瑜伽",
+                "拉伸",
+                "僵硬",
+                "放松",
+                "体态"
+            ],
+            "icon": "accessibility"
+        },
+        {
+            "file": "cycling.json",
+            "name": "骑行",
+            "desc": "想靠骑车锻炼，但坚持不下来",
+            "category": "健康",
+            "daily_minutes": 20,
+            "difficulty": "入门",
+            "audience": "想用骑行通勤或锻炼、需要坚持的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "骑行",
+                "单车",
+                "通勤",
+                "有氧",
+                "户外"
+            ],
+            "icon": "bike"
+        },
+        {
+            "file": "swimming.json",
+            "name": "游泳",
+            "desc": "想学游泳或坚持游泳，但怕水、没节奏",
+            "category": "健康",
+            "daily_minutes": 20,
+            "difficulty": "入门",
+            "audience": "想学游泳、恢复游泳或坚持游的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "游泳",
+                "泳池",
+                "换气",
+                "自由泳",
+                "有氧"
+            ],
+            "icon": "waves"
+        },
+        {
+            "file": "hiking.json",
+            "name": "徒步户外",
+            "desc": "想开始徒步，但不知道准备什么",
+            "category": "健康",
+            "daily_minutes": 20,
+            "difficulty": "进阶",
+            "audience": "想开始周末徒步、户外登山的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "徒步",
+                "爬山",
+                "户外",
+                "露营",
+                "周末"
+            ],
+            "icon": "mountain"
+        },
+        {
+            "file": "eye-care.json",
+            "name": "护眼用眼",
+            "desc": "长时间看屏幕，眼睛干涩疲劳",
+            "category": "健康",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "长时间用电脑手机、眼睛容易疲劳的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "护眼",
+                "眼睛",
+                "疲劳",
+                "干涩",
+                "屏幕"
+            ],
+            "icon": "eye"
+        },
+        {
+            "file": "emotional-eating.json",
+            "name": "情绪化进食",
+            "desc": "压力一大就想吃东西",
+            "category": "健康",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "压力或情绪波动时容易暴食的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "情绪化进食",
+                "暴食",
+                "压力",
+                "零食",
+                "情绪"
+            ],
+            "icon": "cookie"
+        },
+        {
+            "file": "breakup.json",
+            "name": "失恋恢复",
+            "desc": "分手后走不出来，反复回想",
+            "category": "情绪",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "刚分手、失恋后情绪反复的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "失恋",
+                "分手",
+                "前任",
+                "难过",
+                "放下"
+            ],
+            "icon": "heart-crack"
+        },
+        {
+            "file": "anger.json",
+            "name": "愤怒管理",
+            "desc": "容易发火，事后又后悔",
+            "category": "情绪",
+            "daily_minutes": 5,
+            "difficulty": "进阶",
+            "audience": "容易被激怒、情绪爆发后后悔的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "愤怒",
+                "发火",
+                "脾气",
+                "冲突",
+                "情绪"
+            ],
+            "icon": "flame"
+        },
+        {
+            "file": "confidence.json",
+            "name": "自信表达",
+            "desc": "想表达自己，却总是不敢开口",
+            "category": "情绪",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "不自信、不敢表达、容易自我否定的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "自信",
+                "表达",
+                "不敢说",
+                "自我否定",
+                "勇气"
+            ],
+            "icon": "sparkles"
+        },
+        {
+            "file": "parents.json",
+            "name": "与父母沟通",
+            "desc": "和父母说不到两句就吵起来",
+            "category": "关系",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "和父母沟通容易冲突、想改善关系的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "父母",
+                "原生家庭",
+                "代沟",
+                "沟通",
+                "边界"
+            ],
+            "icon": "phone-call"
+        },
+        {
+            "file": "chores.json",
+            "name": "家庭分工",
+            "desc": "家务总是自己干，心里不平衡",
+            "category": "关系",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "家务分配不均、想改善家庭分工的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "家务",
+                "分工",
+                "伴侣",
+                "公平",
+                "家庭"
+            ],
+            "icon": "list-checks"
+        },
+        {
+            "file": "friendship.json",
+            "name": "友情维护",
+            "desc": "朋友越来越少，不知道该怎么联系",
+            "category": "关系",
+            "daily_minutes": 5,
+            "difficulty": "入门",
+            "audience": "想维护老朋友、建立新友谊的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "朋友",
+                "友情",
+                "社交",
+                "联系",
+                "孤独"
+            ],
+            "icon": "party-popper"
+        },
+        {
+            "file": "study-parenting.json",
+            "name": "陪写作业",
+            "desc": "陪孩子写作业，天天鸡飞狗跳",
+            "category": "学习",
+            "daily_minutes": 15,
+            "difficulty": "进阶",
+            "audience": "陪孩子写作业容易发火、想改善亲子学习氛围的家长",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "陪写作业",
+                "孩子",
+                "学习",
+                "亲子",
+                "作业"
+            ],
+            "icon": "pencil-ruler"
+        },
+        {
+            "file": "study-abroad.json",
+            "name": "留学申请",
+            "desc": "想申请留学，但流程复杂没头绪",
+            "category": "学习",
+            "daily_minutes": 20,
+            "difficulty": "进阶",
+            "audience": "准备留学申请、需要长期推进的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "留学",
+                "申请",
+                "选校",
+                "文书",
+                "offer"
+            ],
+            "icon": "plane"
+        },
+        {
+            "file": "new-job.json",
+            "name": "职场新人",
+            "desc": "刚入职，不知道怎么融入",
+            "category": "职业",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "刚入职或转岗、需要适应新环境的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "职场新人",
+                "入职",
+                "融入",
+                "试用期",
+                "同事"
+            ],
+            "icon": "badge"
+        },
+        {
+            "file": "promotion.json",
+            "name": "升职述职",
+            "desc": "想争取升职，但不知道怎么准备",
+            "category": "职业",
+            "daily_minutes": 10,
+            "difficulty": "进阶",
+            "audience": "准备述职、晋升答辩或争取加薪的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "升职",
+                "述职",
+                "晋升",
+                "加薪",
+                "汇报"
+            ],
+            "icon": "trending-up"
+        },
+        {
+            "file": "team-management.json",
+            "name": "团队管理",
+            "desc": "第一次带团队，不知道怎么管",
+            "category": "职业",
+            "daily_minutes": 15,
+            "difficulty": "进阶",
+            "audience": "刚开始带团队或想提升管理能力的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "团队管理",
+                "管理",
+                "带团队",
+                "一对一",
+                "反馈"
+            ],
+            "icon": "users"
+        },
+        {
+            "file": "freelance.json",
+            "name": "自由职业接单",
+            "desc": "想做自由职业，但接单不稳定",
+            "category": "职业",
+            "daily_minutes": 15,
+            "difficulty": "进阶",
+            "audience": "自由职业者或想靠技能接单的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "自由职业",
+                "接单",
+                "报价",
+                "客户",
+                "副业"
+            ],
+            "icon": "laptop"
+        },
+        {
+            "file": "painting.json",
+            "name": "绘画练习",
+            "desc": "想学画画，但总是画两笔就停",
+            "category": "兴趣",
+            "daily_minutes": 15,
+            "difficulty": "入门",
+            "audience": "想学画画、插画或坚持练习的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "绘画",
+                "画画",
+                "插画",
+                "素描",
+                "练习"
+            ],
+            "icon": "palette"
+        },
+        {
+            "file": "photography.json",
+            "name": "摄影",
+            "desc": "想学摄影，但拍来拍去没进步",
+            "category": "兴趣",
+            "daily_minutes": 15,
+            "difficulty": "入门",
+            "audience": "想学摄影、提升拍照水平的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "摄影",
+                "拍照",
+                "相机",
+                "构图",
+                "练习"
+            ],
+            "icon": "camera"
+        },
+        {
+            "file": "singing.json",
+            "name": "唱歌练习",
+            "desc": "想学唱歌，但总跑调、没气息",
+            "category": "兴趣",
+            "daily_minutes": 15,
+            "difficulty": "入门",
+            "audience": "想学唱歌、改善音准和气息的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "唱歌",
+                "音准",
+                "气息",
+                "声乐",
+                "练习"
+            ],
+            "icon": "music"
+        },
+        {
+            "file": "calligraphy.json",
+            "name": "练字书法",
+            "desc": "想练字，但总坚持不下来",
+            "category": "兴趣",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "想改善字迹、练硬笔或书法的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "练字",
+                "书法",
+                "字迹",
+                "临帖",
+                "手写"
+            ],
+            "icon": "pen-tool"
+        },
+        {
+            "file": "travel.json",
+            "name": "旅行规划",
+            "desc": "想出去玩，但做攻略太累",
+            "category": "生活",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "想旅行但懒得做攻略、容易踩坑的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "旅行",
+                "旅游",
+                "攻略",
+                "行程",
+                "预算"
+            ],
+            "icon": "map"
+        },
+        {
+            "file": "solo-living.json",
+            "name": "独居生活",
+            "desc": "一个人住，生活容易乱套",
+            "category": "生活",
+            "daily_minutes": 10,
+            "difficulty": "入门",
+            "audience": "独居或刚搬出来自己住的人",
+            "featured": false,
+            "note": "",
+            "keywords": [
+                "独居",
+                "一个人住",
+                "生活",
+                "自律",
+                "做饭"
+            ],
+            "icon": "house"
         }
     ]
 }

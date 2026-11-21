@@ -10,7 +10,7 @@
 <title>长期任务 · AI 提示词模板 | json-prompt-form</title>
 <meta name="description" content="把长期任务交给 AI 陪你推进。选一个模板复制给 AI，聊完存档，下次接着来。手机可用，无需安装。">
 <meta property="og:title" content="长期任务 · AI 提示词模板">
-<meta property="og:description" content="把长期任务拆小，和 AI 一起推进。36 个场景，复制即用，手机优先。">
+<meta property="og:description" content="把长期任务拆小，和 AI 一起推进。60 个场景，复制即用，手机优先。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/social-preview.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -381,6 +381,7 @@
     .how-grid { grid-template-columns: 1fr; }
     .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .card-featured { grid-column: span 2; }
+    .card-cta { grid-column: span 1; }
     .foot-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
@@ -412,6 +413,11 @@
   /* 桌面端：宽屏利用更大的画布 */
   @media (min-width: 1440px) {
     :root { --max: 1320px; }
+    .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { min-height: 228px; padding: clamp(16px, 1.5vw, 22px); }
+    .card-cta { grid-column: span 3; }
+    .card-icon { width: 24px; height: 24px; margin-top: 14px; }
+    .card h3 { font-size: clamp(1.02rem, 1.15vw, 1.22rem); }
     .shell { width: min(var(--max), calc(100% - 96px)); }
     .head-inner { min-height: 72px; }
     .brand-mark { width: 38px; height: 38px; font-size: 15px; }
@@ -437,14 +443,14 @@
     :root { --max: 1480px; }
     .shell { width: min(var(--max), calc(100% - 120px)); }
     .hero h1 { font-size: clamp(3rem, 4.8vw, 5rem); }
-    .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .card { min-height: 250px; }
-    .card-cta { grid-column: span 3; }
     .how-step img { max-height: 170px; }
   }
   @media (min-width: 2200px) {
     :root { --max: 1640px; }
     .hero h1 { font-size: 5rem; }
+    .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .card-cta { grid-column: span 4; }
+    .card { min-height: 220px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -487,7 +493,7 @@
         <a class="btn btn-solid" href="#how">看怎么用</a>
         <a class="btn btn-line" href="#scenarios">选一个场景</a>
       </div>
-      <p class="hero-note">36 个场景 · 手机优先 · 存档只在你自己手里</p>
+      <p class="hero-note">60 个场景 · 手机优先 · 存档只在你自己手里</p>
     </div>
     <figure class="hero-art" data-reveal style="--delay:120ms">
       <img src="assets/illustrations/hero.svg" alt="一个人坐在桌前，整理长期任务的进度清单" width="960" height="719" loading="eager">
@@ -534,7 +540,7 @@
 
   <section class="section shell" id="scenarios" aria-labelledby="scenarios-title">
     <div class="section-head" data-reveal>
-      <p class="eyebrow">36 个长期任务</p>
+      <p class="eyebrow">60 个长期任务</p>
       <h2 id="scenarios-title">选一个你想推进的事</h2>
       <p>每个模板都会根据你的真实情况调整功能。找不到合适的，用自定义生成器。</p>
     </div>
@@ -697,6 +703,30 @@ const SCENARIOS = [
   { file: "coding.json",            name: "编程学习",   desc: "自学编程、容易卡住或迷路",                            cat: "学习", min: 20, diff: "进阶" },
   { file: "cooking.json",           name: "学做饭",     desc: "不会做饭、想开始带饭",                                cat: "生活", min: 20, diff: "入门" },
   { file: "plant-care.json",        name: "植物养护",   desc: "喜欢绿植但总养死",                                    cat: "兴趣", min: 5,  diff: "入门" },
+  { file: "yoga.json", name: "瑜伽", desc: "想在家练瑜伽，但不知道怎么开始", cat: "健康", min: 10, diff: "入门" },
+  { file: "cycling.json", name: "骑行", desc: "想靠骑车锻炼，但坚持不下来", cat: "健康", min: 20, diff: "入门" },
+  { file: "swimming.json", name: "游泳", desc: "想学游泳或坚持游泳，但怕水、没节奏", cat: "健康", min: 20, diff: "入门" },
+  { file: "hiking.json", name: "徒步户外", desc: "想开始徒步，但不知道准备什么", cat: "健康", min: 20, diff: "进阶" },
+  { file: "eye-care.json", name: "护眼用眼", desc: "长时间看屏幕，眼睛干涩疲劳", cat: "健康", min: 5, diff: "入门" },
+  { file: "emotional-eating.json", name: "情绪化进食", desc: "压力一大就想吃东西", cat: "健康", min: 10, diff: "进阶" },
+  { file: "breakup.json", name: "失恋恢复", desc: "分手后走不出来，反复回想", cat: "情绪", min: 10, diff: "进阶" },
+  { file: "anger.json", name: "愤怒管理", desc: "容易发火，事后又后悔", cat: "情绪", min: 5, diff: "进阶" },
+  { file: "confidence.json", name: "自信表达", desc: "想表达自己，却总是不敢开口", cat: "情绪", min: 10, diff: "进阶" },
+  { file: "parents.json", name: "与父母沟通", desc: "和父母说不到两句就吵起来", cat: "关系", min: 10, diff: "进阶" },
+  { file: "chores.json", name: "家庭分工", desc: "家务总是自己干，心里不平衡", cat: "关系", min: 10, diff: "进阶" },
+  { file: "friendship.json", name: "友情维护", desc: "朋友越来越少，不知道该怎么联系", cat: "关系", min: 5, diff: "入门" },
+  { file: "study-parenting.json", name: "陪写作业", desc: "陪孩子写作业，天天鸡飞狗跳", cat: "学习", min: 15, diff: "进阶" },
+  { file: "study-abroad.json", name: "留学申请", desc: "想申请留学，但流程复杂没头绪", cat: "学习", min: 20, diff: "进阶" },
+  { file: "new-job.json", name: "职场新人", desc: "刚入职，不知道怎么融入", cat: "职业", min: 10, diff: "入门" },
+  { file: "promotion.json", name: "升职述职", desc: "想争取升职，但不知道怎么准备", cat: "职业", min: 10, diff: "进阶" },
+  { file: "team-management.json", name: "团队管理", desc: "第一次带团队，不知道怎么管", cat: "职业", min: 15, diff: "进阶" },
+  { file: "freelance.json", name: "自由职业接单", desc: "想做自由职业，但接单不稳定", cat: "职业", min: 15, diff: "进阶" },
+  { file: "painting.json", name: "绘画练习", desc: "想学画画，但总是画两笔就停", cat: "兴趣", min: 15, diff: "入门" },
+  { file: "photography.json", name: "摄影", desc: "想学摄影，但拍来拍去没进步", cat: "兴趣", min: 15, diff: "入门" },
+  { file: "singing.json", name: "唱歌练习", desc: "想学唱歌，但总跑调、没气息", cat: "兴趣", min: 15, diff: "入门" },
+  { file: "calligraphy.json", name: "练字书法", desc: "想练字，但总坚持不下来", cat: "兴趣", min: 10, diff: "入门" },
+  { file: "travel.json", name: "旅行规划", desc: "想出去玩，但做攻略太累", cat: "生活", min: 10, diff: "入门" },
+  { file: "solo-living.json", name: "独居生活", desc: "一个人住，生活容易乱套", cat: "生活", min: 10, diff: "入门" },
 ];
 
 // 搜索同义词来自 scenarios.json；加载失败时退回名称/描述搜索

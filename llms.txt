@@ -1,6 +1,6 @@
 # json-prompt-form
 
-> 让网页版 AI 长期记住你：一份 JSON 提示词规范 + 36 个场景模板。聊完说「存档」，保存 AI 输出的 JSON；下次把存档贴回来，就能接着聊。
+> 让网页版 AI 长期记住你：一份 JSON 提示词规范 + 60 个场景模板。聊完说「存档」，保存 AI 输出的 JSON；下次把存档贴回来，就能接着聊。
 
 ## 这是什么
 
@@ -14,8 +14,8 @@
 ## 关键文件
 
 - [form.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/form.json)：核心规范，包含流程、功能规则、记忆、安全边界、输出规则。
-- [scenarios.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/scenarios.json)：36 个场景的机器可读索引（名称、分类、时长、难度、关键词），适合 AI 推荐和工具检索。
-- [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：36 个场景模板，直接复制给 AI。
+- [scenarios.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/scenarios.json)：60 个场景的机器可读索引（名称、分类、时长、难度、关键词），适合 AI 推荐和工具检索。
+- [examples/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples)：60 个场景模板，直接复制给 AI。
 - [examples/filled/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/filled)：填好日期和记忆的示例存档。
 - [examples/en/](https://github.com/TuxLin123233/json-prompt-form/tree/main/examples/en)：英文场景模板。
 - [schema.json](https://raw.githubusercontent.com/TuxLin123233/json-prompt-form/main/schema.json)：存档 JSON Schema。

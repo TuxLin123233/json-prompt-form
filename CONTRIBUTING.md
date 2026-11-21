@@ -4,7 +4,7 @@
 
 ## 新增一个场景
 
-1. 在 `scripts/generate_examples.py` 的 `SCENARIOS` 里加一项，包含：
+1. 在 `scripts/generate_examples.py` 的 `SCENARIOS` 里加一项（批量场景也可以按现有格式追加到 `scripts/scenarios_extra.py` 的 `EXTRA`），包含：
    - `goal`
    - `identity`（`what / why / how`）
    - `scene`（`what / why / how`）
